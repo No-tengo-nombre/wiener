@@ -26,12 +26,9 @@ impl VertexArray {
 
     /// Create a new vertex array with a given size.
     pub fn new_sized(size: u32, layout: &[u32]) -> Self {
-        return VertexArray::builder()
-            .size(size)
-            .layout(layout)
-            .build();
+        return VertexArray::builder().size(size).layout(layout).build();
     }
-    
+
     /// Generate a builder for a vertex array.
     pub fn builder() -> Self {
         let mut vao_id = 0;
@@ -55,7 +52,7 @@ impl VertexArray {
 
     /// Specify the layout of the vertex array. This layout corresponds
     /// to a vector containing the size of each attribute.
-    /// 
+    ///
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
     pub fn layout(mut self, new_layout: &[u32]) -> Self {

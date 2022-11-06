@@ -55,7 +55,7 @@ impl Buffer for VertexBuffer {
             gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
         }
     }
-    
+
     fn unbind(&self) {
         unsafe {
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);

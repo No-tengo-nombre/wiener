@@ -66,7 +66,7 @@ impl Buffer for UniformBuffer {
             gl::BindBuffer(gl::UNIFORM_BUFFER, self._id);
         }
     }
-    
+
     fn unbind(&self) {
         unsafe {
             gl::BindBuffer(gl::UNIFORM_BUFFER, 0);
