@@ -4,6 +4,7 @@ use std::mem::size_of;
 use gl;
 use gl::types::*;
 
+#[derive(Copy, Clone, Debug)]
 /// Element buffer object, which contains triangle data stored in the GPU.
 pub struct ElementBuffer {
     /// Unique ID associated to the object.
@@ -54,7 +55,7 @@ impl Buffer for ElementBuffer {
             gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, self._id);
         }
     }
-    
+
     fn unbind(&self) {
         unsafe {
             gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);

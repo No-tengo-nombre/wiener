@@ -4,6 +4,7 @@ use std::mem::size_of;
 use gl;
 use gl::types::*;
 
+#[derive(Copy, Clone, Debug)]
 /// Vertex buffer object, which contains vertex data stored in the GPU.
 pub struct VertexBuffer {
     /// Unique ID associated to the object.

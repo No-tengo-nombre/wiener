@@ -2,6 +2,7 @@ use super::buffer::Buffer;
 
 use gl;
 
+#[derive(Clone, Debug)]
 /// Vertex array that specifies the vertex layout on GPU memory.
 pub struct VertexArray {
     /// Unique ID associated to the object.
