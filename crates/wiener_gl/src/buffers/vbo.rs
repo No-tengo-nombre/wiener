@@ -6,7 +6,10 @@ use gl::types::*;
 
 /// Vertex buffer object, which contains vertex data stored in the GPU.
 pub struct VertexBuffer {
+    /// Unique ID associated to the object.
     _id: u32,
+
+    /// Usage of the data.
     pub _usage: GLenum,
 }
 

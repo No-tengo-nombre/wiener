@@ -4,17 +4,26 @@ use gl;
 
 /// Vertex array that specifies the vertex layout on GPU memory.
 pub struct VertexArray {
+    /// Unique ID associated to the object.
     _id: u32,
+
+    /// Number of elements in each vertex.
     _stride: u32,
+
+    /// Size in bytes of each element.
     _size: u32,
+
+    /// Layout in GPU memory of the vertex.
     _layout: Vec<u32>,
 }
 
 impl VertexArray {
+    /// Create a new vertex array with size 4 (32 bits).
     pub fn new(layout: &[u32]) -> Self {
         return VertexArray::new_sized(4, layout);
     }
 
+    /// Create a new vertex array with a given size.
     pub fn new_sized(size: u32, layout: &[u32]) -> Self {
         return VertexArray::builder()
             .size(size)
