@@ -3,14 +3,14 @@ use super::buffer::Buffer;
 use gl;
 
 /// Vertex array that specifies the vertex layout on GPU memory.
-pub struct VertexArrays {
+pub struct VertexArray {
     _id: u32,
     _stride: u32,
     _size: u32,
     _layout: Vec<u32>,
 }
 
-impl VertexArrays {
+impl VertexArray {
     /// Generate a builder for a vertex array.
     pub fn builder() -> Self {
         let mut vao_id = 0;
@@ -18,7 +18,7 @@ impl VertexArrays {
             gl::GenVertexArrays(1, &mut vao_id);
         }
 
-        return VertexArrays {
+        return VertexArray {
             _id: vao_id,
             _stride: 0,
             _size: 4,
@@ -64,7 +64,7 @@ impl VertexArrays {
     }
 }
 
-impl Buffer for VertexArrays {
+impl Buffer for VertexArray {
     fn bind(&self) {
         unsafe {
             gl::BindVertexArray(self._id);
