@@ -33,20 +33,6 @@ impl ElementBuffer {
         self._usage = new_usage;
         return self;
     }
-
-    /// Buffer indices to this element buffer.
-    pub fn buffer_indices<T>(self, indices: &[T]) -> Self {
-        self.bind();
-        unsafe {
-            gl::BufferData(
-                gl::ELEMENT_ARRAY_BUFFER,
-                (indices.len() * size_of::<T>()) as isize,
-                indices.as_ptr() as *const GLvoid,
-                self._usage,
-            );
-        }
-        return self;
-    }
 }
 
 impl Buffer for ElementBuffer {
@@ -66,5 +52,18 @@ impl Buffer for ElementBuffer {
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }
+    }
+
+    fn buffer_data<T>(&self, data: &[T]) -> Self {
+        self.bind();
+        unsafe {
+            gl::BufferData(
+                gl::ELEMENT_ARRAY_BUFFER,
+                (data.len() * size_of::<T>()) as isize,
+                data.as_ptr() as *const GLvoid,
+                self._usage,
+            );
+        }
+        return *self;
     }
 }

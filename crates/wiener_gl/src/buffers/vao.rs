@@ -1,5 +1,3 @@
-use super::buffer::Buffer;
-
 use gl;
 
 #[derive(Clone, Debug)]
@@ -80,22 +78,20 @@ impl VertexArray {
         }
         return self;
     }
-}
 
-impl Buffer for VertexArray {
-    fn bind(&self) {
+    pub fn bind(&self) {
         unsafe {
             gl::BindVertexArray(self._id);
         }
     }
 
-    fn unbind(&self) {
+    pub fn unbind(&self) {
         unsafe {
             gl::BindVertexArray(0);
         }
     }
 
-    fn delete(&self) {
+    pub fn delete(&self) {
         unsafe {
             gl::DeleteVertexArrays(1, &self._id);
         }

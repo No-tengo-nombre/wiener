@@ -33,20 +33,6 @@ impl VertexBuffer {
         self._usage = new_usage;
         return self;
     }
-
-    /// Buffer vertices to this vertex buffer.
-    pub fn buffer_vertices<T>(self, vertices: &[T]) -> Self {
-        self.bind();
-        unsafe {
-            gl::BufferData(
-                gl::ARRAY_BUFFER,
-                (vertices.len() * size_of::<T>()) as isize,
-                vertices.as_ptr() as *const GLvoid,
-                self._usage,
-            );
-        }
-        return self;
-    }
 }
 
 impl Buffer for VertexBuffer {
@@ -66,5 +52,18 @@ impl Buffer for VertexBuffer {
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }
+    }
+
+    fn buffer_data<T>(&self, data: &[T]) -> Self {
+        self.bind();
+        unsafe {
+            gl::BufferData(
+                gl::ARRAY_BUFFER,
+                (data.len() * size_of::<T>()) as isize,
+                data.as_ptr() as *const GLvoid,
+                self._usage,
+            );
+        }
+        return *self;
     }
 }

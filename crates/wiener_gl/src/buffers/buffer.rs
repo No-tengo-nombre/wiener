@@ -8,4 +8,7 @@ pub trait Buffer {
 
     /// Delete the buffer.
     fn delete(&self);
+
+    /// Buffer data to this space in GPU memory.
+    fn buffer_data<T>(&self, data: &[T]) -> Self;
 }

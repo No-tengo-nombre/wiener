@@ -38,20 +38,6 @@ impl UniformBuffer {
         return self;
     }
 
-    /// Buffer data to this uniform buffer.
-    pub fn buffer_data<T>(&self, data: &[T]) -> Self {
-        self.bind();
-        unsafe {
-            gl::BufferData(
-                gl::UNIFORM_BUFFER,
-                (data.len() * size_of::<T>()) as isize,
-                data.as_ptr() as *const GLvoid,
-                self._usage,
-            );
-        }
-        return *self;
-    }
-
     /// Binds the uniform buffer to the given index in memory.
     pub fn bind_index(&self, index: u32) {
         unsafe {
@@ -77,5 +63,18 @@ impl Buffer for UniformBuffer {
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }
+    }
+
+    fn buffer_data<T>(&self, data: &[T]) -> Self {
+        self.bind();
+        unsafe {
+            gl::BufferData(
+                gl::UNIFORM_BUFFER,
+                (data.len() * size_of::<T>()) as isize,
+                data.as_ptr() as *const GLvoid,
+                self._usage,
+            );
+        }
+        return *self;
     }
 }
