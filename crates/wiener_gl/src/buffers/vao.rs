@@ -11,6 +11,17 @@ pub struct VertexArray {
 }
 
 impl VertexArray {
+    pub fn new(layout: &[u32]) -> Self {
+        return VertexArray::new_sized(4, layout);
+    }
+
+    pub fn new_sized(size: u32, layout: &[u32]) -> Self {
+        return VertexArray::builder()
+            .size(size)
+            .layout(layout)
+            .build();
+    }
+    
     /// Generate a builder for a vertex array.
     pub fn builder() -> Self {
         let mut vao_id = 0;
@@ -37,7 +48,7 @@ impl VertexArray {
     /// 
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
-    pub fn layout(mut self, new_layout: &Vec<u32>) -> Self {
+    pub fn layout(mut self, new_layout: &[u32]) -> Self {
         self._layout = new_layout.to_vec();
         self._stride = new_layout.iter().sum();
 
