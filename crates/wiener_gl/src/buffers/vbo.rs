@@ -1,0 +1,66 @@
+use super::buffer::Buffer;
+use std::mem::size_of;
+
+use gl;
+use gl::types::*;
+
+/// Vertex buffer object, which contains vertex data stored in the GPU.
+pub struct VertexBuffer {
+    _id: u32,
+    pub _usage: GLenum,
+}
+
+impl VertexBuffer {
+    /// Generate a new vertex buffer.
+    pub fn new() -> Self {
+        let mut vbo_id = 0;
+        unsafe {
+            gl::GenBuffers(1, &mut vbo_id);
+        }
+
+        return VertexBuffer {
+            _id: vbo_id,
+            _usage: gl::STATIC_DRAW,
+        };
+    }
+
+    /// Set the usage of the vertex buffer.
+    pub fn usage(mut self, new_usage: GLenum) -> Self {
+        self._usage = new_usage;
+        return self;
+    }
+
+    /// Buffer vertices to this vertex buffer.
+    pub fn buffer_vertices<T>(self, vertices: &[T]) -> Self {
+        self.bind();
+        unsafe {
+            gl::BufferData(
+                gl::ARRAY_BUFFER,
+                (vertices.len() * size_of::<T>()) as isize,
+                vertices.as_ptr() as *const GLvoid,
+                self._usage,
+            );
+        }
+        return self;
+    }
+}
+
+impl Buffer for VertexBuffer {
+    fn bind(&self) {
+        unsafe {
+            gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
+        }
+    }
+    
+    fn unbind(&self) {
+        unsafe {
+            gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+        }
+    }
+
+    fn delete(&self) {
+        unsafe {
+            gl::DeleteBuffers(1, &self._id);
+        }
+    }
+}
