@@ -30,13 +30,8 @@ impl VertexArrays {
     }
 
     pub fn layout(mut self, new_layout: &Vec<u32>) -> Self {
-        let mut new_stride = 0;
-        for l in new_layout {
-            new_stride += l;
-        }
-
         self._layout = new_layout.to_vec();
-        self._stride = new_stride;
+        self._stride = new_layout.iter().sum();
 
         return self;
     }
