@@ -2,6 +2,7 @@ use gl;
 use gl::types::*;
 use wiener_utils::image;
 
+#[derive(Clone, Copy, Debug)]
 /// 2D texture.
 pub struct Texture2D {
     /// Unique ID associated to the object.
