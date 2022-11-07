@@ -1,4 +1,3 @@
-use crate::GLManager;
 use glfw;
 use glfw::Context;
 use std::sync::mpsc::Receiver;
@@ -11,7 +10,6 @@ pub struct GLWindow {
     _glfw_instance: glfw::Glfw,
     _gl_version: (u32, u32),
     _gl_profile: glfw::OpenGlProfileHint,
-    _gl_manager: GLManager,
 }
 
 impl GLWindow {
@@ -27,7 +25,6 @@ impl GLWindow {
             _glfw_instance: empty_instance,
             _gl_version: (4, 6),
             _gl_profile: glfw::OpenGlProfileHint::Core,
-            _gl_manager: GLManager,
         };
     }
 
