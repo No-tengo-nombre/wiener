@@ -1,6 +1,8 @@
 use gl;
 use gl::types::*;
 
+// TODO: Figure out a better way to do all of this.
+
 /// Manager for OpenGL functions.
 pub struct GLManager;
 
