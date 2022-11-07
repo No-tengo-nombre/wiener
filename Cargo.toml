@@ -9,3 +9,6 @@ edition = "2021"
 wiener_core = { path = "crates/wiener_core" }
 wiener_gl = { path = "crates/wiener_gl" }
 wiener_vk = { path = "crates/wiener_vk" }
+
+[dev-dependencies]
+gl = "0.14.0"
