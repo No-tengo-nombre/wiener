@@ -4,14 +4,14 @@ pub mod prelude;
 
 mod buffers;
 mod gl_manager;
-mod shaders;
+mod shader;
 mod shapes;
 mod textures;
 mod window;
 
 pub use buffers::*;
 pub use gl_manager::*;
-pub use shaders::*;
+pub use shader::*;
 pub use shapes::*;
 pub use textures::*;
 pub use window::*;
