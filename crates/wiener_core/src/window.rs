@@ -3,12 +3,14 @@ use glfw::Context;
 use std::sync::mpsc::Receiver;
 
 #[derive(Copy, Clone, Debug)]
+/// Mode for the window.
 pub enum WindowMode {
     Windowed,
     FullScreen(u32),
 }
 
 #[derive(Clone, Debug)]
+/// Descriptor of a window.
 pub struct WindowDescriptor {
     pub _width: u32,
     pub _height: u32,
@@ -17,6 +19,7 @@ pub struct WindowDescriptor {
 }
 
 impl WindowDescriptor {
+    /// Generate a builder for the descriptor.
     pub fn builder() -> Self {
         return WindowDescriptor {
             _width: 640,
@@ -26,37 +29,44 @@ impl WindowDescriptor {
         };
     }
 
+    /// Set the width.
     pub fn width(mut self, width: u32) -> Self {
         self._width = width;
         return self;
     }
-
+    
+    /// Set the height.
     pub fn height(mut self, height: u32) -> Self {
         self._height = height;
         return self;
     }
-
+    
+    /// Set the dimensions (width and height).
     pub fn dimensions(mut self, width: u32, height: u32) -> Self {
         self._width = width;
         self._height = height;
         return self;
     }
-
+    
+    /// Set the title of the window.
     pub fn title(mut self, title: &str) -> Self {
         self._title = title.to_string();
         return self;
     }
-
+    
+    /// Set the mode.
     pub fn mode(mut self, mode: WindowMode) -> Self {
         self._mode = mode;
         return self;
     }
 
+    /// Make the window windowed.
     pub fn windowed(mut self) -> Self {
         self._mode = WindowMode::Windowed;
         return self;
     }
-
+    
+    /// Make the window fullscreen.
     pub fn fullscreen(mut self, monitor: u32) -> Self {
         self._mode = WindowMode::FullScreen(monitor);
         return self;
