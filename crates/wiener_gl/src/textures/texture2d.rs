@@ -2,7 +2,7 @@ use gl;
 use gl::types::*;
 use wiener_utils::image;
 
-/// 2D texture
+/// 2D texture.
 pub struct Texture2D {
     /// Unique ID associated to the object.
     _id: u32,
