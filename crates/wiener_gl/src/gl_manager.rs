@@ -22,4 +22,10 @@ impl GLManager {
             gl::Clear(mask);
         }
     }
+
+    pub fn blend_func(sfactor: u32, dfactor: u32) {
+        unsafe {
+            gl::BlendFunc(sfactor, dfactor);
+        }
+    }
 }
