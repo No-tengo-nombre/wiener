@@ -5,3 +5,5 @@ pub mod gl {
 pub mod vk {
     pub use wiener_vk::*;
 }
+
+pub use wiener_core::*;

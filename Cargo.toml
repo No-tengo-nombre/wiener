@@ -6,5 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+wiener_core = { path = "crates/wiener_core" }
 wiener_gl = { path = "crates/wiener_gl" }
 wiener_vk = { path = "crates/wiener_vk" }
