@@ -1,4 +1,4 @@
-//! Create that contains the code to connect Wiener with Vulkan
+//! Create that contains utilities for Wiener
 
 pub mod prelude;
 
