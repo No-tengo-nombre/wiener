@@ -33,4 +33,28 @@ impl Mesh {
         self._vao = new_vao;
         return self;
     }
+
+    pub fn vbo(mut self, new_vbo: VertexBuffer) -> Self {
+        self._vbo = new_vbo;
+        return self;
+    }
+
+    pub fn ebo(mut self, new_ebo: ElementBuffer) -> Self {
+        self._ebo = new_ebo;
+        return self;
+    }
+
+    pub fn shader(mut self, new_shader: ShaderProgram) -> Self {
+        self._shader = new_shader;
+        return self;
+    }
+
+    pub fn textures(mut self, new_textures: Vec<Texture2D>) -> Self {
+        self._textures = new_textures;
+        return self;
+    }
+
+    pub fn add_texture(&mut self, texture: Texture2D) {
+        self._textures.push(texture);
+    }
 }
