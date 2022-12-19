@@ -16,6 +16,12 @@ pub struct WindowDescriptor {
     pub height: u32,
     pub title: String,
     pub mode: WindowMode,
+    pub key_polling: bool,
+    pub cursor_enter_polling: bool,
+    pub cursor_pos_polling: bool,
+    pub mouse_button_polling: bool,
+    pub cursor_mode: glfw::CursorMode,
+    pub make_current: bool,
 }
 
 impl WindowDescriptor {
@@ -68,6 +74,36 @@ impl WindowDescriptor {
         self.mode = WindowMode::FullScreen(monitor);
         return self;
     }
+
+    pub fn set_key_polling(mut self, key_polling: bool) -> Self {
+        self.key_polling = key_polling;
+        return self;
+    }
+
+    pub fn set_cursor_enter_polling(mut self, cursor_enter_polling: bool) -> Self {
+        self.cursor_enter_polling = cursor_enter_polling;
+        return self;
+    }
+
+    pub fn set_cursor_pos_polling(mut self, cursor_pos_polling: bool) -> Self {
+        self.cursor_pos_polling = cursor_pos_polling;
+        return self;
+    }
+
+    pub fn set_mouse_button_polling(mut self, mouse_button_polling: bool) -> Self {
+        self.mouse_button_polling = mouse_button_polling;
+        return self;
+    }
+
+    pub fn set_cursor_mode(mut self, cursor_mode: glfw::CursorMode) -> Self {
+        self.cursor_mode = cursor_mode;
+        return self;
+    }
+
+    pub fn set_make_current(mut self, make_current: bool) -> Self {
+        self.make_current = make_current;
+        return self;
+    }
 }
 
 impl Default for WindowDescriptor {
@@ -77,6 +113,12 @@ impl Default for WindowDescriptor {
             height: 480,
             title: "Hello World!".to_string(),
             mode: WindowMode::Windowed,
+            key_polling: true,
+            cursor_enter_polling: true,
+            cursor_pos_polling: true,
+            mouse_button_polling: true,
+            cursor_mode: glfw::CursorMode::Normal,
+            make_current: true,
         };
     }
 }
@@ -112,12 +154,14 @@ pub fn init_glfw(
             .expect("Error creating GLFW window"),
     };
 
-    window.set_key_polling(true);
-    window.set_cursor_mode(glfw::CursorMode::Normal);
-    window.set_cursor_enter_polling(true);
-    window.set_mouse_button_polling(true);
-    window.set_cursor_pos_polling(true);
-    window.make_current();
+    window.set_key_polling(descriptor.key_polling);
+    window.set_cursor_mode(descriptor.cursor_mode);
+    window.set_cursor_enter_polling(descriptor.cursor_enter_polling);
+    window.set_mouse_button_polling(descriptor.mouse_button_polling);
+    window.set_cursor_pos_polling(descriptor.cursor_pos_polling);
+    if descriptor.make_current {
+        window.make_current();
+    }
 
     return (window, events, glfw_inst);
 }
