@@ -1,4 +1,4 @@
-use crate::{VertexArray, VertexBuffer, ElementBuffer, ShaderProgram, Texture2D, Buffer};
+use crate::{Buffer, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer};
 
 pub struct Mesh {
     _vao: VertexArray,

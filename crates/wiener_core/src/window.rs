@@ -37,26 +37,26 @@ impl WindowDescriptor {
         self.width = width;
         return self;
     }
-    
+
     /// Set the height.
     pub fn set_height(mut self, height: u32) -> Self {
         self.height = height;
         return self;
     }
-    
+
     /// Set the dimensions (width and height).
     pub fn set_dimensions(mut self, width: u32, height: u32) -> Self {
         self.width = width;
         self.height = height;
         return self;
     }
-    
+
     /// Set the title of the window.
     pub fn set_title(mut self, title: &str) -> Self {
         self.title = title.to_string();
         return self;
     }
-    
+
     /// Set the mode.
     pub fn set_mode(mut self, mode: WindowMode) -> Self {
         self.mode = mode;
@@ -68,7 +68,7 @@ impl WindowDescriptor {
         self.mode = WindowMode::Windowed;
         return self;
     }
-    
+
     /// Make the window fullscreen.
     pub fn set_fullscreen(mut self, monitor: u32) -> Self {
         self.mode = WindowMode::FullScreen(monitor);
@@ -80,7 +80,7 @@ impl WindowDescriptor {
         self.key_polling = key_polling;
         return self;
     }
-    
+
     /// Set the cursor enter polling event.
     pub fn set_cursor_enter_polling(mut self, cursor_enter_polling: bool) -> Self {
         self.cursor_enter_polling = cursor_enter_polling;
@@ -92,19 +92,19 @@ impl WindowDescriptor {
         self.cursor_pos_polling = cursor_pos_polling;
         return self;
     }
-    
+
     /// Set the mouse button polling event.
     pub fn set_mouse_button_polling(mut self, mouse_button_polling: bool) -> Self {
         self.mouse_button_polling = mouse_button_polling;
         return self;
     }
-    
+
     /// Set the cursor mode.
     pub fn set_cursor_mode(mut self, cursor_mode: glfw::CursorMode) -> Self {
         self.cursor_mode = cursor_mode;
         return self;
     }
-    
+
     /// Set whether to set the created window as current or not.
     pub fn set_make_current(mut self, make_current: bool) -> Self {
         self.make_current = make_current;
@@ -144,7 +144,12 @@ pub fn init_glfw(
 
     let (mut window, events) = match descriptor.mode {
         WindowMode::Windowed => glfw_inst
-            .create_window(descriptor.width, descriptor.height, &descriptor.title, glfw::WindowMode::Windowed)
+            .create_window(
+                descriptor.width,
+                descriptor.height,
+                &descriptor.title,
+                glfw::WindowMode::Windowed,
+            )
             .expect("Error creating GLFW window"),
         WindowMode::FullScreen(_) => glfw_inst
             .with_primary_monitor(|temp_glfw, m| {

@@ -2,8 +2,8 @@ use gl;
 use gl::types::*;
 use wiener_utils::image;
 
-#[derive(Clone, Copy, Debug)]
 /// 2D texture.
+#[derive(Clone, Copy, Debug)]
 pub struct Texture2D {
     /// Unique ID associated to the object.
     _id: u32,
@@ -50,31 +50,31 @@ impl Texture2D {
         self._tex_num = new_bind;
         return self;
     }
-    
+
     /// Change the format of the texture.
     pub fn format(mut self, new_format: GLenum) -> Self {
         self._format = new_format;
         return self;
     }
-    
+
     /// Change the S wrapping method.
     pub fn wrap_s(mut self, new_wrap: GLenum) -> Self {
         self._wrap_s = new_wrap;
         return self;
     }
-    
+
     /// Change the T wrapping method.
     pub fn wrap_t(mut self, new_wrap: GLenum) -> Self {
         self._wrap_t = new_wrap;
         return self;
     }
-    
+
     /// Change the min filtering method.
     pub fn min_filter(mut self, new_filter: GLenum) -> Self {
         self._min_filter = new_filter;
         return self;
     }
-    
+
     /// Change the max filtering method.
     pub fn max_filter(mut self, new_filter: GLenum) -> Self {
         self._max_filter = new_filter;
@@ -101,7 +101,7 @@ impl Texture2D {
         }
         return self;
     }
-    
+
     /// Buffer the given image to the texture.
     pub fn buffer_img<T>(self, data: &Vec<T>, width: i32, height: i32) -> Self {
         self.bind();
@@ -121,7 +121,7 @@ impl Texture2D {
         }
         return self;
     }
-    
+
     /// Buffer an image contained in a file to the texture.
     pub fn buffer_from_file(self, filename: &str) -> Self {
         let (img, width, height) = image::load(filename);
@@ -135,7 +135,7 @@ impl Texture2D {
             gl::ActiveTexture(gl::TEXTURE0 + self._tex_num);
         }
     }
-    
+
     /// Bind the texture.
     pub fn bind(&self) {
         self.bind_slot();
@@ -143,7 +143,7 @@ impl Texture2D {
             gl::BindTexture(gl::TEXTURE_2D, self._id);
         }
     }
-    
+
     /// Unbind the texture.
     pub fn unbind(&self) {
         self.bind_slot();

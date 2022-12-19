@@ -1,7 +1,7 @@
 use gl;
 
-#[derive(Clone, Debug)]
 /// Vertex array that specifies the vertex layout on GPU memory.
+#[derive(Clone, Debug)]
 pub struct VertexArray {
     /// Unique ID associated to the object.
     _id: u32,

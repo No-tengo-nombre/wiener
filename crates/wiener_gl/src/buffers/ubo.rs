@@ -4,8 +4,8 @@ use std::mem::size_of;
 use gl;
 use gl::types::*;
 
-#[derive(Copy, Clone, Debug)]
 /// Uniform buffer object, which contains uniform data stored in the GPU.
+#[derive(Copy, Clone, Debug)]
 pub struct UniformBuffer {
     /// Unique ID associated to the object.
     _id: u32,

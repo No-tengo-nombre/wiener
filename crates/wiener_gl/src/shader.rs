@@ -2,17 +2,17 @@ use gl;
 use gl::types::*;
 use std::fs;
 
-#[derive(Copy, Clone, Debug)]
 /// OpenGL shader component.
+#[derive(Copy, Clone, Debug)]
 pub struct Shader {
     _id: u32,
-    
+
     /// Type of shader.
     pub _type: GLenum,
 }
 
-#[derive(Clone, Debug)]
 /// Program that contains a bunch of compiled shaders.
+#[derive(Clone, Debug)]
 pub struct ShaderProgram {
     _id: u32,
     _shaders: Vec<Shader>,
@@ -44,7 +44,10 @@ impl Shader {
                 panic!("Failed to compile shader : {}", String::from_utf8_lossy(&v));
             }
         }
-        return Shader { _id: shader_id, _type: shader_type }
+        return Shader {
+            _id: shader_id,
+            _type: shader_type,
+        };
     }
 
     /// Get the shader ID.
@@ -69,7 +72,10 @@ impl Shader {
 impl ShaderProgram {
     pub fn new() -> Self {
         unsafe {
-            return ShaderProgram { _id: gl::CreateProgram(), _shaders: [].to_vec() }
+            return ShaderProgram {
+                _id: gl::CreateProgram(),
+                _shaders: [].to_vec(),
+            };
         }
     }
 

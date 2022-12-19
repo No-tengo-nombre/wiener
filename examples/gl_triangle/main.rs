@@ -1,6 +1,6 @@
-use wiener::gl::{GLWindow, GLManager};
-use wiener::WindowDescriptor;
 use gl;
+use wiener::gl::{GLManager, GLWindow};
+use wiener::WindowDescriptor;
 
 fn main() {
     let window_descriptor = WindowDescriptor {

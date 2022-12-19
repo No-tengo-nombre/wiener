@@ -34,7 +34,7 @@ impl GLWindow {
     pub fn get_window(&self) -> &glfw::Window {
         return &self._glfw_window;
     }
-    
+
     /// Get the GLFW window descriptor.
     pub fn get_descriptor(&self) -> &WindowDescriptor {
         return &self._descriptor;
@@ -90,11 +90,8 @@ impl GLWindow {
 
     /// Build the window.
     pub fn build(mut self) -> Self {
-        let (mut window, events, glfw_inst) = init_glfw(
-            &self._descriptor,
-            self._gl_version,
-            self._gl_profile,
-        );
+        let (mut window, events, glfw_inst) =
+            init_glfw(&self._descriptor, self._gl_version, self._gl_profile);
         init_gl(&mut window);
         self._glfw_window = window;
         self._events = events;
