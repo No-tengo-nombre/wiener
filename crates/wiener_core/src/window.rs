@@ -75,31 +75,37 @@ impl WindowDescriptor {
         return self;
     }
 
+    /// Set the key polling event.
     pub fn set_key_polling(mut self, key_polling: bool) -> Self {
         self.key_polling = key_polling;
         return self;
     }
-
+    
+    /// Set the cursor enter polling event.
     pub fn set_cursor_enter_polling(mut self, cursor_enter_polling: bool) -> Self {
         self.cursor_enter_polling = cursor_enter_polling;
         return self;
     }
 
+    /// Set the cursor position polling event.
     pub fn set_cursor_pos_polling(mut self, cursor_pos_polling: bool) -> Self {
         self.cursor_pos_polling = cursor_pos_polling;
         return self;
     }
-
+    
+    /// Set the mouse button polling event.
     pub fn set_mouse_button_polling(mut self, mouse_button_polling: bool) -> Self {
         self.mouse_button_polling = mouse_button_polling;
         return self;
     }
-
+    
+    /// Set the cursor mode.
     pub fn set_cursor_mode(mut self, cursor_mode: glfw::CursorMode) -> Self {
         self.cursor_mode = cursor_mode;
         return self;
     }
-
+    
+    /// Set whether to set the created window as current or not.
     pub fn set_make_current(mut self, make_current: bool) -> Self {
         self.make_current = make_current;
         return self;
