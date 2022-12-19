@@ -18,6 +18,58 @@ pub struct WindowDescriptor {
     pub mode: WindowMode,
 }
 
+impl WindowDescriptor {
+    /// Generate a builder for the descriptor.
+    pub fn builder() -> Self {
+        return WindowDescriptor {
+            ..Default::default()
+        };
+    }
+
+    /// Set the width.
+    pub fn set_width(mut self, width: u32) -> Self {
+        self.width = width;
+        return self;
+    }
+    
+    /// Set the height.
+    pub fn set_height(mut self, height: u32) -> Self {
+        self.height = height;
+        return self;
+    }
+    
+    /// Set the dimensions (width and height).
+    pub fn set_dimensions(mut self, width: u32, height: u32) -> Self {
+        self.width = width;
+        self.height = height;
+        return self;
+    }
+    
+    /// Set the title of the window.
+    pub fn set_title(mut self, title: &str) -> Self {
+        self.title = title.to_string();
+        return self;
+    }
+    
+    /// Set the mode.
+    pub fn set_mode(mut self, mode: WindowMode) -> Self {
+        self.mode = mode;
+        return self;
+    }
+
+    /// Make the window windowed.
+    pub fn set_windowed(mut self) -> Self {
+        self.mode = WindowMode::Windowed;
+        return self;
+    }
+    
+    /// Make the window fullscreen.
+    pub fn set_fullscreen(mut self, monitor: u32) -> Self {
+        self.mode = WindowMode::FullScreen(monitor);
+        return self;
+    }
+}
+
 impl Default for WindowDescriptor {
     fn default() -> Self {
         return WindowDescriptor {
