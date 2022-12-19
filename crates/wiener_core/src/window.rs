@@ -2,83 +2,36 @@ use glfw;
 use glfw::Context;
 use std::sync::mpsc::Receiver;
 
-#[derive(Copy, Clone, Debug)]
 /// Mode for the window.
+#[derive(Copy, Clone, Debug)]
 pub enum WindowMode {
     Windowed,
     FullScreen(u32),
 }
 
-#[derive(Clone, Debug)]
 /// Descriptor of a window.
+#[derive(Clone, Debug)]
 pub struct WindowDescriptor {
-    pub _width: u32,
-    pub _height: u32,
-    pub _title: String,
-    pub _mode: WindowMode,
+    pub width: u32,
+    pub height: u32,
+    pub title: String,
+    pub mode: WindowMode,
 }
 
-impl WindowDescriptor {
-    /// Generate a builder for the descriptor.
-    pub fn builder() -> Self {
+impl Default for WindowDescriptor {
+    fn default() -> Self {
         return WindowDescriptor {
-            _width: 640,
-            _height: 480,
-            _title: "Hello World!".to_string(),
-            _mode: WindowMode::Windowed,
+            width: 640,
+            height: 480,
+            title: "Hello World!".to_string(),
+            mode: WindowMode::Windowed,
         };
-    }
-
-    /// Set the width.
-    pub fn width(mut self, width: u32) -> Self {
-        self._width = width;
-        return self;
-    }
-    
-    /// Set the height.
-    pub fn height(mut self, height: u32) -> Self {
-        self._height = height;
-        return self;
-    }
-    
-    /// Set the dimensions (width and height).
-    pub fn dimensions(mut self, width: u32, height: u32) -> Self {
-        self._width = width;
-        self._height = height;
-        return self;
-    }
-    
-    /// Set the title of the window.
-    pub fn title(mut self, title: &str) -> Self {
-        self._title = title.to_string();
-        return self;
-    }
-    
-    /// Set the mode.
-    pub fn mode(mut self, mode: WindowMode) -> Self {
-        self._mode = mode;
-        return self;
-    }
-
-    /// Make the window windowed.
-    pub fn windowed(mut self) -> Self {
-        self._mode = WindowMode::Windowed;
-        return self;
-    }
-    
-    /// Make the window fullscreen.
-    pub fn fullscreen(mut self, monitor: u32) -> Self {
-        self._mode = WindowMode::FullScreen(monitor);
-        return self;
     }
 }
 
 /// Initializes a GLFW window, setting it as the current one.
 pub fn init_glfw(
-    width: u32,
-    height: u32,
-    title: &str,
-    mode: WindowMode,
+    descriptor: &WindowDescriptor,
     version: (u32, u32),
     profile: glfw::OpenGlProfileHint,
 ) -> (glfw::Window, Receiver<(f64, glfw::WindowEvent)>, glfw::Glfw) {
@@ -89,16 +42,16 @@ pub fn init_glfw(
     // glfw_inst.window_hint(glfw::WindowHint::OpenGlForwardCompat(true));
     glfw_inst.window_hint(glfw::WindowHint::OpenGlProfile(profile));
 
-    let (mut window, events) = match mode {
+    let (mut window, events) = match descriptor.mode {
         WindowMode::Windowed => glfw_inst
-            .create_window(width, height, title, glfw::WindowMode::Windowed)
+            .create_window(descriptor.width, descriptor.height, &descriptor.title, glfw::WindowMode::Windowed)
             .expect("Error creating GLFW window"),
         WindowMode::FullScreen(_) => glfw_inst
             .with_primary_monitor(|temp_glfw, m| {
                 temp_glfw.create_window(
-                    width,
-                    height,
-                    title,
+                    descriptor.width,
+                    descriptor.height,
+                    &descriptor.title,
                     m.map_or(glfw::WindowMode::Windowed, |m| {
                         glfw::WindowMode::FullScreen(m)
                     }),

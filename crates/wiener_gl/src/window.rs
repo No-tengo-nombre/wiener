@@ -21,7 +21,7 @@ impl GLWindow {
             .create_window(1, 1, "", glfw::WindowMode::Windowed)
             .expect("");
         return GLWindow {
-            _descriptor: WindowDescriptor::builder(),
+            _descriptor: WindowDescriptor::default(),
             _glfw_window: window,
             _events: receiver,
             _glfw_instance: empty_instance,
@@ -91,10 +91,7 @@ impl GLWindow {
     /// Build the window.
     pub fn build(mut self) -> Self {
         let (mut window, events, glfw_inst) = init_glfw(
-            self._descriptor._width,
-            self._descriptor._height,
-            &self._descriptor._title,
-            self._descriptor._mode,
+            &self._descriptor,
             self._gl_version,
             self._gl_profile,
         );
