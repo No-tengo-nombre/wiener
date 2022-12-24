@@ -1,3 +1,1 @@
-mod matrices;
-
-pub use matrices::*;
+pub mod linalg;
