@@ -3,3 +3,5 @@
 pub mod prelude;
 
 pub mod image;
+
+pub mod math;
