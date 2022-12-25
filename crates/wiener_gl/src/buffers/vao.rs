@@ -72,10 +72,20 @@ impl VertexArray {
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
     pub fn layout(mut self, new_layout: &Vec<VertexAttribute>) -> Self {
+        self.set_layout(new_layout);
+        return self;
+    }
+
+    /// Specify the layout of the vertex array. This layout corresponds
+    /// to a vector of VertexAttribute structs.
+    ///
+    /// For example, if your vertex has 3 spatial coordinates, 3 colors
+    /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
+    pub fn set_layout(&mut self, new_layout: &Vec<VertexAttribute>) {
         self.layout = new_layout.to_vec();
         self.stride = new_layout.iter().map(|a| a.size).sum();
+        log::debug!("VertexArray :: Set layout to {:?}. New stride is {:?}", self.layout, self.stride);
         self.update();
-        return self;
     }
 
     /// Push a new attribute to the VAO.
@@ -88,6 +98,7 @@ impl VertexArray {
     pub fn push_attribute_inplace(&mut self, new_attribute: VertexAttribute) {
         self.layout.push(new_attribute);
         self.stride += new_attribute.size;
+        log::debug!("VertexArray :: Added {:?}. New layout is {:?} and stride is {:?}", new_attribute, self.layout, self.stride);
         new_attribute.bind_vao(&self);
     }
 
