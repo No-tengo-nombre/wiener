@@ -35,4 +35,11 @@ impl GLManager {
             gl::BlendFunc(sfactor, dfactor);
         }
     }
+
+    pub fn viewport(start_x: i32, start_y: i32, width: i32, height: i32) {
+        log::trace!("Setting viewport to {:?}x{:?} at ({:?}, {:?}", width, height, start_x, start_y);
+        unsafe {
+            gl::Viewport(0, 0, width, height);
+        }
+    }
 }
