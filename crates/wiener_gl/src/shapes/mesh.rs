@@ -127,21 +127,6 @@ impl Mesh {
         self.projection_mat = new_projection_mat;
         return self;
     }
-
-    pub fn set_model_mat(mut self, new_model_mat: [[f32; 4]; 4]) {
-        trace!("Mesh :: Setting model matrix");
-        self.model_mat = new_model_mat;
-    }
-
-    pub fn set_view_mat(mut self, new_view_mat: [[f32; 4]; 4]) {
-        trace!("Mesh :: Setting view matrix");
-        self.view_mat = new_view_mat;
-    }
-
-    pub fn set_projection_mat(mut self, new_projection_mat: [[f32; 4]; 4]) {
-        trace!("Mesh :: Setting projection matrix");
-        self.projection_mat = new_projection_mat;
-    }
 }
 
 impl Bindable for Mesh {
