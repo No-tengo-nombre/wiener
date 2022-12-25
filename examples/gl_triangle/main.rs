@@ -13,26 +13,30 @@ fn main() {
         ..Default::default()
     };
     let mut window = GLWindow::builder().descriptor(window_descriptor).build();
-    
+
     log::debug!("gl_triangle :: Making triangle shader");
     let triangle_shader = ShaderProgram::new()
-    .add_shader(Shader::from_file("examples/gl_triangle/resources/triangle.vert"))
-    .add_shader(Shader::from_file("examples/gl_triangle/resources/triangle.frag"));
-    
+        .add_shader(Shader::from_file(
+            "examples/gl_triangle/resources/triangle.vert",
+        ))
+        .add_shader(Shader::from_file(
+            "examples/gl_triangle/resources/triangle.frag",
+        ));
+
     log::debug!("gl_triangle :: Making triangle mesh");
     let triangle = Mesh::new()
-    .vertices(&[
+        .vertices(&[
             -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
              0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
              0.0,  0.5, 0.0, 0.0, 0.0, 1.0,
-             ])
+            ])
         .indices(&[0, 1, 2])
         .layout(&[3, 3])
         .shader(triangle_shader);
 
     log::debug!("gl_triangle :: Setting clear color");
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
-    
+
     log::debug!("gl_triangle :: Starting the render loop");
     while !window.should_close() {
         window.poll_events();
