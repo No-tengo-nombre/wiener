@@ -4,27 +4,15 @@ use num::traits::{real::Real, Pow};
 use num::{Float, Num};
 
 pub fn subtract2<T: Sub<T, Output = T> + Copy>(a: [T; 2], b: [T; 2]) -> [T; 2] {
-    return [
-        a[0] - b[0],
-        a[1] - b[1],
-    ];
+    return [a[0] - b[0], a[1] - b[1]];
 }
 
 pub fn subtract3<T: Sub<T, Output = T> + Copy>(a: [T; 3], b: [T; 3]) -> [T; 3] {
-    return [
-        a[0] - b[0],
-        a[1] - b[1],
-        a[2] - b[2],
-    ];
+    return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 
 pub fn subtract4<T: Sub<T, Output = T> + Copy>(a: [T; 4], b: [T; 4]) -> [T; 4] {
-    return [
-        a[0] - b[0],
-        a[1] - b[1],
-        a[2] - b[2],
-        a[3] - b[3],
-    ];
+    return [a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3]];
 }
 
 /// Calculate the cross product between two vectors.
@@ -172,11 +160,9 @@ pub fn spherical_to_cartesian<T: Float>(r: T, phi: T, theta: T) -> [T; 3] {
 pub fn clamp<T: PartialOrd<T> + Copy>(num: T, bottom: Option<T>, top: Option<T>) -> T {
     if top.is_some() && num > top.unwrap() {
         return top.unwrap();
-    }
-    else if bottom.is_some() && num < bottom.unwrap() {
+    } else if bottom.is_some() && num < bottom.unwrap() {
         return bottom.unwrap();
-    }
-    else {
+    } else {
         return num;
     }
 }
@@ -187,9 +173,14 @@ pub fn perspective_mat<T: Real>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 
     return [
         [two * n / (r - l), T::zero(), (r + l) / (r - l), T::zero()],
         [T::zero(), two * n / (t - b), (t + b) / (t - b), T::zero()],
-        [T::zero(), T::zero(), (n + f) / (n - f), two * n * f / (n - f)],
+        [
+            T::zero(),
+            T::zero(),
+            (n + f) / (n - f),
+            two * n * f / (n - f),
+        ],
         [T::zero(), T::zero(), -T::one(), T::zero()],
-    ]
+    ];
 }
 
 /// Generate perspective matrix from an FOV.
@@ -209,13 +200,14 @@ pub fn ortographic_mat<T: Real>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 
         [T::zero(), two / (t - b), T::zero(), (b + t) / (b - t)],
         [T::zero(), T::zero(), two / (n - f), (n + f) / (n - f)],
         [T::zero(), T::zero(), T::zero(), T::one()],
-    ]
+    ];
 }
 
 /// Generate a view matrix.
 pub fn view_mat<T>(eye: [T; 3], up: [T; 3], at: [T; 3]) -> [[T; 4]; 4]
 where
-    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,{
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
+{
     let e = eye;
     let a = at;
     let f = normalize3(subtract3(a, e));
