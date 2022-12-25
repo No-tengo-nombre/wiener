@@ -166,7 +166,8 @@ impl<'a> ShaderProgram<'a> {
 
     pub fn get_uniform_location(&self, name: &str) -> GLint {
         unsafe {
-            return gl::GetUniformLocation(self._id, name.as_bytes().as_ptr() as *const i8);
+            // Strings in rust are not null terminated, so we terminate them manually.
+            return gl::GetUniformLocation(self._id, (name.to_owned() + "\0").as_ptr() as *const GLchar);
         }
     }
 
