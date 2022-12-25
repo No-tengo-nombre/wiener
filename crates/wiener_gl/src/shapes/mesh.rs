@@ -24,8 +24,10 @@ pub struct Mesh {
 impl Mesh {
     pub fn new() -> Self {
         info!("Mesh :: Creating mesh");
+        let vao = VertexArray::builder();
+        vao.bind();
         return Mesh {
-            vao: VertexArray::builder(),
+            vao,
             _vbo: VertexBuffer::new(),
             _ebo: ElementBuffer::new(),
             primitive: gl::TRIANGLES,
