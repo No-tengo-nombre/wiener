@@ -1,6 +1,7 @@
 use crate::Bindable;
 
 use gl;
+use gl::types::*;
 use log;
 
 /// Vertex array that specifies the vertex layout on GPU memory.
@@ -14,6 +15,9 @@ pub struct VertexArray {
 
     /// Size in bytes of each element.
     pub size: u32,
+
+    /// Type of contained data.
+    pub data_type: GLenum,
 
     /// Layout in GPU memory of the vertex.
     pub layout: Vec<u32>,
@@ -32,6 +36,7 @@ impl VertexArray {
             _id: vao_id,
             stride: 0,
             size: 4,
+            data_type: gl::FLOAT,
             layout: [].to_vec(),
         };
     }
@@ -54,6 +59,12 @@ impl VertexArray {
         return self;
     }
 
+    /// Set the data type.
+    pub fn data_type(mut self, new_type: GLenum) -> Self {
+        self.data_type = new_type;
+        return self;
+    }
+
     /// Update the vertex array, creating the attributes.
     pub fn update(&self) {
         log::info!("VertexArray :: Updating layout");
@@ -63,7 +74,7 @@ impl VertexArray {
                 gl::VertexAttribPointer(
                     i as u32,
                     l as i32,
-                    gl::FLOAT,
+                    self.data_type,
                     gl::FALSE,
                     (self.size * self.stride) as i32,
                     (self.size * self.layout[0..i].iter().sum::<u32>()) as *const _,
