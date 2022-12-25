@@ -24,23 +24,6 @@ pub struct VertexArray {
 }
 
 impl VertexArray {
-    /// Generate a builder for a vertex array.
-    pub fn builder() -> Self {
-        let mut vao_id = 0;
-        unsafe {
-            gl::GenVertexArrays(1, &mut vao_id);
-        }
-        log::info!("VertexArray :: Creating new VertexArray {:?}", vao_id);
-
-        return VertexArray {
-            _id: vao_id,
-            stride: 0,
-            size: 4,
-            data_type: gl::FLOAT,
-            layout: [].to_vec(),
-        };
-    }
-
     /// Set the size in bytes of each number.
     pub fn size(mut self, new_size: u32) -> Self {
         self.size = new_size;
@@ -105,5 +88,24 @@ impl Bindable for VertexArray {
         unsafe {
             gl::DeleteVertexArrays(1, &self._id);
         }
+    }
+}
+
+impl Default for VertexArray {
+    /// Generate a builder for a vertex array.
+    fn default() -> Self {
+        let mut vao_id = 0;
+        unsafe {
+            gl::GenVertexArrays(1, &mut vao_id);
+        }
+        log::info!("VertexArray :: Creating new VertexArray {:?}", vao_id);
+
+        return VertexArray {
+            _id: vao_id,
+            stride: 0,
+            size: 4,
+            data_type: gl::FLOAT,
+            layout: [].to_vec(),
+        };
     }
 }

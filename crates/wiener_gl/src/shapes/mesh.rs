@@ -24,7 +24,7 @@ pub struct Mesh {
 impl Mesh {
     pub fn new() -> Self {
         info!("Mesh :: Creating mesh");
-        let vao = VertexArray::builder();
+        let vao = VertexArray::default();
         vao.bind();
         return Mesh {
             vao,
