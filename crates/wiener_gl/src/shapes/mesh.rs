@@ -19,7 +19,7 @@ pub struct Mesh {
 }
 
 impl Mesh {
-    pub fn builder() -> Self {
+    pub fn new() -> Self {
         return Mesh {
             vao: VertexArray::builder(),
             _vbo: VertexBuffer::new(),
