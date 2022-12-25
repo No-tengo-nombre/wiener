@@ -62,6 +62,16 @@ impl VertexArray {
         return self;
     }
 
+    /// Specify the layout of the vertex array. This layout corresponds
+    /// to a vector containing the size of each attribute.
+    ///
+    /// For example, if your vertex has 3 spatial coordinates, 3 colors
+    /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
+    pub fn set_layout(&mut self, new_layout: &[u32]) {
+        self._layout = new_layout.to_vec();
+        self._stride = new_layout.iter().sum();
+    }
+
     /// Build the vertex array, creating the attributes.
     pub fn build(self) -> Self {
         unsafe {
