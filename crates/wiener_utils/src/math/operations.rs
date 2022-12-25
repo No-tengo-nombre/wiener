@@ -3,16 +3,106 @@ use std::ops::{AddAssign, Sub};
 use num::traits::{real::Real, Pow};
 use num::{Float, Num};
 
+/// Subtract two vectors.
 pub fn subtract2<T: Sub<T, Output = T> + Copy>(a: [T; 2], b: [T; 2]) -> [T; 2] {
     return [a[0] - b[0], a[1] - b[1]];
 }
 
+/// Subtract two vectors.
 pub fn subtract3<T: Sub<T, Output = T> + Copy>(a: [T; 3], b: [T; 3]) -> [T; 3] {
     return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 }
 
+/// Subtract two vectors.
 pub fn subtract4<T: Sub<T, Output = T> + Copy>(a: [T; 4], b: [T; 4]) -> [T; 4] {
     return [a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3]];
+}
+
+/// Extract a column from a matrix.
+pub fn extract_column2<T: Num + Copy>(mat: [[T; 2]; 2], index: usize) -> [T; 2] {
+    let mut result = [T::zero(), T::zero()];
+    for i in 0..mat.len() {
+        result[i] = mat[i][index];
+    }
+    return result;
+}
+
+/// Extract a column from a matrix.
+pub fn extract_column3<T: Num + Copy>(mat: [[T; 3]; 3], index: usize) -> [T; 3] {
+    let mut result = [T::zero(), T::zero(), T::zero()];
+    for i in 0..mat.len() {
+        result[i] = mat[i][index];
+    }
+    return result;
+}
+
+/// Extract a column from a matrix.
+pub fn extract_column4<T: Num + Copy>(mat: [[T; 4]; 4], index: usize) -> [T; 4] {
+    let mut result = [T::zero(), T::zero(), T::zero(), T::zero()];
+    for i in 0..mat.len() {
+        result[i] = mat[i][index];
+    }
+    return result;
+}
+
+/// Multiply two matrices.
+pub fn matmul2<T: Num + Copy + AddAssign<T>>(a: [[T; 2]; 2], b: [[T; 2]; 2]) -> [[T; 2]; 2] {
+    let mut result = [[T::zero(); 2]; 2];
+    for i in 0..a.len() {
+        for j in 0..b.len() {
+            result[i][j] = dot2(a[i], extract_column2(b, j));
+        }
+    }
+    return result;
+}
+
+/// Multiply two matrices.
+pub fn matmul3<T: Num + Copy + AddAssign<T>>(a: [[T; 3]; 3], b: [[T; 3]; 3]) -> [[T; 3]; 3] {
+    let mut result = [[T::zero(); 3]; 3];
+    for i in 0..a.len() {
+        for j in 0..b.len() {
+            result[i][j] = dot3(a[i], extract_column3(b, j));
+        }
+    }
+    return result;
+}
+
+/// Multiply two matrices.
+pub fn matmul4<T: Num + Copy + AddAssign<T>>(a: [[T; 4]; 4], b: [[T; 4]; 4]) -> [[T; 4]; 4] {
+    let mut result = [[T::zero(); 4]; 4];
+    for i in 0..a.len() {
+        for j in 0..b.len() {
+            result[i][j] = dot4(a[i], extract_column4(b, j));
+        }
+    }
+    return result;
+}
+
+/// Multiply a matrix and a vector.
+pub fn matmul2v<T: Num + Copy + AddAssign<T>>(mat: [[T; 2]; 2], v: [T; 2]) -> [T; 2] {
+    let mut result = [T::zero(); 2];
+    for i in 0..mat.len() {
+        result[i] = dot2(mat[i], v);
+    }
+    return result;
+}
+
+/// Multiply a matrix and a vector.
+pub fn matmul3v<T: Num + Copy + AddAssign<T>>(mat: [[T; 3]; 3], v: [T; 3]) -> [T; 3] {
+    let mut result = [T::zero(); 3];
+    for i in 0..mat.len() {
+        result[i] = dot3(mat[i], v);
+    }
+    return result;
+}
+
+/// Multiply a matrix and a vector.
+pub fn matmul4v<T: Num + Copy + AddAssign<T>>(mat: [[T; 4]; 4], v: [T; 4]) -> [T; 4] {
+    let mut result = [T::zero(); 4];
+    for i in 0..mat.len() {
+        result[i] = dot4(mat[i], v);
+    }
+    return result;
 }
 
 /// Calculate the cross product between two vectors.
