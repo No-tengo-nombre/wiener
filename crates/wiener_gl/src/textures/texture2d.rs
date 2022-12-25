@@ -12,22 +12,25 @@ pub struct Texture2D {
     _id: u32,
 
     /// Slot to which the image is bound.
-    pub _tex_num: u32,
+    pub tex_num: u32,
 
     /// Format of the data.
-    pub _format: GLenum,
+    pub format: GLenum,
 
     /// Method to use for S wrapping.
-    pub _wrap_s: GLenum,
+    pub wrap_s: GLenum,
 
     /// Method to use for T wrapping.
-    pub _wrap_t: GLenum,
+    pub wrap_t: GLenum,
+
+    /// Method to use for R wrapping.
+    pub wrap_r: GLenum,
 
     /// Method for min filter.
-    pub _min_filter: GLenum,
+    pub min_filter: GLenum,
 
     /// Method for mag filter.
-    pub _mag_filter: GLenum,
+    pub mag_filter: GLenum,
 }
 
 impl Texture2D {
@@ -40,74 +43,83 @@ impl Texture2D {
         log::info!("Texture2D :: Creating new Texture2D {:?}", tex_id);
         return Texture2D {
             _id: tex_id,
-            _tex_num: 0,
-            _format: gl::RGB,
-            _wrap_s: gl::REPEAT,
-            _wrap_t: gl::REPEAT,
-            _min_filter: gl::LINEAR,
-            _mag_filter: gl::LINEAR,
+            tex_num: 0,
+            format: gl::RGB,
+            wrap_s: gl::REPEAT,
+            wrap_t: gl::REPEAT,
+            wrap_r: gl::REPEAT,
+            min_filter: gl::LINEAR,
+            mag_filter: gl::LINEAR,
         };
     }
 
     /// Change the slot of the texture.
     pub fn tex_num(mut self, new_bind: u32) -> Self {
         log::trace!("Texture2D :: Setting texture num {:?}", new_bind);
-        self._tex_num = new_bind;
+        self.tex_num = new_bind;
         return self;
     }
 
     /// Change the format of the texture.
     pub fn format(mut self, new_format: GLenum) -> Self {
         log::trace!("Texture2D :: Setting format {:?}", new_format);
-        self._format = new_format;
+        self.format = new_format;
         return self;
     }
 
     /// Change the S wrapping method.
     pub fn wrap_s(mut self, new_wrap: GLenum) -> Self {
         log::trace!("Texture2D :: Setting wrap S {:?}", new_wrap);
-        self._wrap_s = new_wrap;
+        self.wrap_s = new_wrap;
         return self;
     }
 
     /// Change the T wrapping method.
     pub fn wrap_t(mut self, new_wrap: GLenum) -> Self {
         log::trace!("Texture2D :: Setting wrap T {:?}", new_wrap);
-        self._wrap_t = new_wrap;
+        self.wrap_t = new_wrap;
+        return self;
+    }
+
+    /// Change the R wrapping method.
+    pub fn wrap_r(mut self, new_wrap: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting wrap R {:?}", new_wrap);
+        self.wrap_r = new_wrap;
         return self;
     }
 
     /// Change the min filtering method.
     pub fn min_filter(mut self, new_filter: GLenum) -> Self {
         log::trace!("Texture2D :: Setting min filter {:?}", new_filter);
-        self._min_filter = new_filter;
+        self.min_filter = new_filter;
         return self;
     }
 
     /// Change the max filtering method.
     pub fn mag_filter(mut self, new_filter: GLenum) -> Self {
         log::trace!("Texture2D :: Setting mag filter {:?}", new_filter);
-        self._mag_filter = new_filter;
+        self.mag_filter = new_filter;
         return self;
     }
 
     /// Build the texture. After building, you should buffer the desired
     /// image.
     pub fn build<T>(self) -> Self {
-        log::info!("Texture2D :: Building Texture2D with parameters:\nWrap S {:?}\nWrap T {:?}\nMin filter {:?}\nMag filter {:?}", self._wrap_s, self._wrap_t, self._min_filter, self._mag_filter);
+        log::info!("Texture2D :: Building Texture2D with parameters:\nWrap S {:?}\nWrap T {:?}\nWrap R {:?}\nMin filter {:?}\nMag filter {:?}", self.wrap_s, self.wrap_t, self.wrap_r, self.min_filter, self.mag_filter);
         self.bind();
         unsafe {
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, self._wrap_s as i32);
-            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, self._wrap_t as i32);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, self.wrap_s as i32);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, self.wrap_t as i32);
+            gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_R, self.wrap_r as i32);
             gl::TexParameteri(
                 gl::TEXTURE_2D,
                 gl::TEXTURE_MIN_FILTER,
-                self._min_filter as i32,
+                self.min_filter as i32,
             );
             gl::TexParameteri(
                 gl::TEXTURE_2D,
                 gl::TEXTURE_MAG_FILTER,
-                self._mag_filter as i32,
+                self.mag_filter as i32,
             );
         }
         return self;
@@ -125,11 +137,11 @@ impl Texture2D {
             gl::TexImage2D(
                 gl::TEXTURE_2D,
                 0,
-                self._format as i32,
+                self.format as i32,
                 width,
                 height,
                 0,
-                self._format,
+                self.format,
                 gl::UNSIGNED_BYTE,
                 data.as_ptr() as *const _,
             );
@@ -149,7 +161,7 @@ impl Texture2D {
     pub fn bind_slot(&self) {
         log::trace!("Texture2D :: Binding texture slot");
         unsafe {
-            gl::ActiveTexture(gl::TEXTURE0 + self._tex_num);
+            gl::ActiveTexture(gl::TEXTURE0 + self.tex_num);
         }
     }
 }
