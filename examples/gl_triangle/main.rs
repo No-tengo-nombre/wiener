@@ -38,9 +38,12 @@ fn main() {
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
 
     log::debug!("gl_triangle :: Starting the render loop");
+    let mut viewport;
     while !window.should_close() {
         window.poll_events();
+        viewport = window.get_window().get_framebuffer_size();
         GLManager::clear(gl::COLOR_BUFFER_BIT);
+        GLManager::viewport(0, 0, viewport.0, viewport.1);
 
         triangle.draw();
 
