@@ -26,7 +26,7 @@ impl VertexArray {
 
     /// Create a new vertex array with a given size.
     pub fn new_sized(size: u32, layout: &[u32]) -> Self {
-        return VertexArray::builder().size(size).layout(layout).build();
+        return VertexArray::builder().size(size).layout(layout);
     }
 
     /// Generate a builder for a vertex array.
@@ -58,7 +58,7 @@ impl VertexArray {
     pub fn layout(mut self, new_layout: &[u32]) -> Self {
         self._layout = new_layout.to_vec();
         self._stride = new_layout.iter().sum();
-
+        self.update();
         return self;
     }
 
@@ -70,10 +70,11 @@ impl VertexArray {
     pub fn set_layout(&mut self, new_layout: &[u32]) {
         self._layout = new_layout.to_vec();
         self._stride = new_layout.iter().sum();
+        self.update();
     }
 
-    /// Build the vertex array, creating the attributes.
-    pub fn build(self) -> Self {
+    /// Update the vertex array, creating the attributes.
+    pub fn update(&self) {
         unsafe {
             for i in 0..self._layout.len() {
                 let l = self._layout[i];
@@ -88,7 +89,6 @@ impl VertexArray {
                 gl::EnableVertexArrayAttrib(self._id, i as u32);
             }
         }
-        return self;
     }
 }
 
