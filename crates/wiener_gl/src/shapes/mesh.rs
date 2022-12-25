@@ -85,6 +85,11 @@ impl Mesh {
         return self;
     }
 
+    pub fn data_type(mut self, new_type: GLenum) -> Self {
+        self.vao.data_type = new_type;
+        return self;
+    }
+
     pub fn set_vertices<T>(&mut self, new_vertices: &[T]) {
         trace!("Mesh :: Setting vertices");
         self.vbo.buffer_data(new_vertices);
