@@ -3,7 +3,7 @@ use std::ffi::c_void;
 use crate::{Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer};
 
 use gl::types::GLenum;
-use log::{debug, info, trace};
+use log::{info, trace};
 use wiener_utils::math;
 
 pub struct Mesh {
@@ -181,13 +181,11 @@ impl Drawable for Mesh {
         self.bind();
 
         // Uniform the MVP matrices
-        debug!("Mesh :: Setting MVP uniforms");
         self.shader.uniform_mat4f("u_model", self.model_mat);
         self.shader.uniform_mat4f("u_view", self.view_mat);
         self.shader.uniform_mat4f("u_projection", self.projection_mat);
         
         unsafe {
-            debug!("Mesh :: Sending GL draw call");
             gl::DrawElements(self.primitive, self._primitive_num, gl::UNSIGNED_INT, 0 as *const c_void);
         }
     }
