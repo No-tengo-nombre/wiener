@@ -22,6 +22,7 @@ pub struct WindowDescriptor {
     pub cursor_enter_polling: bool,
     pub cursor_pos_polling: bool,
     pub mouse_button_polling: bool,
+    pub framebuffer_size_polling: bool,
     pub cursor_mode: glfw::CursorMode,
     pub make_current: bool,
 }
@@ -101,6 +102,12 @@ impl WindowDescriptor {
         return self;
     }
 
+    /// Set the framebuffer size polling event.
+    pub fn set_framebuffer_size_polling(mut self, framebuffer_size_polling: bool) -> Self {
+        self.framebuffer_size_polling = framebuffer_size_polling;
+        return self;
+    }
+
     /// Set the cursor mode.
     pub fn set_cursor_mode(mut self, cursor_mode: glfw::CursorMode) -> Self {
         self.cursor_mode = cursor_mode;
@@ -125,6 +132,7 @@ impl Default for WindowDescriptor {
             cursor_enter_polling: true,
             cursor_pos_polling: true,
             mouse_button_polling: true,
+            framebuffer_size_polling: true,
             cursor_mode: glfw::CursorMode::Normal,
             make_current: true,
         };
@@ -174,6 +182,7 @@ pub fn init_glfw(
     window.set_cursor_enter_polling(descriptor.cursor_enter_polling);
     window.set_mouse_button_polling(descriptor.mouse_button_polling);
     window.set_cursor_pos_polling(descriptor.cursor_pos_polling);
+    window.set_framebuffer_size_polling(descriptor.framebuffer_size_polling);
     if descriptor.make_current {
         window.make_current();
     }
