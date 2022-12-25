@@ -72,7 +72,7 @@ impl Bindable for UniformBuffer {
     }
     
     fn delete(&self) {
-        log::trace!("UniformBuffer :: Deleting");
+        log::info!("UniformBuffer :: Deleting");
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }

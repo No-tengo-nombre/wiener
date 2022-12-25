@@ -60,7 +60,7 @@ impl Bindable for ElementBuffer {
     }
     
     fn delete(&self) {
-        log::trace!("ElementBuffer :: Deleting");
+        log::info!("ElementBuffer :: Deleting");
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }

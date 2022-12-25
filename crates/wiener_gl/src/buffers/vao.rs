@@ -111,7 +111,7 @@ impl Bindable for VertexArray {
     }
     
     fn delete(&self) {
-        log::trace!("VertexArray :: Deleting");
+        log::info!("VertexArray :: Deleting");
         unsafe {
             gl::DeleteVertexArrays(1, &self._id);
         }

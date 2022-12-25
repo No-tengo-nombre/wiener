@@ -59,7 +59,7 @@ impl Bindable for VertexBuffer {
     }
     
     fn delete(&self) {
-        log::trace!("VertexBuffer :: Deleting");
+        log::info!("VertexBuffer :: Deleting");
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }
