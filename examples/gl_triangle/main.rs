@@ -1,6 +1,6 @@
 use gl;
 use log;
-use wiener::gl::{Drawable, GLManager, GLWindow, Mesh, Shader, ShaderProgram};
+use wiener::gl::{Drawable, GLManager, GLWindow, Mesh, Shader, ShaderProgram, VertexAttribute};
 use wiener::WindowDescriptor;
 
 fn main() {
@@ -32,7 +32,8 @@ fn main() {
              0.0,  0.5, 0.0, 0.0, 0.0, 1.0_f32,
             ])
         .indices(&[0, 1, 2])
-        .layout(&[3, 3])
+        .push_attribute(VertexAttribute { location: 0, size: 3, data_type: gl::FLOAT })
+        .push_attribute(VertexAttribute { location: 1, size: 3, data_type: gl::FLOAT })
         .shader(triangle_shader);
 
     log::debug!("gl_triangle :: Setting clear color");
