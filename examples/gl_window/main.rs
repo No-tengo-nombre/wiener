@@ -3,6 +3,7 @@ use wiener::gl::{GLManager, GLWindow};
 use wiener::WindowDescriptor;
 
 fn main() {
+    env_logger::init();
     let window_descriptor = WindowDescriptor {
         width: 1000,
         height: 1000,
