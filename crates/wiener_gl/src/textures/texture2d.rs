@@ -1,3 +1,5 @@
+use crate::Bindable;
+
 use gl;
 use gl::types::*;
 use wiener_utils::image;
@@ -135,24 +137,24 @@ impl Texture2D {
             gl::ActiveTexture(gl::TEXTURE0 + self._tex_num);
         }
     }
+}
 
-    /// Bind the texture.
-    pub fn bind(&self) {
+impl Bindable for Texture2D {
+    fn bind(&self) {
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, self._id);
         }
     }
 
-    /// Unbind the texture.
-    pub fn unbind(&self) {
+    fn unbind(&self) {
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, 0);
         }
     }
-    
-    pub fn delete(&self) {
+
+    fn delete(&self) {
         self.bind_slot();
         unsafe {
             gl::DeleteTextures(1, &self._id);

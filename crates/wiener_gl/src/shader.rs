@@ -1,3 +1,5 @@
+use crate::Bindable;
+
 use gl;
 use gl::types::*;
 use std::fs;
@@ -98,20 +100,22 @@ impl ShaderProgram {
         shader.delete();
         return self;
     }
+}
 
-    pub fn bind(&self) {
+impl Bindable for ShaderProgram {
+    fn bind(&self) {
         unsafe {
             gl::UseProgram(self._id);
         }
     }
 
-    pub fn unbind(&self) {
+    fn unbind(&self) {
         unsafe {
             gl::UseProgram(self._id);
         }
     }
 
-    pub fn delete(&self) {
+    fn delete(&self) {
         unsafe {
             gl::DeleteProgram(self._id);
         }
