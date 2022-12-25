@@ -10,26 +10,16 @@ pub struct VertexArray {
     _id: u32,
 
     /// Number of elements in each vertex.
-    _stride: u32,
+    pub stride: u32,
 
     /// Size in bytes of each element.
-    _size: u32,
+    pub size: u32,
 
     /// Layout in GPU memory of the vertex.
-    _layout: Vec<u32>,
+    pub layout: Vec<u32>,
 }
 
 impl VertexArray {
-    /// Create a new vertex array with size 4 (32 bits).
-    pub fn new(layout: &[u32]) -> Self {
-        return VertexArray::new_sized(4, layout);
-    }
-
-    /// Create a new vertex array with a given size.
-    pub fn new_sized(size: u32, layout: &[u32]) -> Self {
-        return VertexArray::builder().size(size).layout(layout);
-    }
-
     /// Generate a builder for a vertex array.
     pub fn builder() -> Self {
         let mut vao_id = 0;
@@ -40,21 +30,16 @@ impl VertexArray {
 
         return VertexArray {
             _id: vao_id,
-            _stride: 0,
-            _size: 4,
-            _layout: [].to_vec(),
+            stride: 0,
+            size: 4,
+            layout: [].to_vec(),
         };
     }
 
     /// Set the size in bytes of each number.
     pub fn size(mut self, new_size: u32) -> Self {
-        self._size = new_size;
+        self.size = new_size;
         return self;
-    }
-
-    /// Set the size in bytes of each number.
-    pub fn set_size(&mut self, new_size: u32) {
-        self._size = new_size;
     }
 
     /// Specify the layout of the vertex array. This layout corresponds
@@ -63,36 +48,25 @@ impl VertexArray {
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
     pub fn layout(mut self, new_layout: &[u32]) -> Self {
-        self._layout = new_layout.to_vec();
-        self._stride = new_layout.iter().sum();
+        self.layout = new_layout.to_vec();
+        self.stride = new_layout.iter().sum();
         self.update();
         return self;
-    }
-
-    /// Specify the layout of the vertex array. This layout corresponds
-    /// to a vector containing the size of each attribute.
-    ///
-    /// For example, if your vertex has 3 spatial coordinates, 3 colors
-    /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
-    pub fn set_layout(&mut self, new_layout: &[u32]) {
-        self._layout = new_layout.to_vec();
-        self._stride = new_layout.iter().sum();
-        self.update();
     }
 
     /// Update the vertex array, creating the attributes.
     pub fn update(&self) {
         log::info!("VertexArray :: Updating layout");
         unsafe {
-            for i in 0..self._layout.len() {
-                let l = self._layout[i];
+            for i in 0..self.layout.len() {
+                let l = self.layout[i];
                 gl::VertexAttribPointer(
                     i as u32,
                     l as i32,
                     gl::FLOAT,
                     gl::FALSE,
-                    (self._size * self._stride) as i32,
-                    (self._size * self._layout[0..i].iter().sum::<u32>()) as *const _,
+                    (self.size * self.stride) as i32,
+                    (self.size * self.layout[0..i].iter().sum::<u32>()) as *const _,
                 );
                 gl::EnableVertexArrayAttrib(self._id, i as u32);
             }

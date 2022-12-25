@@ -12,7 +12,7 @@ pub struct ElementBuffer {
     _id: u32,
 
     /// Usage of the data.
-    pub _usage: GLenum,
+    pub usage: GLenum,
 }
 
 impl ElementBuffer {
@@ -26,21 +26,15 @@ impl ElementBuffer {
 
         return ElementBuffer {
             _id: ebo_id,
-            _usage: gl::STATIC_DRAW,
+            usage: gl::STATIC_DRAW,
         };
     }
 
     /// Set the usage of the element buffer.
     pub fn usage(mut self, new_usage: GLenum) -> Self {
         log::trace!("ElementBuffer :: Setting usage");
-        self._usage = new_usage;
+        self.usage = new_usage;
         return self;
-    }
-
-    /// Set the usage of the element buffer.
-    pub fn set_usage(&mut self, new_usage: GLenum) {
-        log::trace!("ElementBuffer :: Setting usage");
-        self._usage = new_usage;
     }
 }
 
@@ -76,7 +70,7 @@ impl Buffer for ElementBuffer {
                 gl::ELEMENT_ARRAY_BUFFER,
                 (data.len() * size_of::<T>()) as isize,
                 data.as_ptr() as *const GLvoid,
-                self._usage,
+                self.usage,
             );
         }
         return *self;

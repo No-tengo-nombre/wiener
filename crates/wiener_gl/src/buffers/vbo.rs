@@ -11,7 +11,7 @@ pub struct VertexBuffer {
     _id: u32,
 
     /// Usage of the data.
-    pub _usage: GLenum,
+    pub usage: GLenum,
 }
 
 impl VertexBuffer {
@@ -25,21 +25,21 @@ impl VertexBuffer {
 
         return VertexBuffer {
             _id: vbo_id,
-            _usage: gl::STATIC_DRAW,
+            usage: gl::STATIC_DRAW,
         };
     }
 
     /// Set the usage of the vertex buffer.
     pub fn usage(mut self, new_usage: GLenum) -> Self {
         log::trace!("VertexBuffer :: Setting usage");
-        self._usage = new_usage;
+        self.usage = new_usage;
         return self;
     }
 
     /// Set the usage of the vertex buffer.
     pub fn set_usage(&mut self, new_usage: GLenum) {
         log::trace!("VertexBuffer :: Setting usage");
-        self._usage = new_usage;
+        self.usage = new_usage;
     }
 }
 
@@ -75,7 +75,7 @@ impl Buffer for VertexBuffer {
                 gl::ARRAY_BUFFER,
                 (data.len() * size_of::<T>()) as isize,
                 data.as_ptr() as *const GLvoid,
-                self._usage,
+                self.usage,
             );
         }
         return *self;

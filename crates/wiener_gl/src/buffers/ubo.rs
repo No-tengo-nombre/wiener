@@ -12,10 +12,10 @@ pub struct UniformBuffer {
     _id: u32,
 
     /// Size of the data.
-    pub _size: u32,
+    pub size: u32,
 
     /// Usage of the data.
-    pub _usage: GLenum,
+    pub usage: GLenum,
 }
 
 impl UniformBuffer {
@@ -29,22 +29,16 @@ impl UniformBuffer {
 
         return UniformBuffer {
             _id: ubo_id,
-            _size: size,
-            _usage: gl::STATIC_DRAW,
+            size,
+            usage: gl::STATIC_DRAW,
         };
     }
 
     /// Set the usage of the uniform buffer.
     pub fn usage(mut self, new_usage: GLenum) -> Self {
         log::trace!("UniformBuffer :: Setting usage");
-        self._usage = new_usage;
+        self.usage = new_usage;
         return self;
-    }
-
-    /// Set the usage of the uniform buffer.
-    pub fn set_usage(&mut self, new_usage: GLenum) {
-        log::trace!("UniformBuffer :: Setting usage");
-        self._usage = new_usage;
     }
 
     /// Binds the uniform buffer to the given index in memory.
@@ -88,7 +82,7 @@ impl Buffer for UniformBuffer {
                 gl::UNIFORM_BUFFER,
                 (data.len() * size_of::<T>()) as isize,
                 data.as_ptr() as *const GLvoid,
-                self._usage,
+                self.usage,
             );
         }
         return *self;

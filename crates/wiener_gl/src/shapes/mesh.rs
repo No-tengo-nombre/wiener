@@ -69,13 +69,13 @@ impl Mesh {
 
     pub fn usage(mut self, new_usage: GLenum) -> Self {
         trace!("Mesh :: Setting usage");
-        self._vbo.set_usage(new_usage);
+        self._vbo.usage = new_usage;
         return self;
     }
 
     pub fn layout(mut self, new_layout: &[u32]) -> Self {
         trace!("Mesh :: Setting layout");
-        self.vao.set_layout(new_layout);
+        self.vao.layout = new_layout.to_vec();
         return self;
     }
 
@@ -90,7 +90,7 @@ impl Mesh {
         self._vbo.buffer_data(new_vertices);
         let size = std::mem::size_of::<T>();
         info!("Mesh :: Setting associated VAO size to {:?}", size);
-        self.vao.set_size(size as u32);
+        self.vao.size = size as u32;
     }
 
     pub fn set_indices<T>(&mut self, new_indices: &[T]) {
@@ -101,13 +101,13 @@ impl Mesh {
 
     pub fn set_usage(&mut self, new_usage: GLenum) {
         trace!("Mesh :: Setting usage");
-        self._vbo.set_usage(new_usage);
-        self._ebo.set_usage(new_usage);
+        self._vbo.usage = new_usage;
+        self._ebo.usage = new_usage;
     }
 
     pub fn set_layout(&mut self, new_layout: &[u32]) {
         trace!("Mesh :: Setting layout");
-        self.vao.set_layout(new_layout);
+        self.vao.layout = new_layout.to_vec();
     }
 
     pub fn model_mat(mut self, new_model_mat: [[f32; 4]; 4]) -> Self {
