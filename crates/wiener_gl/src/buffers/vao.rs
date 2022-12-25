@@ -38,6 +38,12 @@ impl VertexAttribute {
     }
 }
 
+impl Default for VertexAttribute {
+    fn default() -> Self {
+        return VertexAttribute { location: 0, size: 0, data_type: gl::FLOAT };
+    }
+}
+
 /// Vertex array that specifies the vertex layout on GPU memory.
 #[derive(Clone, Debug)]
 pub struct VertexArray<'a> {
