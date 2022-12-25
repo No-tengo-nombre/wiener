@@ -8,5 +8,7 @@ edition = "2021"
 [dependencies]
 wiener_core = { path = "../wiener_core" }
 wiener_utils = { path = "../wiener_utils" }
+env_logger = "0.10.0"
 gl = "0.14.0"
 glfw = "0.46.0"
+log = "0.4.17"
