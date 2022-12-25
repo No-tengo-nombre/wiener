@@ -98,4 +98,22 @@ impl ShaderProgram {
         shader.delete();
         return self;
     }
+
+    pub fn bind(&self) {
+        unsafe {
+            gl::UseProgram(self._id);
+        }
+    }
+
+    pub fn unbind(&self) {
+        unsafe {
+            gl::UseProgram(self._id);
+        }
+    }
+
+    pub fn delete(&self) {
+        unsafe {
+            gl::DeleteProgram(self._id);
+        }
+    }
 }
