@@ -24,12 +24,12 @@ impl VertexArray {
     pub fn new(layout: &[u32]) -> Self {
         return VertexArray::new_sized(4, layout);
     }
-    
+
     /// Create a new vertex array with a given size.
     pub fn new_sized(size: u32, layout: &[u32]) -> Self {
         return VertexArray::builder().size(size).layout(layout);
     }
-    
+
     /// Generate a builder for a vertex array.
     pub fn builder() -> Self {
         let mut vao_id = 0;
@@ -109,7 +109,7 @@ impl Bindable for VertexArray {
             gl::BindVertexArray(0);
         }
     }
-    
+
     fn delete(&self) {
         log::info!("VertexArray :: Deleting");
         unsafe {

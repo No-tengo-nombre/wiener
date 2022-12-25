@@ -23,7 +23,7 @@ impl ElementBuffer {
             gl::GenBuffers(1, &mut ebo_id);
         }
         log::info!("ElementBuffer :: Creating new ElementBuffer {:?}", ebo_id);
-        
+
         return ElementBuffer {
             _id: ebo_id,
             _usage: gl::STATIC_DRAW,
@@ -51,14 +51,14 @@ impl Bindable for ElementBuffer {
             gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, self._id);
         }
     }
-    
+
     fn unbind(&self) {
         log::trace!("ElementBuffer :: Unbinding");
         unsafe {
             gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
         }
     }
-    
+
     fn delete(&self) {
         log::info!("ElementBuffer :: Deleting");
         unsafe {

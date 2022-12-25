@@ -94,7 +94,7 @@ impl GLWindow {
     pub fn build(mut self) -> Self {
         log::info!("GLWindow :: Building window");
         let (mut window, events, glfw_inst) =
-        init_glfw(&self._descriptor, self._gl_version, self._gl_profile);
+            init_glfw(&self._descriptor, self._gl_version, self._gl_profile);
         init_gl(&mut window);
         self._glfw_window = window;
         self._events = events;

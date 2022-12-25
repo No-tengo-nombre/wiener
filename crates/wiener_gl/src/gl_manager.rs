@@ -28,7 +28,7 @@ impl GLManager {
             gl::Clear(mask);
         }
     }
-    
+
     pub fn blend_func(sfactor: u32, dfactor: u32) {
         log::info!("GLManager :: Setting blending function");
         unsafe {

@@ -139,7 +139,7 @@ pub fn init_glfw(
 ) -> (glfw::Window, Receiver<(f64, glfw::WindowEvent)>, glfw::Glfw) {
     let mut glfw_inst = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
     log::info!("init_glfw :: Initializing GLFW");
-    
+
     glfw_inst.window_hint(glfw::WindowHint::CenterCursor(true));
     glfw_inst.window_hint(glfw::WindowHint::ContextVersion(version.0, version.1));
     // glfw_inst.window_hint(glfw::WindowHint::OpenGlForwardCompat(true));
@@ -166,8 +166,8 @@ pub fn init_glfw(
                 )
             })
             .expect("Error creating GLFW window"),
-        };
-        
+    };
+
     log::info!("init_glfw :: Configuring window");
     window.set_key_polling(descriptor.key_polling);
     window.set_cursor_mode(descriptor.cursor_mode);

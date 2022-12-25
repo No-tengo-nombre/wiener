@@ -40,7 +40,7 @@ impl UniformBuffer {
         self._usage = new_usage;
         return self;
     }
-    
+
     /// Set the usage of the uniform buffer.
     pub fn set_usage(&mut self, new_usage: GLenum) {
         log::trace!("UniformBuffer :: Setting usage");
@@ -63,14 +63,14 @@ impl Bindable for UniformBuffer {
             gl::BindBuffer(gl::UNIFORM_BUFFER, self._id);
         }
     }
-    
+
     fn unbind(&self) {
         log::trace!("UniformBuffer :: Unbinding");
         unsafe {
             gl::BindBuffer(gl::UNIFORM_BUFFER, 0);
         }
     }
-    
+
     fn delete(&self) {
         log::info!("UniformBuffer :: Deleting");
         unsafe {

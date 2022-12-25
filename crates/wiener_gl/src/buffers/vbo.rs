@@ -50,14 +50,14 @@ impl Bindable for VertexBuffer {
             gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
         }
     }
-    
+
     fn unbind(&self) {
         log::trace!("VertexBuffer :: Unbinding");
         unsafe {
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);
         }
     }
-    
+
     fn delete(&self) {
         log::info!("VertexBuffer :: Deleting");
         unsafe {

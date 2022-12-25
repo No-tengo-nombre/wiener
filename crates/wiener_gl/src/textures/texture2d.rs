@@ -62,7 +62,7 @@ impl Texture2D {
         self._format = new_format;
         return self;
     }
-    
+
     /// Change the S wrapping method.
     pub fn wrap_s(mut self, new_wrap: GLenum) -> Self {
         log::trace!("Texture2D :: Setting wrap S {:?}", new_wrap);
@@ -76,14 +76,14 @@ impl Texture2D {
         self._wrap_t = new_wrap;
         return self;
     }
-    
+
     /// Change the min filtering method.
     pub fn min_filter(mut self, new_filter: GLenum) -> Self {
         log::trace!("Texture2D :: Setting min filter {:?}", new_filter);
         self._min_filter = new_filter;
         return self;
     }
-    
+
     /// Change the max filtering method.
     pub fn mag_filter(mut self, new_filter: GLenum) -> Self {
         log::trace!("Texture2D :: Setting mag filter {:?}", new_filter);
@@ -115,7 +115,11 @@ impl Texture2D {
 
     /// Buffer the given image to the texture.
     pub fn buffer_img<T>(self, data: &Vec<T>, width: i32, height: i32) -> Self {
-        log::info!("Texture2D :: Buffering {:?}x{:?} image to Texture2D", width, height);
+        log::info!(
+            "Texture2D :: Buffering {:?}x{:?} image to Texture2D",
+            width,
+            height
+        );
         self.bind();
         unsafe {
             gl::TexImage2D(

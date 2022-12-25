@@ -3,8 +3,8 @@ use crate::Bindable;
 use gl;
 use gl::types::*;
 use log;
-use std::fs;
 use std::collections::HashMap;
+use std::fs;
 
 fn get_shader_type(file_extension: &str) -> GLenum {
     let file_map = HashMap::from([
@@ -97,14 +97,19 @@ impl Shader {
 
     /// Create a new shader from a file, assuming the shader type from the file extension.
     pub fn from_file(filename: &str) -> Self {
-        let shader_content = fs::read_to_string(filename).expect(format!("Error reading file {:?}.", filename).as_str());
-        let file_extension = filename.split(".").last().expect("Couldn't find file extension.");
+        let shader_content = fs::read_to_string(filename)
+            .expect(format!("Error reading file {:?}.", filename).as_str());
+        let file_extension = filename
+            .split(".")
+            .last()
+            .expect("Couldn't find file extension.");
         return Shader::new(&shader_content, get_shader_type(file_extension));
     }
 
     /// Create a new shader from a file, explicitly giving the shader type.
     pub fn from_file_explicit(filename: &str, shader_type: GLenum) -> Self {
-        let shader_content = fs::read_to_string(filename).expect(format!("Error reading file {:?}.", filename).as_str());
+        let shader_content = fs::read_to_string(filename)
+            .expect(format!("Error reading file {:?}.", filename).as_str());
         return Shader::new(&shader_content, shader_type);
     }
 
@@ -121,7 +126,10 @@ impl ShaderProgram {
     pub fn new() -> Self {
         unsafe {
             let program_id = gl::CreateProgram();
-            log::info!("ShaderProgram :: Creating new shader program {:?}", program_id);
+            log::info!(
+                "ShaderProgram :: Creating new shader program {:?}",
+                program_id
+            );
             return ShaderProgram {
                 _id: program_id,
                 _shaders: [].to_vec(),
@@ -166,36 +174,21 @@ impl ShaderProgram {
     pub fn uniform_2i(&self, name: &str, val0: i32, val1: i32) {
         self.bind();
         unsafe {
-            gl::Uniform2i(
-                self.get_uniform_location(name),
-                val0,
-                val1,
-            );
+            gl::Uniform2i(self.get_uniform_location(name), val0, val1);
         }
     }
 
     pub fn uniform_3i(&self, name: &str, val0: i32, val1: i32, val2: i32) {
         self.bind();
         unsafe {
-            gl::Uniform3i(
-                self.get_uniform_location(name),
-                val0,
-                val1,
-                val2,
-            );
+            gl::Uniform3i(self.get_uniform_location(name), val0, val1, val2);
         }
     }
 
     pub fn uniform_4i(&self, name: &str, val0: i32, val1: i32, val2: i32, val3: i32) {
         self.bind();
         unsafe {
-            gl::Uniform4i(
-                self.get_uniform_location(name),
-                val0,
-                val1,
-                val2,
-                val3,
-            );
+            gl::Uniform4i(self.get_uniform_location(name), val0, val1, val2, val3);
         }
     }
 
@@ -209,36 +202,21 @@ impl ShaderProgram {
     pub fn uniform_2f(&self, name: &str, val0: f32, val1: f32) {
         self.bind();
         unsafe {
-            gl::Uniform2f(
-                self.get_uniform_location(name),
-                val0,
-                val1,
-            );
+            gl::Uniform2f(self.get_uniform_location(name), val0, val1);
         }
     }
 
     pub fn uniform_3f(&self, name: &str, val0: f32, val1: f32, val2: f32) {
         self.bind();
         unsafe {
-            gl::Uniform3f(
-                self.get_uniform_location(name),
-                val0,
-                val1,
-                val2,
-            );
+            gl::Uniform3f(self.get_uniform_location(name), val0, val1, val2);
         }
     }
 
     pub fn uniform_4f(&self, name: &str, val0: f32, val1: f32, val2: f32, val3: f32) {
         self.bind();
         unsafe {
-            gl::Uniform4f(
-                self.get_uniform_location(name),
-                val0,
-                val1,
-                val2,
-                val3,
-            );
+            gl::Uniform4f(self.get_uniform_location(name), val0, val1, val2, val3);
         }
     }
 
@@ -293,7 +271,7 @@ impl Bindable for ShaderProgram {
             gl::UseProgram(self._id);
         }
     }
-    
+
     fn delete(&self) {
         log::info!("ShaderProgram :: Deleting");
         unsafe {

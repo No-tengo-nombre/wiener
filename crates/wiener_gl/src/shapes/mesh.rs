@@ -1,6 +1,8 @@
 use std::ffi::c_void;
 
-use crate::{Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer};
+use crate::{
+    Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer,
+};
 
 use gl::types::GLenum;
 use log::{info, trace};
@@ -41,7 +43,7 @@ impl Mesh {
         self._vbo.buffer_data(new_vertices);
         return self;
     }
-    
+
     pub fn indices<T>(mut self, new_indices: &[T]) -> Self {
         trace!("Mesh :: Setting indices");
         self._ebo.buffer_data(new_indices);
@@ -54,13 +56,13 @@ impl Mesh {
         self.shader = new_shader;
         return self;
     }
-    
+
     pub fn textures(mut self, new_textures: Vec<Texture2D>) -> Self {
         trace!("Mesh :: Setting textures");
         self.textures = new_textures;
         return self;
     }
-    
+
     pub fn add_texture(&mut self, texture: Texture2D) {
         trace!("Mesh :: Adding texture");
         self.textures.push(texture);
@@ -71,13 +73,13 @@ impl Mesh {
         self._vbo.set_usage(new_usage);
         return self;
     }
-    
+
     pub fn layout(mut self, new_layout: &[u32]) -> Self {
         trace!("Mesh :: Setting layout");
         self.vao.set_layout(new_layout);
         return self;
     }
-    
+
     pub fn primitive(mut self, new_primitive: GLenum) -> Self {
         trace!("Mesh :: Setting primitive type");
         self.primitive = new_primitive;
@@ -88,36 +90,36 @@ impl Mesh {
         trace!("Mesh :: Setting vertices");
         self._vbo.buffer_data(new_vertices);
     }
-    
+
     pub fn set_indices<T>(&mut self, new_indices: &[T]) {
         trace!("Mesh :: Setting indices");
         self._ebo.buffer_data(new_indices);
         self._primitive_num = new_indices.len() as i32;
     }
-    
+
     pub fn set_usage(&mut self, new_usage: GLenum) {
         trace!("Mesh :: Setting usage");
         self._vbo.set_usage(new_usage);
         self._ebo.set_usage(new_usage);
     }
-    
+
     pub fn set_layout(&mut self, new_layout: &[u32]) {
         trace!("Mesh :: Setting layout");
         self.vao.set_layout(new_layout);
     }
-    
+
     pub fn model_mat(mut self, new_model_mat: [[f32; 4]; 4]) -> Self {
         trace!("Mesh :: Setting model matrix");
         self.model_mat = new_model_mat;
         return self;
     }
-    
+
     pub fn view_mat(mut self, new_view_mat: [[f32; 4]; 4]) -> Self {
         trace!("Mesh :: Setting view matrix");
         self.view_mat = new_view_mat;
         return self;
     }
-    
+
     pub fn projection_mat(mut self, new_projection_mat: [[f32; 4]; 4]) -> Self {
         trace!("Mesh :: Setting projection matrix");
         self.projection_mat = new_projection_mat;
@@ -183,10 +185,16 @@ impl Drawable for Mesh {
         // Uniform the MVP matrices
         self.shader.uniform_mat4f("u_model", self.model_mat);
         self.shader.uniform_mat4f("u_view", self.view_mat);
-        self.shader.uniform_mat4f("u_projection", self.projection_mat);
-        
+        self.shader
+            .uniform_mat4f("u_projection", self.projection_mat);
+
         unsafe {
-            gl::DrawElements(self.primitive, self._primitive_num, gl::UNSIGNED_INT, 0 as *const c_void);
+            gl::DrawElements(
+                self.primitive,
+                self._primitive_num,
+                gl::UNSIGNED_INT,
+                0 as *const c_void,
+            );
         }
     }
 }
