@@ -10,8 +10,8 @@ use wiener_utils::math;
 
 pub struct Mesh {
     pub vao: VertexArray,
-    _vbo: VertexBuffer,
-    _ebo: ElementBuffer,
+    pub vbo: VertexBuffer,
+    pub ebo: ElementBuffer,
     pub primitive: GLenum,
     _primitive_num: i32,
     pub shader: ShaderProgram,
@@ -28,8 +28,8 @@ impl Mesh {
         vao.bind();
         return Mesh {
             vao,
-            _vbo: VertexBuffer::new(),
-            _ebo: ElementBuffer::new(),
+            vbo: VertexBuffer::new(),
+            ebo: ElementBuffer::new(),
             primitive: gl::TRIANGLES,
             _primitive_num: 0,
             shader: ShaderProgram::new(),
@@ -69,7 +69,7 @@ impl Mesh {
 
     pub fn usage(mut self, new_usage: GLenum) -> Self {
         trace!("Mesh :: Setting usage");
-        self._vbo.usage = new_usage;
+        self.vbo.usage = new_usage;
         return self;
     }
 
@@ -87,7 +87,7 @@ impl Mesh {
 
     pub fn set_vertices<T>(&mut self, new_vertices: &[T]) {
         trace!("Mesh :: Setting vertices");
-        self._vbo.buffer_data(new_vertices);
+        self.vbo.buffer_data(new_vertices);
         let size = std::mem::size_of::<T>();
         info!("Mesh :: Setting associated VAO size to {:?}", size);
         self.vao.size = size as u32;
@@ -95,14 +95,14 @@ impl Mesh {
 
     pub fn set_indices<T>(&mut self, new_indices: &[T]) {
         trace!("Mesh :: Setting indices");
-        self._ebo.buffer_data(new_indices);
+        self.ebo.buffer_data(new_indices);
         self._primitive_num = new_indices.len() as i32;
     }
 
     pub fn set_usage(&mut self, new_usage: GLenum) {
         trace!("Mesh :: Setting usage");
-        self._vbo.usage = new_usage;
-        self._ebo.usage = new_usage;
+        self.vbo.usage = new_usage;
+        self.ebo.usage = new_usage;
     }
 
     pub fn set_layout(&mut self, new_layout: &[u32]) {
@@ -148,8 +148,8 @@ impl Bindable for Mesh {
     fn bind(&self) {
         trace!("Mesh :: Binding");
         self.vao.bind();
-        self._vbo.bind();
-        self._ebo.bind();
+        self.vbo.bind();
+        self.ebo.bind();
         self.shader.bind();
         for t in &self.textures {
             t.bind();
@@ -159,8 +159,8 @@ impl Bindable for Mesh {
     fn unbind(&self) {
         trace!("Mesh :: Unbinding");
         self.vao.unbind();
-        self._vbo.unbind();
-        self._ebo.unbind();
+        self.vbo.unbind();
+        self.ebo.unbind();
         self.shader.unbind();
         for t in &self.textures {
             t.unbind();
@@ -170,8 +170,8 @@ impl Bindable for Mesh {
     fn delete(&self) {
         trace!("Mesh :: Deleting");
         self.vao.delete();
-        self._vbo.delete();
-        self._ebo.delete();
+        self.vbo.delete();
+        self.ebo.delete();
         self.shader.delete();
         for t in &self.textures {
             t.delete();
