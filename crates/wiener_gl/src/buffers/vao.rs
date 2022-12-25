@@ -99,7 +99,7 @@ impl VertexArray {
         self.layout.push(new_attribute);
         self.stride += new_attribute.size;
         log::debug!("VertexArray :: Added {:?}. New layout is {:?} and stride is {:?}", new_attribute, self.layout, self.stride);
-        new_attribute.bind_vao(&self);
+        self.update();
     }
 
     /// Update the vertex array, creating the attributes.
