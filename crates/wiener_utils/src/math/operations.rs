@@ -3,6 +3,8 @@ use std::ops::{Add, AddAssign, Sub};
 use num::traits::{real::Real, Pow};
 use num::{Float, Num};
 
+// === Arithmetic operations === //
+
 /// Add two vectors.
 pub fn add<T: Add<T, Output = T> + Copy + Num, const N: usize>(a: [T; N], b: [T; N]) -> [T; N] {
     let mut result = [T::zero(); N];
@@ -51,6 +53,8 @@ pub fn subtract4<T: Sub<T, Output = T> + Copy>(a: [T; 4], b: [T; 4]) -> [T; 4] {
     return [a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3]];
 }
 
+// === Matrix manipulation === //
+
 /// Extract a column from a matrix.
 pub fn extract_column<T: Num + Copy, const N: usize>(mat: [[T; N]; N], index: usize) -> [T; N] {
     let mut result = [T::zero(); N];
@@ -86,6 +90,8 @@ pub fn extract_column4<T: Num + Copy>(mat: [[T; 4]; 4], index: usize) -> [T; 4] 
     }
     return result;
 }
+
+// === Matrix arithmetic === //
 
 /// Multiply two matrices.
 pub fn matmul<T: Num + Copy + AddAssign<T>, const N: usize>(a: [[T; N]; N], b: [[T; N]; N]) -> [[T; N]; N] {
@@ -339,6 +345,8 @@ where
     return result;
 }
 
+// === Number operations === //
+
 /// Transform from spherical to cartesian coordinates.
 pub fn spherical_to_cartesian<T: Float>(r: T, phi: T, theta: T) -> [T; 3] {
     return [
@@ -358,6 +366,8 @@ pub fn clamp<T: PartialOrd<T> + Copy>(num: T, bottom: Option<T>, top: Option<T>)
         return num;
     }
 }
+
+// === Notable matrices === //
 
 /// Generate perspective matrix.
 pub fn perspective_mat<T: Real>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 4] {
