@@ -3,6 +3,42 @@ use crate::Bindable;
 use gl;
 use gl::types::*;
 use std::fs;
+use std::collections::HashMap;
+
+fn get_shader_type(file_extension: &str) -> GLenum {
+    let file_map = HashMap::from([
+        // Vertex shaders
+        ("v", gl::VERTEX_SHADER),
+        ("vs", gl::VERTEX_SHADER),
+        ("vsh", gl::VERTEX_SHADER),
+        ("vert", gl::VERTEX_SHADER),
+        ("vertex", gl::VERTEX_SHADER),
+        // Fragment shaders
+        ("f", gl::FRAGMENT_SHADER),
+        ("fs", gl::FRAGMENT_SHADER),
+        ("fsh", gl::FRAGMENT_SHADER),
+        ("frag", gl::FRAGMENT_SHADER),
+        ("fragment", gl::FRAGMENT_SHADER),
+        // Geometry shaders
+        ("g", gl::GEOMETRY_SHADER),
+        ("gs", gl::GEOMETRY_SHADER),
+        ("geom", gl::GEOMETRY_SHADER),
+        ("geometry", gl::GEOMETRY_SHADER),
+        // Tessellation shaders
+        ("control", gl::TESS_CONTROL_SHADER),
+        ("tesc", gl::TESS_CONTROL_SHADER),
+        ("tescontrol", gl::TESS_CONTROL_SHADER),
+        ("tesscontrol", gl::TESS_CONTROL_SHADER),
+        ("eval", gl::TESS_EVALUATION_SHADER),
+        ("tese", gl::TESS_EVALUATION_SHADER),
+        ("teseval", gl::TESS_EVALUATION_SHADER),
+        ("tesseval", gl::TESS_EVALUATION_SHADER),
+        // Compute shaders
+        ("comp", gl::COMPUTE_SHADER),
+        ("compute", gl::COMPUTE_SHADER),
+    ]);
+    return file_map[file_extension];
+}
 
 /// OpenGL shader component.
 #[derive(Copy, Clone, Debug)]
@@ -57,9 +93,16 @@ impl Shader {
         return self._id;
     }
 
-    /// Create a new shader from a file.
-    pub fn from_file(filename: &str, shader_type: GLenum) -> Self {
-        let shader_content = fs::read_to_string(filename).expect("Error reading shader code.");
+    /// Create a new shader from a file, assuming the shader type from the file extension.
+    pub fn from_file(filename: &str) -> Self {
+        let shader_content = fs::read_to_string(filename).expect(format!("Error reading file {:?}.", filename).as_str());
+        let file_extension = filename.split(".").last().expect("Couldn't find file extension.");
+        return Shader::new(&shader_content, get_shader_type(file_extension));
+    }
+
+    /// Create a new shader from a file, explicitly giving the shader type.
+    pub fn from_file_explicit(filename: &str, shader_type: GLenum) -> Self {
+        let shader_content = fs::read_to_string(filename).expect(format!("Error reading file {:?}.", filename).as_str());
         return Shader::new(&shader_content, shader_type);
     }
 
