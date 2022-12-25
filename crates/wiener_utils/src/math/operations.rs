@@ -1,7 +1,31 @@
-use std::ops::AddAssign;
+use std::ops::{AddAssign, Sub};
 
 use num::traits::{real::Real, Pow};
 use num::{Float, Num};
+
+pub fn subtract2<T: Sub<T, Output = T> + Copy>(a: [T; 2], b: [T; 2]) -> [T; 2] {
+    return [
+        a[0] - b[0],
+        a[1] - b[1],
+    ];
+}
+
+pub fn subtract3<T: Sub<T, Output = T> + Copy>(a: [T; 3], b: [T; 3]) -> [T; 3] {
+    return [
+        a[0] - b[0],
+        a[1] - b[1],
+        a[2] - b[2],
+    ];
+}
+
+pub fn subtract4<T: Sub<T, Output = T> + Copy>(a: [T; 4], b: [T; 4]) -> [T; 4] {
+    return [
+        a[0] - b[0],
+        a[1] - b[1],
+        a[2] - b[2],
+        a[3] - b[3],
+    ];
+}
 
 /// Calculate the cross product between two vectors.
 pub fn cross<T>(a: [T; 3], b: [T; 3]) -> [T; 3]
@@ -15,21 +39,122 @@ where
     ];
 }
 
-/// Normalize a vector
-pub fn normalize<T>(a: &[T]) -> Vec<T>
+/// Calculate the norm of a vector.
+pub fn norm2<T>(v: [T; 2]) -> T
 where
     T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
 {
-    let length = {
-        let mut result: T = T::zero();
-        for i in a {
-            result += i.pow(2);
-        }
-        result.sqrt()
-    };
-    let mut result = Vec::new();
-    for i in a {
-        result.push(*i / length);
+    let mut result: T = T::zero();
+    for i in v {
+        result += i.pow(2);
+    }
+    return result.sqrt();
+}
+
+/// Calculate the norm of a vector.
+pub fn norm3<T>(v: [T; 3]) -> T
+where
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
+{
+    let mut result: T = T::zero();
+    for i in v {
+        result += i.pow(2);
+    }
+    return result.sqrt();
+}
+
+/// Calculate the norm of a vector.
+pub fn norm4<T>(v: [T; 4]) -> T
+where
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
+{
+    let mut result: T = T::zero();
+    for i in v {
+        result += i.pow(2);
+    }
+    return result.sqrt();
+}
+
+/// Normalize a vector
+pub fn normalize2<T>(a: [T; 2]) -> [T; 2]
+where
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
+{
+    let mut length = norm2(a);
+    if length == T::zero() {
+        length = T::one();
+    }
+    let mut result = [T::zero(), T::zero()];
+    for i in 0..a.len() {
+        result[i] = a[i] / length;
+    }
+    return result;
+}
+
+/// Normalize a vector
+pub fn normalize3<T>(a: [T; 3]) -> [T; 3]
+where
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
+{
+    let mut length = norm3(a);
+    if length == T::zero() {
+        length = T::one();
+    }
+    let mut result = [T::zero(), T::zero(), T::zero()];
+    for i in 0..a.len() {
+        result[i] = a[i] / length;
+    }
+    return result;
+}
+
+/// Normalize a vector
+pub fn normalize4<T>(a: [T; 4]) -> [T; 4]
+where
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,
+{
+    let mut length = norm4(a);
+    if length == T::zero() {
+        length = T::one();
+    }
+    let mut result = [T::zero(), T::zero(), T::zero(), T::zero()];
+    for i in 0..a.len() {
+        result[i] = a[i] / length;
+    }
+    return result;
+}
+
+/// Calculate the dot product between two vectors.
+pub fn dot2<T>(a: [T; 2], b: [T; 2]) -> T
+where
+    T: Num + AddAssign<T> + Copy,
+{
+    let mut result = T::zero();
+    for i in 0..a.len() {
+        result += a[i] * b[i];
+    }
+    return result;
+}
+
+/// Calculate the dot product between two vectors.
+pub fn dot3<T>(a: [T; 3], b: [T; 3]) -> T
+where
+    T: Num + AddAssign<T> + Copy,
+{
+    let mut result = T::zero();
+    for i in 0..a.len() {
+        result += a[i] * b[i];
+    }
+    return result;
+}
+
+/// Calculate the dot product between two vectors.
+pub fn dot4<T>(a: [T; 4], b: [T; 4]) -> T
+where
+    T: Num + AddAssign<T> + Copy,
+{
+    let mut result = T::zero();
+    for i in 0..a.len() {
+        result += a[i] * b[i];
     }
     return result;
 }
@@ -57,7 +182,7 @@ pub fn clamp<T: PartialOrd<T> + Copy>(num: T, bottom: Option<T>, top: Option<T>)
 }
 
 /// Generate perspective matrix.
-pub fn perspective_mat<T: Float>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 4] {
+pub fn perspective_mat<T: Real>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 4] {
     let two = T::from(2.0).expect("Failed to convert to float");
     return [
         [two * n / (r - l), T::zero(), (r + l) / (r - l), T::zero()],
@@ -67,8 +192,17 @@ pub fn perspective_mat<T: Float>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4];
     ]
 }
 
+/// Generate perspective matrix from an FOV.
+pub fn perspective_fov_mat<T: Real>(fov: T, aspect: T, near: T, far: T) -> [[T; 4]; 4] {
+    let top = near * fov.sin();
+    let right = top / aspect;
+    let left = -right;
+    let bottom = -top;
+    return perspective_mat(near, far, left, right, top, bottom);
+}
+
 /// Generate ortographic matrix.
-pub fn ortographic_mat<T: Float>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 4] {
+pub fn ortographic_mat<T: Real>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4]; 4] {
     let two = T::from(2.0).expect("Failed to convert to float");
     return [
         [two / (r - l), T::zero(), T::zero(), (l + r) / (l - r)],
@@ -76,4 +210,61 @@ pub fn ortographic_mat<T: Float>(n: T, f: T, l: T, r: T, t: T, b: T) -> [[T; 4];
         [T::zero(), T::zero(), two / (n - f), (n + f) / (n - f)],
         [T::zero(), T::zero(), T::zero(), T::one()],
     ]
+}
+
+/// Generate a view matrix.
+pub fn view_mat<T>(eye: [T; 3], up: [T; 3], at: [T; 3]) -> [[T; 4]; 4]
+where
+    T: Num + Pow<u16, Output = T> + AddAssign<T> + Real,{
+    let e = eye;
+    let a = at;
+    let f = normalize3(subtract3(a, e));
+    let s = cross(f, normalize3(up));
+    let u = cross(s, f);
+    return [
+        [s[0], s[1], s[2], -dot3(e, s)],
+        [u[0], u[1], u[2], -dot3(e, u)],
+        [-f[0], -f[1], -f[2], dot3(e, f)],
+        [T::zero(), T::zero(), T::zero(), T::one()],
+    ];
+}
+
+/// Generate a translation matrix.
+pub fn translation<T: Num>(x: T, y: T, z: T) -> [[T; 4]; 4] {
+    return [
+        [T::one(), T::zero(), T::zero(), x],
+        [T::zero(), T::one(), T::zero(), y],
+        [T::zero(), T::zero(), T::one(), z],
+        [T::zero(), T::zero(), T::zero(), T::one()],
+    ];
+}
+
+/// Generate a scaling matrix.
+pub fn scaling<T: Num>(x: T, y: T, z: T) -> [[T; 4]; 4] {
+    return [
+        [x, T::zero(), T::zero(), T::zero()],
+        [T::zero(), y, T::zero(), T::zero()],
+        [T::zero(), T::zero(), z, T::zero()],
+        [T::zero(), T::zero(), T::zero(), T::one()],
+    ];
+}
+
+/// Generate a rotation matrix.
+pub fn rotation<T: Num + Real>(x: T, y: T, z: T) -> [[T; 4]; 4] {
+    return [
+        [
+            y.cos() * z.cos(),
+            x.sin() * y.sin() * z.cos() - x.cos() * z.sin(),
+            x.cos() * y.sin() * z.cos() + x.sin() * z.sin(),
+            T::zero(),
+        ],
+        [
+            y.cos() * z.sin(),
+            x.sin() * y.sin() * z.sin() + x.cos() * z.cos(),
+            x.cos() * y.sin() * z.sin() - x.sin() * z.cos(),
+            T::zero(),
+        ],
+        [-y.sin(), x.sin() * y.cos(), x.cos() * y.cos(), T::zero()],
+        [T::zero(), T::zero(), T::zero(), T::one()],
+    ];
 }
