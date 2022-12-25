@@ -35,12 +35,6 @@ impl VertexBuffer {
         self.usage = new_usage;
         return self;
     }
-
-    /// Set the usage of the vertex buffer.
-    pub fn set_usage(&mut self, new_usage: GLenum) {
-        log::trace!("VertexBuffer :: Setting usage");
-        self.usage = new_usage;
-    }
 }
 
 impl Bindable for VertexBuffer {
