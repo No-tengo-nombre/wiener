@@ -1,6 +1,6 @@
 use std::ffi::c_void;
 
-use crate::{Bindable, Buffer, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer};
+use crate::{Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer};
 
 use gl::types::GLenum;
 use wiener_utils::math;
@@ -118,19 +118,6 @@ impl Mesh {
     pub fn set_projection_mat(mut self, new_projection_mat: [[f32; 4]; 4]) {
         self.projection_mat = new_projection_mat;
     }
-
-    pub fn draw(&self) {
-        self.bind();
-
-        // Uniform the MVP matrices
-        self.shader.uniform_mat4f("u_model", self.model_mat);
-        self.shader.uniform_mat4f("u_view", self.view_mat);
-        self.shader.uniform_mat4f("u_projection", self.projection_mat);
-
-        unsafe {
-            gl::DrawElements(self.primitive, self._primitive_num, gl::UNSIGNED_INT, 0 as *const c_void);
-        }
-    }
 }
 
 impl Bindable for Mesh {
@@ -161,6 +148,21 @@ impl Bindable for Mesh {
         self.shader.delete();
         for t in &self.textures {
             t.delete();
+        }
+    }
+}
+
+impl Drawable for Mesh {
+    fn draw(&self) {
+        self.bind();
+
+        // Uniform the MVP matrices
+        self.shader.uniform_mat4f("u_model", self.model_mat);
+        self.shader.uniform_mat4f("u_view", self.view_mat);
+        self.shader.uniform_mat4f("u_projection", self.projection_mat);
+
+        unsafe {
+            gl::DrawElements(self.primitive, self._primitive_num, gl::UNSIGNED_INT, 0 as *const c_void);
         }
     }
 }
