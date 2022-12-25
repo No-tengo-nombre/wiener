@@ -40,7 +40,7 @@ impl VertexAttribute {
 
 /// Vertex array that specifies the vertex layout on GPU memory.
 #[derive(Clone, Debug)]
-pub struct VertexArray {
+pub struct VertexArray<'a> {
     /// Unique ID associated to the object.
     _id: u32,
 
@@ -51,10 +51,10 @@ pub struct VertexArray {
     pub size: u32,
 
     /// Layout in GPU memory of the vertex.
-    pub layout: Vec<VertexAttribute>,
+    pub layout: &'a [VertexAttribute],
 }
 
-impl VertexArray {
+impl<'a> VertexArray<'a> {
     /// Get the VAO's id.
     pub fn get_id(&self) -> u32 {
         return self._id;
@@ -71,7 +71,7 @@ impl VertexArray {
     ///
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
-    pub fn layout(mut self, new_layout: &Vec<VertexAttribute>) -> Self {
+    pub fn layout(mut self, new_layout: &'a [VertexAttribute]) -> Self {
         self.set_layout(new_layout);
         return self;
     }
@@ -81,24 +81,10 @@ impl VertexArray {
     ///
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
-    pub fn set_layout(&mut self, new_layout: &Vec<VertexAttribute>) {
-        self.layout = new_layout.to_vec();
+    pub fn set_layout(&mut self, new_layout: &'a [VertexAttribute]) {
+        self.layout = new_layout;
         self.stride = new_layout.iter().map(|a| a.size).sum();
         log::debug!("VertexArray :: Set layout to {:?}. New stride is {:?}", self.layout, self.stride);
-        self.update();
-    }
-
-    /// Push a new attribute to the VAO.
-    pub fn push_attribute(mut self, new_attribute: VertexAttribute) -> Self {
-        self.push_attribute_inplace(new_attribute);
-        return self;
-    }
-    
-    /// Push a new attribute to the VAO without returning self.
-    pub fn push_attribute_inplace(&mut self, new_attribute: VertexAttribute) {
-        self.layout.push(new_attribute);
-        self.stride += new_attribute.size;
-        log::debug!("VertexArray :: Added {:?}. New layout is {:?} and stride is {:?}", new_attribute, self.layout, self.stride);
         self.update();
     }
 
@@ -106,13 +92,13 @@ impl VertexArray {
     pub fn update(&self) {
         log::info!("VertexArray :: Updating layout");
         self.bind();
-        for attr in &self.layout {
+        for attr in self.layout {
             attr.bind_vao(self);
         }
     }
 }
 
-impl Bindable for VertexArray {
+impl<'a> Bindable for VertexArray<'a> {
     fn bind(&self) {
         log::trace!("VertexArray :: Binding");
         unsafe {
@@ -135,7 +121,7 @@ impl Bindable for VertexArray {
     }
 }
 
-impl Default for VertexArray {
+impl<'a> Default for VertexArray<'a> {
     /// Generate a builder for a vertex array.
     fn default() -> Self {
         let mut vao_id = 0;
@@ -148,7 +134,7 @@ impl Default for VertexArray {
             _id: vao_id,
             stride: 0,
             size: 4,
-            layout: Vec::new(),
+            layout: &[],
         };
     }
 }

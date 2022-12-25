@@ -8,8 +8,8 @@ use gl::types::GLenum;
 use log::{info, trace};
 use wiener_utils::math;
 
-pub struct Mesh {
-    pub vao: VertexArray,
+pub struct Mesh<'a> {
+    pub vao: VertexArray<'a>,
     pub vbo: VertexBuffer,
     pub ebo: ElementBuffer,
     pub primitive: GLenum,
@@ -21,7 +21,7 @@ pub struct Mesh {
     pub projection_mat: [[f32; 4]; 4],
 }
 
-impl Mesh {
+impl<'a> Mesh<'a> {
     pub fn new() -> Self {
         info!("Mesh :: Creating mesh");
         let vao = VertexArray::default();
@@ -73,19 +73,10 @@ impl Mesh {
         return self;
     }
 
-    pub fn layout(mut self, new_layout: Vec<VertexAttribute>) -> Self {
+    pub fn layout(mut self, new_layout: &'a [VertexAttribute]) -> Self {
         trace!("Mesh :: Setting layout");
-        self.vao.layout = new_layout;
+        self.vao.set_layout(new_layout);
         return self;
-    }
-
-    pub fn push_attribute(mut self, new_attribute: VertexAttribute) -> Self {
-        self.push_attribute_inplace(new_attribute);
-        return self;
-    }
-
-    pub fn push_attribute_inplace(&mut self, new_attribute: VertexAttribute) {
-        self.vao.push_attribute_inplace(new_attribute);
     }
 
     pub fn primitive(mut self, new_primitive: GLenum) -> Self {
@@ -114,9 +105,9 @@ impl Mesh {
         self.ebo.usage = new_usage;
     }
 
-    pub fn set_layout(&mut self, new_layout: Vec<VertexAttribute>) {
+    pub fn set_layout(&mut self, new_layout: &'a [VertexAttribute]) {
         trace!("Mesh :: Setting layout");
-        self.vao.layout = new_layout;
+        self.vao.set_layout(new_layout);
     }
 
     pub fn model_mat(mut self, new_model_mat: [[f32; 4]; 4]) -> Self {
@@ -138,7 +129,7 @@ impl Mesh {
     }
 }
 
-impl Bindable for Mesh {
+impl<'a> Bindable for Mesh<'a> {
     fn bind(&self) {
         trace!("Mesh :: Binding");
         self.vao.bind();
@@ -173,7 +164,7 @@ impl Bindable for Mesh {
     }
 }
 
-impl Drawable for Mesh {
+impl<'a> Drawable for Mesh<'a> {
     fn draw(&self) {
         trace!("Mesh :: Sending draw call");
         self.bind();
