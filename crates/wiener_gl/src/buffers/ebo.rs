@@ -33,6 +33,11 @@ impl ElementBuffer {
         self._usage = new_usage;
         return self;
     }
+
+    /// Set the usage of the element buffer.
+    pub fn set_usage(&mut self, new_usage: GLenum) {
+        self._usage = new_usage;
+    }
 }
 
 impl Bindable for ElementBuffer {

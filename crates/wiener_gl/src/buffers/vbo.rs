@@ -33,6 +33,11 @@ impl VertexBuffer {
         self._usage = new_usage;
         return self;
     }
+
+    /// Set the usage of the vertex buffer.
+    pub fn set_usage(&mut self, new_usage: GLenum) {
+        self._usage = new_usage;
+    }
 }
 
 impl Bindable for VertexBuffer {

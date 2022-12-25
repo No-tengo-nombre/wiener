@@ -38,6 +38,11 @@ impl UniformBuffer {
         return self;
     }
 
+    /// Set the usage of the uniform buffer.
+    pub fn set_usage(&mut self, new_usage: GLenum) {
+        self._usage = new_usage;
+    }
+
     /// Binds the uniform buffer to the given index in memory.
     pub fn bind_index(&self, index: u32) {
         unsafe {
