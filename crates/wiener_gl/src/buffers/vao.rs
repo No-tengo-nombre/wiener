@@ -1,6 +1,7 @@
 use crate::Bindable;
 
 use gl;
+use log;
 
 /// Vertex array that specifies the vertex layout on GPU memory.
 #[derive(Clone, Debug)]
@@ -23,18 +24,19 @@ impl VertexArray {
     pub fn new(layout: &[u32]) -> Self {
         return VertexArray::new_sized(4, layout);
     }
-
+    
     /// Create a new vertex array with a given size.
     pub fn new_sized(size: u32, layout: &[u32]) -> Self {
         return VertexArray::builder().size(size).layout(layout);
     }
-
+    
     /// Generate a builder for a vertex array.
     pub fn builder() -> Self {
         let mut vao_id = 0;
         unsafe {
             gl::GenVertexArrays(1, &mut vao_id);
         }
+        log::info!("VertexArray :: Creating new VertexArray {:?}", vao_id);
 
         return VertexArray {
             _id: vao_id,
@@ -75,6 +77,7 @@ impl VertexArray {
 
     /// Update the vertex array, creating the attributes.
     pub fn update(&self) {
+        log::info!("VertexArray :: Updating layout");
         unsafe {
             for i in 0..self._layout.len() {
                 let l = self._layout[i];
@@ -94,18 +97,21 @@ impl VertexArray {
 
 impl Bindable for VertexArray {
     fn bind(&self) {
+        log::trace!("VertexArray :: Binding");
         unsafe {
             gl::BindVertexArray(self._id);
         }
     }
 
     fn unbind(&self) {
+        log::trace!("VertexArray :: Unbinding");
         unsafe {
             gl::BindVertexArray(0);
         }
     }
-
+    
     fn delete(&self) {
+        log::trace!("VertexArray :: Deleting");
         unsafe {
             gl::DeleteVertexArrays(1, &self._id);
         }

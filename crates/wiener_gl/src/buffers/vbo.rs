@@ -21,6 +21,7 @@ impl VertexBuffer {
         unsafe {
             gl::GenBuffers(1, &mut vbo_id);
         }
+        log::info!("VertexBuffer :: Creating new VertexBuffer {:?}", vbo_id);
 
         return VertexBuffer {
             _id: vbo_id,
@@ -30,30 +31,35 @@ impl VertexBuffer {
 
     /// Set the usage of the vertex buffer.
     pub fn usage(mut self, new_usage: GLenum) -> Self {
+        log::trace!("VertexBuffer :: Setting usage");
         self._usage = new_usage;
         return self;
     }
 
     /// Set the usage of the vertex buffer.
     pub fn set_usage(&mut self, new_usage: GLenum) {
+        log::trace!("VertexBuffer :: Setting usage");
         self._usage = new_usage;
     }
 }
 
 impl Bindable for VertexBuffer {
     fn bind(&self) {
+        log::trace!("VertexBuffer :: Binding");
         unsafe {
             gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
         }
     }
-
+    
     fn unbind(&self) {
+        log::trace!("VertexBuffer :: Unbinding");
         unsafe {
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);
         }
     }
-
+    
     fn delete(&self) {
+        log::trace!("VertexBuffer :: Deleting");
         unsafe {
             gl::DeleteBuffers(1, &self._id);
         }
@@ -62,6 +68,7 @@ impl Bindable for VertexBuffer {
 
 impl Buffer for VertexBuffer {
     fn buffer_data<T>(&self, data: &[T]) -> Self {
+        log::info!("VertexBuffer :: Buffering data to GPU");
         self.bind();
         unsafe {
             gl::BufferData(
