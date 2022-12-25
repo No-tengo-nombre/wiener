@@ -1,4 +1,4 @@
-use super::buffer::Buffer;
+use crate::{Bindable, Buffer};
 use std::mem::size_of;
 
 use gl;
@@ -35,7 +35,7 @@ impl VertexBuffer {
     }
 }
 
-impl Buffer for VertexBuffer {
+impl Bindable for VertexBuffer {
     fn bind(&self) {
         unsafe {
             gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
@@ -53,7 +53,9 @@ impl Buffer for VertexBuffer {
             gl::DeleteBuffers(1, &self._id);
         }
     }
+}
 
+impl Buffer for VertexBuffer {
     fn buffer_data<T>(&self, data: &[T]) -> Self {
         self.bind();
         unsafe {

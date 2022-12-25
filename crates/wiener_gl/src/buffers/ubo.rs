@@ -1,4 +1,4 @@
-use super::buffer::Buffer;
+use crate::{Bindable, Buffer};
 use std::mem::size_of;
 
 use gl;
@@ -46,7 +46,7 @@ impl UniformBuffer {
     }
 }
 
-impl Buffer for UniformBuffer {
+impl Bindable for UniformBuffer {
     fn bind(&self) {
         unsafe {
             gl::BindBuffer(gl::UNIFORM_BUFFER, self._id);
@@ -64,7 +64,9 @@ impl Buffer for UniformBuffer {
             gl::DeleteBuffers(1, &self._id);
         }
     }
+}
 
+impl Buffer for UniformBuffer {
     fn buffer_data<T>(&self, data: &[T]) -> Self {
         self.bind();
         unsafe {

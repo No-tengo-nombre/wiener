@@ -1,3 +1,5 @@
+use crate::Bindable;
+
 use gl;
 
 /// Vertex array that specifies the vertex layout on GPU memory.
@@ -78,20 +80,22 @@ impl VertexArray {
         }
         return self;
     }
+}
 
-    pub fn bind(&self) {
+impl Bindable for VertexArray {
+    fn bind(&self) {
         unsafe {
             gl::BindVertexArray(self._id);
         }
     }
 
-    pub fn unbind(&self) {
+    fn unbind(&self) {
         unsafe {
             gl::BindVertexArray(0);
         }
     }
 
-    pub fn delete(&self) {
+    fn delete(&self) {
         unsafe {
             gl::DeleteVertexArrays(1, &self._id);
         }

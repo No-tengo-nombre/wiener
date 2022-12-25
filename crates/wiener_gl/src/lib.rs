@@ -7,6 +7,7 @@ mod gl_manager;
 mod shader;
 mod shapes;
 mod textures;
+mod types;
 mod window;
 
 pub use buffers::*;
@@ -14,4 +15,5 @@ pub use gl_manager::*;
 pub use shader::*;
 pub use shapes::*;
 pub use textures::*;
+pub use types::*;
 pub use window::*;

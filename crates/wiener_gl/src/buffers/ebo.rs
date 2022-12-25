@@ -1,4 +1,4 @@
-use super::buffer::Buffer;
+use crate::{Bindable, Buffer};
 use std::mem::size_of;
 
 use gl;
@@ -35,7 +35,7 @@ impl ElementBuffer {
     }
 }
 
-impl Buffer for ElementBuffer {
+impl Bindable for ElementBuffer {
     fn bind(&self) {
         unsafe {
             gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, self._id);
@@ -53,7 +53,9 @@ impl Buffer for ElementBuffer {
             gl::DeleteBuffers(1, &self._id);
         }
     }
+}
 
+impl Buffer for ElementBuffer {
     fn buffer_data<T>(&self, data: &[T]) -> Self {
         self.bind();
         unsafe {
