@@ -14,15 +14,15 @@ pub struct Mesh<'a> {
     pub ebo: ElementBuffer,
     pub primitive: GLenum,
     _primitive_num: i32,
-    pub shader: ShaderProgram,
-    pub textures: Vec<Texture2D>,
+    pub shader: &'a ShaderProgram<'a>,
+    pub textures: &'a [Texture2D],
     pub model_mat: [[f32; 4]; 4],
     pub view_mat: [[f32; 4]; 4],
     pub projection_mat: [[f32; 4]; 4],
 }
 
 impl<'a> Mesh<'a> {
-    pub fn new() -> Self {
+    pub fn new(shader: &'a ShaderProgram<'a>) -> Self {
         info!("Mesh :: Creating mesh");
         let vao = VertexArray::default();
         vao.bind();
@@ -32,8 +32,8 @@ impl<'a> Mesh<'a> {
             ebo: ElementBuffer::new(),
             primitive: gl::TRIANGLES,
             _primitive_num: 0,
-            shader: ShaderProgram::new(),
-            textures: [].to_vec(),
+            shader,
+            textures: &[],
             model_mat: math::linalg::eye4::<f32>(),
             view_mat: math::linalg::eye4::<f32>(),
             projection_mat: math::linalg::eye4::<f32>(),
@@ -50,21 +50,16 @@ impl<'a> Mesh<'a> {
         return self;
     }
 
-    pub fn shader(mut self, new_shader: ShaderProgram) -> Self {
+    pub fn shader(mut self, new_shader: &'a ShaderProgram<'a>) -> Self {
         trace!("Mesh :: Setting shader");
         self.shader = new_shader;
         return self;
     }
 
-    pub fn textures(mut self, new_textures: Vec<Texture2D>) -> Self {
+    pub fn textures(mut self, new_textures: &'a [Texture2D]) -> Self {
         trace!("Mesh :: Setting textures");
         self.textures = new_textures;
         return self;
-    }
-
-    pub fn add_texture(&mut self, texture: Texture2D) {
-        trace!("Mesh :: Adding texture");
-        self.textures.push(texture);
     }
 
     pub fn usage(mut self, new_usage: GLenum) -> Self {
@@ -136,7 +131,7 @@ impl<'a> Bindable for Mesh<'a> {
         self.vbo.bind();
         self.ebo.bind();
         self.shader.bind();
-        for t in &self.textures {
+        for t in self.textures {
             t.bind();
         }
     }
@@ -147,7 +142,7 @@ impl<'a> Bindable for Mesh<'a> {
         self.vbo.unbind();
         self.ebo.unbind();
         self.shader.unbind();
-        for t in &self.textures {
+        for t in self.textures {
             t.unbind();
         }
     }
@@ -158,7 +153,7 @@ impl<'a> Bindable for Mesh<'a> {
         self.vbo.delete();
         self.ebo.delete();
         self.shader.delete();
-        for t in &self.textures {
+        for t in self.textures {
             t.delete();
         }
     }

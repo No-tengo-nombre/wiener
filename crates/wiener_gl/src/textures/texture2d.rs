@@ -107,7 +107,7 @@ impl Texture2D {
     }
 
     /// Buffer the given image to the texture.
-    pub fn buffer_img<T>(self, data: &Vec<T>, width: i32, height: i32) -> Self {
+    pub fn buffer_img<T>(self, data: &[T], width: i32, height: i32) -> Self {
         log::info!(
             "Texture2D :: Buffering {:?}x{:?} image to Texture2D",
             width,
@@ -134,7 +134,7 @@ impl Texture2D {
     /// Buffer an image contained in a file to the texture.
     pub fn buffer_from_file(self, filename: &str) -> Self {
         let (img, width, height) = image::load(filename);
-        let data = img.to_rgba8().into_vec();
+        let data = img.to_rgba8().to_vec();
         return self.buffer_img(&data, width, height);
     }
 

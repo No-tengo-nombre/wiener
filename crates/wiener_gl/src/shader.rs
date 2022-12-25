@@ -52,9 +52,9 @@ pub struct Shader {
 
 /// Program that contains a bunch of compiled shaders.
 #[derive(Clone, Debug)]
-pub struct ShaderProgram {
+pub struct ShaderProgram<'a> {
     _id: u32,
-    _shaders: Vec<Shader>,
+    _shaders: &'a [Shader],
 }
 
 impl Shader {
@@ -122,7 +122,7 @@ impl Shader {
     }
 }
 
-impl ShaderProgram {
+impl<'a> ShaderProgram<'a> {
     pub fn new() -> Self {
         unsafe {
             let program_id = gl::CreateProgram();
@@ -132,29 +132,35 @@ impl ShaderProgram {
             );
             return ShaderProgram {
                 _id: program_id,
-                _shaders: [].to_vec(),
+                _shaders: &[],
             };
         }
     }
 
-    pub fn add_shader(mut self, shader: Shader) -> Self {
-        log::info!("ShaderProgram :: Adding new shader to program");
-        self._shaders.push(shader);
+    pub fn from_array(shaders: &'a [Shader]) -> Self {
+        return Self::new().shaders(shaders);
+    }
 
-        unsafe {
-            gl::AttachShader(self._id, shader.get_id());
-            gl::LinkProgram(self._id);
-            let mut success = 0;
-            gl::GetProgramiv(self._id, gl::LINK_STATUS, &mut success);
-            if success == 0 {
-                let mut v: Vec<u8> = Vec::with_capacity(1024);
-                let mut log_len = 0_i32;
-                gl::GetProgramInfoLog(self._id, 1024, &mut log_len, v.as_mut_ptr().cast());
-                v.set_len(log_len.try_into().unwrap());
-                panic!("Program Link Error: {}", String::from_utf8_lossy(&v));
-            };
+    pub fn shaders(mut self, shaders: &'a [Shader]) -> Self {
+        log::info!("ShaderProgram :: Setting shaders");
+        self._shaders = shaders;
+
+        for shader in self._shaders {
+            unsafe {
+                gl::AttachShader(self._id, shader.get_id());
+                gl::LinkProgram(self._id);
+                let mut success = 0;
+                gl::GetProgramiv(self._id, gl::LINK_STATUS, &mut success);
+                if success == 0 {
+                    let mut v: Vec<u8> = Vec::with_capacity(1024);
+                    let mut log_len = 0_i32;
+                    gl::GetProgramInfoLog(self._id, 1024, &mut log_len, v.as_mut_ptr().cast());
+                    v.set_len(log_len.try_into().unwrap());
+                    panic!("Program Link Error: {}", String::from_utf8_lossy(&v));
+                };
+            }
+            shader.delete();
         }
-        shader.delete();
         return self;
     }
 
@@ -257,7 +263,7 @@ impl ShaderProgram {
     }
 }
 
-impl Bindable for ShaderProgram {
+impl<'a> Bindable for ShaderProgram<'a> {
     fn bind(&self) {
         log::trace!("ShaderProgram :: Binding");
         unsafe {
