@@ -47,7 +47,7 @@ pub struct Shader {
     _id: u32,
 
     /// Type of shader.
-    pub _type: GLenum,
+    _type: GLenum,
 }
 
 /// Program that contains a bunch of compiled shaders.
