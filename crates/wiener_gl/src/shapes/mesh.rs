@@ -40,16 +40,13 @@ impl Mesh {
         };
     }
 
-    pub fn vertices<T>(self, new_vertices: &[T]) -> Self {
-        trace!("Mesh :: Setting vertices");
-        self._vbo.buffer_data(new_vertices);
+    pub fn vertices<T>(mut self, new_vertices: &[T]) -> Self {
+        self.set_vertices(new_vertices);
         return self;
     }
 
     pub fn indices<T>(mut self, new_indices: &[T]) -> Self {
-        trace!("Mesh :: Setting indices");
-        self._ebo.buffer_data(new_indices);
-        self._primitive_num = new_indices.len() as i32;
+        self.set_indices(new_indices);
         return self;
     }
 
@@ -88,9 +85,12 @@ impl Mesh {
         return self;
     }
 
-    pub fn set_vertices<T>(&self, new_vertices: &[T]) {
+    pub fn set_vertices<T>(&mut self, new_vertices: &[T]) {
         trace!("Mesh :: Setting vertices");
         self._vbo.buffer_data(new_vertices);
+        let size = std::mem::size_of::<T>();
+        info!("Mesh :: Setting associated VAO size to {:?}", size);
+        self.vao.set_size(size as u32);
     }
 
     pub fn set_indices<T>(&mut self, new_indices: &[T]) {

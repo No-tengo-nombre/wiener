@@ -52,6 +52,11 @@ impl VertexArray {
         return self;
     }
 
+    /// Set the size in bytes of each number.
+    pub fn set_size(&mut self, new_size: u32) {
+        self._size = new_size;
+    }
+
     /// Specify the layout of the vertex array. This layout corresponds
     /// to a vector containing the size of each attribute.
     ///
@@ -86,7 +91,7 @@ impl VertexArray {
                     l as i32,
                     gl::FLOAT,
                     gl::FALSE,
-                    self._stride as i32,
+                    (self._size * self._stride) as i32,
                     (self._size * self._layout[0..i].iter().sum::<u32>()) as *const _,
                 );
                 gl::EnableVertexArrayAttrib(self._id, i as u32);
