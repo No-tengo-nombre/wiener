@@ -1,5 +1,6 @@
 use glfw;
 use glfw::Context;
+use log;
 use std::sync::mpsc::Receiver;
 use wiener_core::{init_glfw, WindowDescriptor};
 
@@ -16,6 +17,7 @@ pub struct GLWindow {
 impl GLWindow {
     /// Generate a builder for the window.
     pub fn builder() -> Self {
+        log::info!("GLWindow :: Creating new GLWindow");
         let mut empty_instance = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
         let (window, receiver) = empty_instance
             .create_window(1, 1, "", glfw::WindowMode::Windowed)
@@ -90,8 +92,9 @@ impl GLWindow {
 
     /// Build the window.
     pub fn build(mut self) -> Self {
+        log::info!("GLWindow :: Building window");
         let (mut window, events, glfw_inst) =
-            init_glfw(&self._descriptor, self._gl_version, self._gl_profile);
+        init_glfw(&self._descriptor, self._gl_version, self._gl_profile);
         init_gl(&mut window);
         self._glfw_window = window;
         self._events = events;
@@ -102,5 +105,6 @@ impl GLWindow {
 
 /// Initialize OpenGL.
 pub fn init_gl(window: &mut glfw::Window) {
+    log::info!("init_gl :: Initializing OpenGL");
     gl::load_with(|s| window.get_proc_address(s) as *const _);
 }

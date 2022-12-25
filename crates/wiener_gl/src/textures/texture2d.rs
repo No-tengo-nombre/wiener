@@ -2,6 +2,7 @@ use crate::Bindable;
 
 use gl;
 use gl::types::*;
+use log;
 use wiener_utils::image;
 
 /// 2D texture.
@@ -25,8 +26,8 @@ pub struct Texture2D {
     /// Method for min filter.
     pub _min_filter: GLenum,
 
-    /// Method for max filter.
-    pub _max_filter: GLenum,
+    /// Method for mag filter.
+    pub _mag_filter: GLenum,
 }
 
 impl Texture2D {
@@ -36,6 +37,7 @@ impl Texture2D {
         unsafe {
             gl::GenTextures(1, &mut tex_id);
         }
+        log::info!("Texture2D :: Creating new Texture2D {:?}", tex_id);
         return Texture2D {
             _id: tex_id,
             _tex_num: 0,
@@ -43,49 +45,56 @@ impl Texture2D {
             _wrap_s: gl::REPEAT,
             _wrap_t: gl::REPEAT,
             _min_filter: gl::LINEAR,
-            _max_filter: gl::LINEAR,
+            _mag_filter: gl::LINEAR,
         };
     }
 
     /// Change the slot of the texture.
     pub fn tex_num(mut self, new_bind: u32) -> Self {
+        log::trace!("Texture2D :: Setting texture num {:?}", new_bind);
         self._tex_num = new_bind;
         return self;
     }
 
     /// Change the format of the texture.
     pub fn format(mut self, new_format: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting format {:?}", new_format);
         self._format = new_format;
         return self;
     }
-
+    
     /// Change the S wrapping method.
     pub fn wrap_s(mut self, new_wrap: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting wrap S {:?}", new_wrap);
         self._wrap_s = new_wrap;
         return self;
     }
 
     /// Change the T wrapping method.
     pub fn wrap_t(mut self, new_wrap: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting wrap T {:?}", new_wrap);
         self._wrap_t = new_wrap;
         return self;
     }
-
+    
     /// Change the min filtering method.
     pub fn min_filter(mut self, new_filter: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting min filter {:?}", new_filter);
         self._min_filter = new_filter;
         return self;
     }
-
+    
     /// Change the max filtering method.
-    pub fn max_filter(mut self, new_filter: GLenum) -> Self {
-        self._max_filter = new_filter;
+    pub fn mag_filter(mut self, new_filter: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting mag filter {:?}", new_filter);
+        self._mag_filter = new_filter;
         return self;
     }
 
     /// Build the texture. After building, you should buffer the desired
     /// image.
     pub fn build<T>(self) -> Self {
+        log::info!("Texture2D :: Building Texture2D with parameters:\nWrap S {:?}\nWrap T {:?}\nMin filter {:?}\nMag filter {:?}", self._wrap_s, self._wrap_t, self._min_filter, self._mag_filter);
         self.bind();
         unsafe {
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, self._wrap_s as i32);
@@ -98,7 +107,7 @@ impl Texture2D {
             gl::TexParameteri(
                 gl::TEXTURE_2D,
                 gl::TEXTURE_MAG_FILTER,
-                self._max_filter as i32,
+                self._mag_filter as i32,
             );
         }
         return self;
@@ -106,6 +115,7 @@ impl Texture2D {
 
     /// Buffer the given image to the texture.
     pub fn buffer_img<T>(self, data: &Vec<T>, width: i32, height: i32) -> Self {
+        log::info!("Texture2D :: Buffering {:?}x{:?} image to Texture2D", width, height);
         self.bind();
         unsafe {
             gl::TexImage2D(
@@ -133,6 +143,7 @@ impl Texture2D {
 
     /// Bind the slot associated to the texture.
     pub fn bind_slot(&self) {
+        log::trace!("Texture2D :: Binding texture slot");
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0 + self._tex_num);
         }
@@ -141,6 +152,7 @@ impl Texture2D {
 
 impl Bindable for Texture2D {
     fn bind(&self) {
+        log::trace!("Texture2D :: Binding");
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, self._id);
@@ -148,6 +160,7 @@ impl Bindable for Texture2D {
     }
 
     fn unbind(&self) {
+        log::trace!("Texture2D :: Unbinding");
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, 0);
@@ -155,6 +168,7 @@ impl Bindable for Texture2D {
     }
 
     fn delete(&self) {
+        log::trace!("Texture2D :: Deleting");
         self.bind_slot();
         unsafe {
             gl::DeleteTextures(1, &self._id);

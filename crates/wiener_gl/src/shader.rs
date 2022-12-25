@@ -2,6 +2,7 @@ use crate::Bindable;
 
 use gl;
 use gl::types::*;
+use log;
 use std::fs;
 use std::collections::HashMap;
 
@@ -64,6 +65,7 @@ impl Shader {
         unsafe {
             // Compile the shader
             shader_id = gl::CreateShader(shader_type);
+            log::info!("Shader :: Creating new shader {:?}", shader_id);
             gl::ShaderSource(
                 shader_id,
                 1,
@@ -108,6 +110,7 @@ impl Shader {
 
     /// Delete the shader.
     pub fn delete(self) {
+        log::info!("Shader :: Deleting shader");
         unsafe {
             gl::DeleteShader(self._id);
         }
@@ -117,14 +120,17 @@ impl Shader {
 impl ShaderProgram {
     pub fn new() -> Self {
         unsafe {
+            let program_id = gl::CreateProgram();
+            log::info!("ShaderProgram :: Creating new shader program {:?}", program_id);
             return ShaderProgram {
-                _id: gl::CreateProgram(),
+                _id: program_id,
                 _shaders: [].to_vec(),
             };
         }
     }
 
     pub fn add_shader(mut self, shader: Shader) -> Self {
+        log::info!("ShaderProgram :: Adding new shader to program");
         self._shaders.push(shader);
 
         unsafe {
@@ -275,18 +281,21 @@ impl ShaderProgram {
 
 impl Bindable for ShaderProgram {
     fn bind(&self) {
+        log::trace!("ShaderProgram :: Binding");
         unsafe {
             gl::UseProgram(self._id);
         }
     }
 
     fn unbind(&self) {
+        log::trace!("ShaderProgram :: Unbinding");
         unsafe {
             gl::UseProgram(self._id);
         }
     }
-
+    
     fn delete(&self) {
+        log::info!("ShaderProgram :: Deleting");
         unsafe {
             gl::DeleteProgram(self._id);
         }
