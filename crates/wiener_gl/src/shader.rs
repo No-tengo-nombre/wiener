@@ -100,6 +100,134 @@ impl ShaderProgram {
         shader.delete();
         return self;
     }
+
+    pub fn get_uniform_location(&self, name: &str) -> GLint {
+        unsafe {
+            return gl::GetUniformLocation(self._id, name.as_bytes().as_ptr() as *const i8);
+        }
+    }
+
+    pub fn uniform_1i(&self, name: &str, val0: i32) {
+        self.bind();
+        unsafe {
+            gl::Uniform1i(self.get_uniform_location(name), val0);
+        }
+    }
+
+    pub fn uniform_2i(&self, name: &str, val0: i32, val1: i32) {
+        self.bind();
+        unsafe {
+            gl::Uniform2i(
+                self.get_uniform_location(name),
+                val0,
+                val1,
+            );
+        }
+    }
+
+    pub fn uniform_3i(&self, name: &str, val0: i32, val1: i32, val2: i32) {
+        self.bind();
+        unsafe {
+            gl::Uniform3i(
+                self.get_uniform_location(name),
+                val0,
+                val1,
+                val2,
+            );
+        }
+    }
+
+    pub fn uniform_4i(&self, name: &str, val0: i32, val1: i32, val2: i32, val3: i32) {
+        self.bind();
+        unsafe {
+            gl::Uniform4i(
+                self.get_uniform_location(name),
+                val0,
+                val1,
+                val2,
+                val3,
+            );
+        }
+    }
+
+    pub fn uniform_1f(&self, name: &str, val0: f32) {
+        self.bind();
+        unsafe {
+            gl::Uniform1f(self.get_uniform_location(name), val0);
+        }
+    }
+
+    pub fn uniform_2f(&self, name: &str, val0: f32, val1: f32) {
+        self.bind();
+        unsafe {
+            gl::Uniform2f(
+                self.get_uniform_location(name),
+                val0,
+                val1,
+            );
+        }
+    }
+
+    pub fn uniform_3f(&self, name: &str, val0: f32, val1: f32, val2: f32) {
+        self.bind();
+        unsafe {
+            gl::Uniform3f(
+                self.get_uniform_location(name),
+                val0,
+                val1,
+                val2,
+            );
+        }
+    }
+
+    pub fn uniform_4f(&self, name: &str, val0: f32, val1: f32, val2: f32, val3: f32) {
+        self.bind();
+        unsafe {
+            gl::Uniform4f(
+                self.get_uniform_location(name),
+                val0,
+                val1,
+                val2,
+                val3,
+            );
+        }
+    }
+
+    pub fn uniform_mat2f(&self, name: &str, val: [[f32; 2]; 2]) {
+        self.bind();
+        unsafe {
+            gl::UniformMatrix2fv(
+                self.get_uniform_location(name),
+                1,
+                gl::TRUE,
+                val[0].as_ptr(),
+            )
+        }
+    }
+
+    pub fn uniform_mat3f(&self, name: &str, val: [[f32; 3]; 3]) {
+        self.bind();
+        unsafe {
+            gl::UniformMatrix3fv(
+                self.get_uniform_location(name),
+                1,
+                gl::TRUE,
+                val[0].as_ptr(),
+            )
+        }
+    }
+
+    pub fn uniform_mat4f(&self, name: &str, val: [[f32; 4]; 4]) {
+        self.bind();
+        unsafe {
+            gl::UniformMatrix4fv(
+                self.get_uniform_location(name),
+                1,
+                gl::TRUE,
+                val[0].as_ptr(),
+            )
+        }
+    }
 }
 
 impl Bindable for ShaderProgram {
