@@ -34,25 +34,6 @@ pub struct Texture2D {
 }
 
 impl Texture2D {
-    /// Generate a builder for the texture.
-    pub fn builder() -> Self {
-        let mut tex_id = 0;
-        unsafe {
-            gl::GenTextures(1, &mut tex_id);
-        }
-        log::info!("Texture2D :: Creating new Texture2D {:?}", tex_id);
-        return Texture2D {
-            _id: tex_id,
-            tex_num: 0,
-            format: gl::RGB,
-            wrap_s: gl::REPEAT,
-            wrap_t: gl::REPEAT,
-            wrap_r: gl::REPEAT,
-            min_filter: gl::LINEAR,
-            mag_filter: gl::LINEAR,
-        };
-    }
-
     /// Change the slot of the texture.
     pub fn tex_num(mut self, new_bind: u32) -> Self {
         log::trace!("Texture2D :: Setting texture num {:?}", new_bind);
@@ -163,6 +144,26 @@ impl Texture2D {
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0 + self.tex_num);
         }
+    }
+}
+
+impl Default for Texture2D {
+    fn default() -> Self {
+        let mut tex_id = 0;
+        unsafe {
+            gl::GenTextures(1, &mut tex_id);
+        }
+        log::info!("Texture2D :: Creating new Texture2D {:?}", tex_id);
+        return Texture2D {
+            _id: tex_id,
+            tex_num: 0,
+            format: gl::RGB,
+            wrap_s: gl::REPEAT,
+            wrap_t: gl::REPEAT,
+            wrap_r: gl::REPEAT,
+            min_filter: gl::LINEAR,
+            mag_filter: gl::LINEAR,
+        };
     }
 }
 
