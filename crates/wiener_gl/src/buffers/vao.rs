@@ -4,6 +4,40 @@ use gl;
 use gl::types::*;
 use log;
 
+/// Vertex attribute.
+#[derive(Copy, Clone, Debug)]
+pub struct VertexAttribute {
+    /// Location in memory.
+    pub location: usize,
+
+    /// Size of the attribute.
+    pub size: u32,
+
+    /// Data type of the attribute.
+    pub data_type: GLenum,
+}
+
+impl VertexAttribute {
+    pub fn new(location: usize, size: u32, data_type: GLenum) -> Self {
+        return VertexAttribute { location, size, data_type };
+    }
+
+    /// Bind the vertex attribute to a given VAO.
+    pub fn bind_vao(&self, vao: &VertexArray) {
+        unsafe {
+            gl::VertexAttribPointer(
+                self.location as u32,
+                self.size as i32,
+                self.data_type,
+                gl::FALSE,
+                (vao.size * vao.stride) as i32,
+                (vao.size * vao.layout[0..self.location].iter().map(|a| a.size).sum::<u32>()) as *const _,
+            );
+            gl::EnableVertexArrayAttrib(vao.get_id(), self.location as u32);
+        }
+    }
+}
+
 /// Vertex array that specifies the vertex layout on GPU memory.
 #[derive(Clone, Debug)]
 pub struct VertexArray {
@@ -16,14 +50,16 @@ pub struct VertexArray {
     /// Size in bytes of each element.
     pub size: u32,
 
-    /// Type of contained data.
-    pub data_type: GLenum,
-
     /// Layout in GPU memory of the vertex.
-    pub layout: Vec<u32>,
+    pub layout: Vec<VertexAttribute>,
 }
 
 impl VertexArray {
+    /// Get the VAO's id.
+    pub fn get_id(&self) -> u32 {
+        return self._id;
+    }
+
     /// Set the size in bytes of each number.
     pub fn size(mut self, new_size: u32) -> Self {
         self.size = new_size;
@@ -31,39 +67,36 @@ impl VertexArray {
     }
 
     /// Specify the layout of the vertex array. This layout corresponds
-    /// to a vector containing the size of each attribute.
+    /// to a vector of VertexAttribute structs.
     ///
     /// For example, if your vertex has 3 spatial coordinates, 3 colors
     /// (RGB) and 2 UV coordinates, then the layout would be (3, 3, 2).
-    pub fn layout(mut self, new_layout: &[u32]) -> Self {
+    pub fn layout(mut self, new_layout: &Vec<VertexAttribute>) -> Self {
         self.layout = new_layout.to_vec();
-        self.stride = new_layout.iter().sum();
+        self.stride = new_layout.iter().map(|a| a.size).sum();
         self.update();
         return self;
     }
 
-    /// Set the data type.
-    pub fn data_type(mut self, new_type: GLenum) -> Self {
-        self.data_type = new_type;
+    /// Push a new attribute to the VAO.
+    pub fn push_attribute(mut self, new_attribute: VertexAttribute) -> Self {
+        self.push_attribute_inplace(new_attribute);
         return self;
+    }
+    
+    /// Push a new attribute to the VAO without returning self.
+    pub fn push_attribute_inplace(&mut self, new_attribute: VertexAttribute) {
+        self.layout.push(new_attribute);
+        self.stride += new_attribute.size;
+        new_attribute.bind_vao(&self);
     }
 
     /// Update the vertex array, creating the attributes.
     pub fn update(&self) {
         log::info!("VertexArray :: Updating layout");
-        unsafe {
-            for i in 0..self.layout.len() {
-                let l = self.layout[i];
-                gl::VertexAttribPointer(
-                    i as u32,
-                    l as i32,
-                    self.data_type,
-                    gl::FALSE,
-                    (self.size * self.stride) as i32,
-                    (self.size * self.layout[0..i].iter().sum::<u32>()) as *const _,
-                );
-                gl::EnableVertexArrayAttrib(self._id, i as u32);
-            }
+        self.bind();
+        for attr in &self.layout {
+            attr.bind_vao(self);
         }
     }
 }
@@ -104,8 +137,7 @@ impl Default for VertexArray {
             _id: vao_id,
             stride: 0,
             size: 4,
-            data_type: gl::FLOAT,
-            layout: [].to_vec(),
+            layout: Vec::new(),
         };
     }
 }
