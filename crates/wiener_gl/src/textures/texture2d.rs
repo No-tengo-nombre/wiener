@@ -151,4 +151,11 @@ impl Texture2D {
             gl::BindTexture(gl::TEXTURE_2D, 0);
         }
     }
+    
+    pub fn delete(&self) {
+        self.bind_slot();
+        unsafe {
+            gl::DeleteTextures(1, &self._id);
+        }
+    }
 }
