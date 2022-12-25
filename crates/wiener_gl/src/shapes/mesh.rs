@@ -1,7 +1,7 @@
 use std::ffi::c_void;
 
 use crate::{
-    Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexBuffer,
+    Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexAttribute, VertexBuffer,
 };
 
 use gl::types::GLenum;
@@ -73,20 +73,24 @@ impl Mesh {
         return self;
     }
 
-    pub fn layout(mut self, new_layout: &[u32]) -> Self {
+    pub fn layout(mut self, new_layout: Vec<VertexAttribute>) -> Self {
         trace!("Mesh :: Setting layout");
-        self.vao.layout = new_layout.to_vec();
+        self.vao.layout = new_layout;
         return self;
+    }
+
+    pub fn push_attribute(mut self, new_attribute: VertexAttribute) -> Self {
+        self.push_attribute_inplace(new_attribute);
+        return self;
+    }
+
+    pub fn push_attribute_inplace(&mut self, new_attribute: VertexAttribute) {
+        self.vao.push_attribute_inplace(new_attribute);
     }
 
     pub fn primitive(mut self, new_primitive: GLenum) -> Self {
         trace!("Mesh :: Setting primitive type");
         self.primitive = new_primitive;
-        return self;
-    }
-
-    pub fn data_type(mut self, new_type: GLenum) -> Self {
-        self.vao.data_type = new_type;
         return self;
     }
 
@@ -110,9 +114,9 @@ impl Mesh {
         self.ebo.usage = new_usage;
     }
 
-    pub fn set_layout(&mut self, new_layout: &[u32]) {
+    pub fn set_layout(&mut self, new_layout: Vec<VertexAttribute>) {
         trace!("Mesh :: Setting layout");
-        self.vao.layout = new_layout.to_vec();
+        self.vao.layout = new_layout;
     }
 
     pub fn model_mat(mut self, new_model_mat: [[f32; 4]; 4]) -> Self {
