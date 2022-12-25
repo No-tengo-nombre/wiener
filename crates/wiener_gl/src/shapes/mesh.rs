@@ -161,7 +161,7 @@ impl<'a> Bindable for Mesh<'a> {
 
 impl<'a> Drawable for Mesh<'a> {
     fn draw(&self) {
-        trace!("Mesh :: Sending draw call");
+        trace!("Mesh :: Sending draw call, model {:?}, view {:?}, projection {:?}", self.model_mat, self.view_mat, self.projection_mat);
         self.bind();
 
         // Uniform the MVP matrices
