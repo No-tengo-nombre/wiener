@@ -16,16 +16,18 @@ fn main() {
         .build();
 
     log::debug!("gl_triangle :: Making triangle shader");
-    let triangle_shader = ShaderProgram::new()
-        .add_shader(Shader::from_file(
-            "examples/gl_triangle/resources/triangle.vert",
-        ))
-        .add_shader(Shader::from_file(
-            "examples/gl_triangle/resources/triangle.frag",
-        ));
+    let triangle_shader_arr = [
+        Shader::from_file(
+            "examples/gl_uniforms/resources/triangle.vert",
+        ),
+        Shader::from_file(
+            "examples/gl_uniforms/resources/triangle.frag",
+        )
+    ];
+    let triangle_shader = ShaderProgram::from_array(&triangle_shader_arr);
 
     log::debug!("gl_triangle :: Making triangle mesh");
-    let triangle = Mesh::new()
+    let triangle = Mesh::new(&triangle_shader)
         .vertices(&[
             -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
              0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
@@ -35,8 +37,7 @@ fn main() {
         .layout(&[
             VertexAttribute { location: 0, size: 3, data_type: gl::FLOAT },
             VertexAttribute { location: 1, size: 3, data_type: gl::FLOAT },
-        ])
-        .shader(triangle_shader);
+        ]);
 
     log::debug!("gl_triangle :: Setting clear color");
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
