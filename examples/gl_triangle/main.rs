@@ -5,14 +5,15 @@ use wiener::WindowDescriptor;
 
 fn main() {
     env_logger::init();
-    log::debug!("gl_triangle :: Making window descriptor");
-    let window_descriptor = WindowDescriptor {
-        width: 1000,
-        height: 1000,
-        title: "Triangle example".to_string(),
-        ..Default::default()
-    };
-    let mut window = GLWindow::builder().descriptor(window_descriptor).build();
+    log::debug!("gl_triangle :: Making window");
+    let mut window = GLWindow::builder()
+        .descriptor(WindowDescriptor {
+            width: 1000,
+            height: 1000,
+            title: "Triangle example".to_string(),
+            ..Default::default()
+        })
+        .build();
 
     log::debug!("gl_triangle :: Making triangle shader");
     let triangle_shader = ShaderProgram::new()
