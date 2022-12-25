@@ -2,6 +2,8 @@ use glfw;
 use glfw::Context;
 use std::sync::mpsc::Receiver;
 
+use log;
+
 /// Mode for the window.
 #[derive(Copy, Clone, Debug)]
 pub enum WindowMode {
@@ -136,7 +138,8 @@ pub fn init_glfw(
     profile: glfw::OpenGlProfileHint,
 ) -> (glfw::Window, Receiver<(f64, glfw::WindowEvent)>, glfw::Glfw) {
     let mut glfw_inst = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
-
+    log::info!("init_glfw :: Initializing GLFW");
+    
     glfw_inst.window_hint(glfw::WindowHint::CenterCursor(true));
     glfw_inst.window_hint(glfw::WindowHint::ContextVersion(version.0, version.1));
     // glfw_inst.window_hint(glfw::WindowHint::OpenGlForwardCompat(true));
@@ -163,8 +166,9 @@ pub fn init_glfw(
                 )
             })
             .expect("Error creating GLFW window"),
-    };
-
+        };
+        
+    log::info!("init_glfw :: Configuring window");
     window.set_key_polling(descriptor.key_polling);
     window.set_cursor_mode(descriptor.cursor_mode);
     window.set_cursor_enter_polling(descriptor.cursor_enter_polling);
