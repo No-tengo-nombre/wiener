@@ -27,7 +27,7 @@ fn main() {
     let triangle_shader = ShaderProgram::from_array(&triangle_shader_arr);
 
     log::debug!("gl_triangle :: Making triangle mesh");
-    let triangle = Mesh::<f32>::new(&triangle_shader)
+    let triangle = Mesh::<f32, u32>::new(&triangle_shader)
         .vertices(&[
             -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
              0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
