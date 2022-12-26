@@ -48,7 +48,7 @@ where
         };
     }
 
-    pub fn from_off<V: Integer + std::str::FromStr + ToPrimitive + Copy>(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self
+    pub fn from_off<V: Integer + std::str::FromStr + ToPrimitive + Copy + Debug>(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self
     where
         <V as FromStr>::Err: Debug,
     {
