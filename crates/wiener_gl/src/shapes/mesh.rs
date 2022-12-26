@@ -67,7 +67,7 @@ where
         let face_num = i32::from_str_radix(file_descriptor[1], 10).unwrap();
         let mut vertices = Vec::<[U; 9]>::with_capacity(vert_num as usize);
         let mut faces = Vec::<[V; 3]>::with_capacity(face_num as usize);
-        log::debug!("Mesh :: Found {vert_num} vertices and {face_num} faces");
+        log::debug!("Mesh :: Reading {vert_num} vertices and {face_num} faces");
 
         // Read the vertices
         let mut temp_vert;
