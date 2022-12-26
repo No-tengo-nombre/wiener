@@ -13,7 +13,7 @@ use num::traits::Pow;
 use num::{Float, Integer, ToPrimitive};
 use wiener_utils::math;
 
-pub struct Mesh<'a, U> {
+pub struct Mesh<'a, U, I> {
     pub vao: VertexArray<'a>,
     pub vbo: VertexBuffer,
     pub ebo: ElementBuffer,
@@ -24,15 +24,18 @@ pub struct Mesh<'a, U> {
     pub model_mat: [[U; 4]; 4],
     pub view_mat: [[U; 4]; 4],
     pub projection_mat: [[U; 4]; 4],
+    phantom: std::marker::PhantomData<I>,
 }
 
-impl<'a, U: Float + Debug + Copy + FromStr + Pow<u16, Output = U> + AddAssign<U>> Mesh<'a, U>
+impl<'a, U: Float + Debug + Copy + FromStr + Pow<u16, Output = U> + AddAssign<U>, I: Integer + std::str::FromStr + ToPrimitive + Copy + Debug> Mesh<'a, U, I>
 where
-    <U as FromStr>::Err: Debug,
+    <U as FromStr>::Err: Debug, <I as FromStr>::Err: Debug,
 {
     pub fn new(shader: &'a ShaderProgram<'a>) -> Self {
         info!("Mesh :: Creating mesh");
-        let vao = VertexArray::default();
+        let size = std::mem::size_of::<U>();
+        info!("Mesh :: Setting associated VAO size to {:?}", size);
+        let vao = VertexArray::default().size(size as u32);
         vao.bind();
         return Mesh {
             vao,
@@ -45,12 +48,11 @@ where
             model_mat: math::linalg::eye4::<U>(),
             view_mat: math::linalg::eye4::<U>(),
             projection_mat: math::linalg::eye4::<U>(),
+            phantom: std::marker::PhantomData,
         };
     }
 
-    pub fn from_off<V: Integer + std::str::FromStr + ToPrimitive + Copy + Debug>(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self
-    where
-        <V as FromStr>::Err: Debug,
+    pub fn from_off(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self
     {
         log::info!("Mesh :: Reading mesh from OFF file");
 
@@ -66,7 +68,7 @@ where
         let vert_num = i32::from_str_radix(file_descriptor[0], 10).unwrap();
         let face_num = i32::from_str_radix(file_descriptor[1], 10).unwrap();
         let mut vertices = Vec::<[U; 9]>::with_capacity(vert_num as usize);
-        let mut faces = Vec::<[V; 3]>::with_capacity(face_num as usize);
+        let mut faces = Vec::<[I; 3]>::with_capacity(face_num as usize);
         log::debug!("Mesh :: Reading {vert_num} vertices and {face_num} faces");
 
         // Read the vertices
@@ -104,9 +106,9 @@ where
         for _ in 0..face_num {
             // Read the face
             temp_face = lines.next().unwrap().split_whitespace().collect::<Vec<&str>>()[1..].to_owned();
-            v0 = temp_face[0].parse::<V>().unwrap();
-            v1 = temp_face[1].parse::<V>().unwrap();
-            v2 = temp_face[2].parse::<V>().unwrap();
+            v0 = temp_face[0].parse::<I>().unwrap();
+            v1 = temp_face[1].parse::<I>().unwrap();
+            v2 = temp_face[2].parse::<I>().unwrap();
             faces.push([v0, v1, v2]);
 
             vertex0_positions = [vertices[v0.to_usize().unwrap()][0], vertices[v0.to_usize().unwrap()][1], vertices[v0.to_usize().unwrap()][2]];
@@ -144,9 +146,9 @@ where
         log::debug!(
             "Mesh :: Found {:?} vertices and {:?} faces",
             std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 9,
-            std::mem::size_of_val(face_slice) / std::mem::size_of::<V>() / 3,
+            std::mem::size_of_val(face_slice) / std::mem::size_of::<I>() / 3,
         );
-        return Mesh::<U>::new(shader)
+        return Mesh::<U, I>::new(shader)
             .vertices(vert_slice)
             .indices(face_slice);
     }
@@ -194,15 +196,13 @@ where
     pub fn set_vertices<T>(&mut self, new_vertices: &[T]) {
         trace!("Mesh :: Setting vertices");
         self.vbo.buffer_data(new_vertices);
-        let size = std::mem::size_of::<T>();
-        info!("Mesh :: Setting associated VAO size to {:?}", size);
-        self.vao.size = size as u32;
     }
 
     pub fn set_indices<T>(&mut self, new_indices: &[T]) {
         trace!("Mesh :: Setting indices");
         self.ebo.buffer_data(new_indices);
-        self._primitive_num = new_indices.len() as i32;
+        self._primitive_num = (new_indices.len() * std::mem::size_of::<T>() / std::mem::size_of::<I>()) as i32;
+        info!("Mesh :: Setting EBO number of primitives to {:?}", self._primitive_num);
     }
 
     pub fn set_usage(&mut self, new_usage: GLenum) {
@@ -235,7 +235,7 @@ where
     }
 }
 
-impl<'a, U: Float + Debug + Copy + FromStr> Bindable for Mesh<'a, U> {
+impl<'a, U, I> Bindable for Mesh<'a, U, I> {
     fn bind(&self) {
         trace!("Mesh :: Binding");
         self.vao.bind();
@@ -270,7 +270,7 @@ impl<'a, U: Float + Debug + Copy + FromStr> Bindable for Mesh<'a, U> {
     }
 }
 
-impl<'a, U: Float + Debug + Copy + FromStr> Drawable for Mesh<'a, U> {
+impl<'a, U: Debug + Copy, I> Drawable for Mesh<'a, U, I> {
     fn draw(&self) {
         trace!("Mesh :: Sending draw call, model {:?}, view {:?}, projection {:?}", self.model_mat, self.view_mat, self.projection_mat);
         self.bind();
