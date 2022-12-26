@@ -52,6 +52,8 @@ where
     where
         <V as FromStr>::Err: Debug,
     {
+        log::info!("Mesh :: Reading mesh from OFF file");
+
         // Read the file and separate into lines
         let contents = fs::read_to_string(filename).expect("Error reading file.");
         let mut lines = contents.split("\r\n");
@@ -65,12 +67,14 @@ where
         let face_num = i32::from_str_radix(file_descriptor[1], 10).unwrap();
         let mut vertices = Vec::<[U; 9]>::with_capacity(vert_num as usize);
         let mut faces = Vec::<[V; 3]>::with_capacity(face_num as usize);
+        log::debug!("Mesh :: Found {vert_num} vertices and {face_num} faces");
 
         // Read the vertices
         let mut temp_vert;
         let mut x;
         let mut y;
         let mut z;
+        log::trace!("Mesh :: Reading the vertices");
         for _ in 0..vert_num {
             temp_vert = lines.next().unwrap().split_whitespace().collect::<Vec<&str>>();
             x = temp_vert[0].parse::<U>().unwrap();
@@ -93,6 +97,7 @@ where
         let mut vertex0_normals;
         let mut vertex1_normals;
         let mut vertex2_normals;
+        log::trace!("Mesh :: Reading the faces");
         for _ in 0..face_num {
             // Read the face
             temp_face = lines.next().unwrap().split_whitespace().collect::<Vec<&str>>()[1..].to_owned();
@@ -127,9 +132,16 @@ where
         }
 
         // Once we have all the info, we create the mesh
+        let vert_slice = vertices.as_slice();
+        let face_slice = faces.as_slice();
+        log::debug!(
+            "Found {:?} vertices and {:?} faces",
+            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>(),
+            std::mem::size_of_val(face_slice) / std::mem::size_of::<V>(),
+        );
         return Mesh::<U>::new(shader)
-            .vertices(vertices.as_slice())
-            .indices(faces.as_slice());
+            .vertices(vert_slice)
+            .indices(face_slice);
     }
 
     pub fn vertices<T>(mut self, new_vertices: &[T]) -> Self {
