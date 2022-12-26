@@ -135,7 +135,7 @@ where
         let vert_slice = vertices.as_slice();
         let face_slice = faces.as_slice();
         log::debug!(
-            "Found {:?} vertices and {:?} faces",
+            "Mesh :: Found {:?} vertices and {:?} faces",
             std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>(),
             std::mem::size_of_val(face_slice) / std::mem::size_of::<V>(),
         );
