@@ -91,6 +91,9 @@ where
         let mut vec1;
         let mut vec2;
         let mut normal_result;
+        let mut normalized_v0;
+        let mut normalized_v1;
+        let mut normalized_v2;
         let mut vertex0_positions;
         let mut vertex1_positions;
         let mut vertex2_positions;
@@ -118,17 +121,21 @@ where
             vec2 = math::subtract3(vertex2_positions, vertex1_positions);
             normal_result = math::cross(vec1, vec2);
 
-            vertices[v0.to_usize().unwrap()][6] = math::normalize3(math::add3(vertex0_normals, normal_result))[0];
-            vertices[v0.to_usize().unwrap()][7] = math::normalize3(math::add3(vertex0_normals, normal_result))[1];
-            vertices[v0.to_usize().unwrap()][8] = math::normalize3(math::add3(vertex0_normals, normal_result))[2];
+            normalized_v0 = math::normalize3(math::add3(vertex0_normals, normal_result));
+            normalized_v1 = math::normalize3(math::add3(vertex1_normals, normal_result));
+            normalized_v2 = math::normalize3(math::add3(vertex2_normals, normal_result));
 
-            vertices[v1.to_usize().unwrap()][6] = math::normalize3(math::add3(vertex1_normals, normal_result))[0];
-            vertices[v1.to_usize().unwrap()][7] = math::normalize3(math::add3(vertex1_normals, normal_result))[1];
-            vertices[v1.to_usize().unwrap()][8] = math::normalize3(math::add3(vertex1_normals, normal_result))[2];
+            vertices[v0.to_usize().unwrap()][6] = normalized_v0[0];
+            vertices[v0.to_usize().unwrap()][7] = normalized_v0[1];
+            vertices[v0.to_usize().unwrap()][8] = normalized_v0[2];
 
-            vertices[v2.to_usize().unwrap()][6] = math::normalize3(math::add3(vertex2_normals, normal_result))[0];
-            vertices[v2.to_usize().unwrap()][7] = math::normalize3(math::add3(vertex2_normals, normal_result))[1];
-            vertices[v2.to_usize().unwrap()][8] = math::normalize3(math::add3(vertex2_normals, normal_result))[2];
+            vertices[v1.to_usize().unwrap()][6] = normalized_v1[0];
+            vertices[v1.to_usize().unwrap()][7] = normalized_v1[1];
+            vertices[v1.to_usize().unwrap()][8] = normalized_v1[2];
+
+            vertices[v2.to_usize().unwrap()][6] = normalized_v2[0];
+            vertices[v2.to_usize().unwrap()][7] = normalized_v2[1];
+            vertices[v2.to_usize().unwrap()][8] = normalized_v2[2];
         }
 
         // Once we have all the info, we create the mesh
@@ -136,8 +143,8 @@ where
         let face_slice = faces.as_slice();
         log::debug!(
             "Mesh :: Found {:?} vertices and {:?} faces",
-            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>(),
-            std::mem::size_of_val(face_slice) / std::mem::size_of::<V>(),
+            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 9,
+            std::mem::size_of_val(face_slice) / std::mem::size_of::<V>() / 3,
         );
         return Mesh::<U>::new(shader)
             .vertices(vert_slice)
