@@ -8,7 +8,10 @@ edition = "2021"
 [dependencies]
 wiener_core = { path = "crates/wiener_core" }
 wiener_gl = { path = "crates/wiener_gl" }
+wiener_utils = { path = "crates/wiener_utils" }
 wiener_vk = { path = "crates/wiener_vk" }
 
 [dev-dependencies]
+env_logger = "0.10.0"
 gl = "0.14.0"
+log = "0.4.17"

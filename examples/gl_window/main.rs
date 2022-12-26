@@ -1,11 +1,15 @@
-use wiener::gl::{GLWindow, GLManager};
-use wiener::WindowDescriptor;
 use gl;
+use wiener::gl::{GLManager, GLWindow};
+use wiener::WindowDescriptor;
 
 fn main() {
-    let window_descriptor = WindowDescriptor::builder()
-        .dimensions(1000, 1000)
-        .title("Window example");
+    env_logger::init();
+    let window_descriptor = WindowDescriptor {
+        width: 1000,
+        height: 1000,
+        title: "Window example".to_string(),
+        ..Default::default()
+    };
     let mut window = GLWindow::builder().descriptor(window_descriptor).build();
 
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
