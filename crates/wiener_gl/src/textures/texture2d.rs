@@ -1,4 +1,4 @@
-use crate::{Bindable, HasID};
+use crate::{Bindable, HasID, Texture};
 
 use gl;
 use gl::types::*;
@@ -35,6 +35,8 @@ pub struct Texture2D {
     /// Method for mag filter.
     pub mag_filter: GLenum,
 }
+
+impl Texture for Texture2D {}
 
 impl HasID for Texture2D {
     fn get_id(&self) -> u32 {
