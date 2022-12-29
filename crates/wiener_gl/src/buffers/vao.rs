@@ -45,7 +45,7 @@ impl Default for VertexAttribute {
 }
 
 /// Vertex array that specifies the vertex layout on GPU memory.
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct VertexArray<'a> {
     /// Unique ID associated to the object.
     _id: u32,

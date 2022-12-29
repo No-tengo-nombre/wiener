@@ -13,6 +13,7 @@ use num::traits::Pow;
 use num::{Float, Integer, ToPrimitive};
 use wiener_utils::math;
 
+#[derive(Clone, Copy, Debug)]
 pub struct Mesh<'a, U, I> {
     pub vao: VertexArray<'a>,
     pub vbo: VertexBuffer,
