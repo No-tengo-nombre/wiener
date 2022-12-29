@@ -17,6 +17,9 @@ pub struct Texture2D {
     /// Format of the data.
     pub format: GLenum,
 
+    /// Type of the data.
+    pub data_type: GLenum,
+
     /// Method to use for S wrapping.
     pub wrap_s: GLenum,
 
@@ -129,7 +132,7 @@ impl Texture2D {
                 height,
                 0,
                 self.format,
-                gl::UNSIGNED_BYTE,
+                self.data_type,
                 data.as_ptr() as *const _,
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
@@ -164,6 +167,7 @@ impl Default for Texture2D {
             _id: tex_id,
             tex_num: 0,
             format: gl::RGB,
+            data_type: gl::UNSIGNED_BYTE,
             wrap_s: gl::REPEAT,
             wrap_t: gl::REPEAT,
             wrap_r: gl::REPEAT,
