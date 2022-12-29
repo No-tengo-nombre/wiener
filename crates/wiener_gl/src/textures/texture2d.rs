@@ -1,4 +1,4 @@
-use crate::Bindable;
+use crate::{Bindable, HasID};
 
 use gl;
 use gl::types::*;
@@ -31,6 +31,12 @@ pub struct Texture2D {
 
     /// Method for mag filter.
     pub mag_filter: GLenum,
+}
+
+impl HasID for Texture2D {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
 }
 
 impl Texture2D {
@@ -172,7 +178,7 @@ impl Bindable for Texture2D {
         log::trace!("Texture2D :: Binding");
         self.bind_slot();
         unsafe {
-            gl::BindTexture(gl::TEXTURE_2D, self._id);
+            gl::BindTexture(gl::TEXTURE_2D, self.get_id());
         }
     }
 
@@ -188,7 +194,7 @@ impl Bindable for Texture2D {
         log::trace!("Texture2D :: Deleting");
         self.bind_slot();
         unsafe {
-            gl::DeleteTextures(1, &self._id);
+            gl::DeleteTextures(1, &self.get_id());
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::Bindable;
+use crate::{Bindable, HasID};
 
 use gl;
 use gl::types::*;
@@ -60,12 +60,13 @@ pub struct VertexArray<'a> {
     pub layout: &'a [VertexAttribute],
 }
 
-impl<'a> VertexArray<'a> {
-    /// Get the VAO's id.
-    pub fn get_id(&self) -> u32 {
+impl<'a> HasID for VertexArray<'a> {
+    fn get_id(&self) -> u32 {
         return self._id;
     }
+}
 
+impl<'a> VertexArray<'a> {
     /// Set the size in bytes of each number.
     pub fn size(mut self, new_size: u32) -> Self {
         self.size = new_size;
@@ -108,7 +109,7 @@ impl<'a> Bindable for VertexArray<'a> {
     fn bind(&self) {
         log::trace!("VertexArray :: Binding");
         unsafe {
-            gl::BindVertexArray(self._id);
+            gl::BindVertexArray(self.get_id());
         }
     }
 
@@ -122,7 +123,7 @@ impl<'a> Bindable for VertexArray<'a> {
     fn delete(&self) {
         log::info!("VertexArray :: Deleting");
         unsafe {
-            gl::DeleteVertexArrays(1, &self._id);
+            gl::DeleteVertexArrays(1, &self.get_id());
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::{Bindable, Buffer};
+use crate::{Bindable, Buffer, HasID};
 use std::mem::size_of;
 
 use gl;
@@ -13,6 +13,12 @@ pub struct ElementBuffer {
 
     /// Usage of the data.
     pub usage: GLenum,
+}
+
+impl HasID for ElementBuffer {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
 }
 
 impl ElementBuffer {
@@ -42,7 +48,7 @@ impl Bindable for ElementBuffer {
     fn bind(&self) {
         log::trace!("ElementBuffer :: Binding");
         unsafe {
-            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, self._id);
+            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, self.get_id());
         }
     }
 
@@ -56,7 +62,7 @@ impl Bindable for ElementBuffer {
     fn delete(&self) {
         log::info!("ElementBuffer :: Deleting");
         unsafe {
-            gl::DeleteBuffers(1, &self._id);
+            gl::DeleteBuffers(1, &self.get_id());
         }
     }
 }

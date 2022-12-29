@@ -6,3 +6,8 @@ pub trait Bindable {
     /// Delete the current object from memory.
     fn delete(&self);
 }
+
+pub trait HasID {
+    /// Get the OpenGL ID of the object.
+    fn get_id(&self) -> u32;
+}

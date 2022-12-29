@@ -1,4 +1,4 @@
-use crate::Bindable;
+use crate::{Bindable, HasID};
 
 use gl;
 use gl::types::*;
@@ -57,6 +57,12 @@ pub struct ShaderProgram<'a> {
     _shaders: &'a [Shader],
 }
 
+impl HasID for Shader {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
+}
+
 impl Shader {
     /// Create a new shader.
     pub fn new(content: &str, shader_type: GLenum) -> Self {
@@ -90,11 +96,6 @@ impl Shader {
         };
     }
 
-    /// Get the shader ID.
-    pub fn get_id(&self) -> u32 {
-        return self._id;
-    }
-
     /// Create a new shader from a file, assuming the shader type from the file extension.
     pub fn from_file(filename: &str) -> Self {
         let shader_content = fs::read_to_string(filename)
@@ -117,8 +118,14 @@ impl Shader {
     pub fn delete(self) {
         log::info!("Shader :: Deleting shader");
         unsafe {
-            gl::DeleteShader(self._id);
+            gl::DeleteShader(self.get_id());
         }
+    }
+}
+
+impl<'a> HasID for ShaderProgram<'a> {
+    fn get_id(&self) -> u32 {
+        return self._id;
     }
 }
 
@@ -147,14 +154,14 @@ impl<'a> ShaderProgram<'a> {
 
         for shader in self._shaders {
             unsafe {
-                gl::AttachShader(self._id, shader.get_id());
-                gl::LinkProgram(self._id);
+                gl::AttachShader(self.get_id(), shader.get_id());
+                gl::LinkProgram(self.get_id());
                 let mut success = 0;
-                gl::GetProgramiv(self._id, gl::LINK_STATUS, &mut success);
+                gl::GetProgramiv(self.get_id(), gl::LINK_STATUS, &mut success);
                 if success == 0 {
                     let mut v: Vec<u8> = Vec::with_capacity(1024);
                     let mut log_len = 0_i32;
-                    gl::GetProgramInfoLog(self._id, 1024, &mut log_len, v.as_mut_ptr().cast());
+                    gl::GetProgramInfoLog(self.get_id(), 1024, &mut log_len, v.as_mut_ptr().cast());
                     v.set_len(log_len.try_into().unwrap());
                     panic!("Program Link Error: {}", String::from_utf8_lossy(&v));
                 };
@@ -167,7 +174,7 @@ impl<'a> ShaderProgram<'a> {
     pub fn get_uniform_location(&self, name: &str) -> GLint {
         unsafe {
             // Strings in rust are not null terminated, so we terminate them manually.
-            return gl::GetUniformLocation(self._id, format!("{name}\0").as_ptr() as *const GLchar);
+            return gl::GetUniformLocation(self.get_id(), format!("{name}\0").as_ptr() as *const GLchar);
         }
     }
 
@@ -268,21 +275,21 @@ impl<'a> Bindable for ShaderProgram<'a> {
     fn bind(&self) {
         log::trace!("ShaderProgram :: Binding");
         unsafe {
-            gl::UseProgram(self._id);
+            gl::UseProgram(self.get_id());
         }
     }
 
     fn unbind(&self) {
         log::trace!("ShaderProgram :: Unbinding");
         unsafe {
-            gl::UseProgram(self._id);
+            gl::UseProgram(self.get_id());
         }
     }
 
     fn delete(&self) {
         log::info!("ShaderProgram :: Deleting");
         unsafe {
-            gl::DeleteProgram(self._id);
+            gl::DeleteProgram(self.get_id());
         }
     }
 }

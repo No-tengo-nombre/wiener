@@ -1,4 +1,4 @@
-use crate::{Bindable, Buffer};
+use crate::{Bindable, Buffer, HasID};
 use std::mem::size_of;
 
 use gl;
@@ -12,6 +12,12 @@ pub struct VertexBuffer {
 
     /// Usage of the data.
     pub usage: GLenum,
+}
+
+impl HasID for VertexBuffer {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
 }
 
 impl VertexBuffer {
@@ -41,7 +47,7 @@ impl Bindable for VertexBuffer {
     fn bind(&self) {
         log::trace!("VertexBuffer :: Binding");
         unsafe {
-            gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
+            gl::BindBuffer(gl::ARRAY_BUFFER, self.get_id());
         }
     }
 
@@ -55,7 +61,7 @@ impl Bindable for VertexBuffer {
     fn delete(&self) {
         log::info!("VertexBuffer :: Deleting");
         unsafe {
-            gl::DeleteBuffers(1, &self._id);
+            gl::DeleteBuffers(1, &self.get_id());
         }
     }
 }
