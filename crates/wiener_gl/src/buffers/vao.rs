@@ -5,7 +5,7 @@ use gl::types::*;
 use log;
 
 /// Vertex attribute.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct VertexAttribute {
     /// Location in memory.
     pub location: usize,

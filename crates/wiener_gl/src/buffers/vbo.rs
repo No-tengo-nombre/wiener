@@ -5,7 +5,7 @@ use gl;
 use gl::types::*;
 
 /// Vertex buffer object, which contains vertex data stored in the GPU.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct VertexBuffer {
     /// Unique ID associated to the object.
     _id: u32,

@@ -6,7 +6,7 @@ use gl::types::*;
 use log;
 
 /// Element buffer object, which contains triangle data stored in the GPU.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct ElementBuffer {
     /// Unique ID associated to the object.
     _id: u32,

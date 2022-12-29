@@ -5,7 +5,7 @@ use std::sync::mpsc::Receiver;
 use log;
 
 /// Mode for the window.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum WindowMode {
     Windowed,
     FullScreen(u32),

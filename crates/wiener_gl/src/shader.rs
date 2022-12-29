@@ -42,7 +42,7 @@ fn get_shader_type(file_extension: &str) -> GLenum {
 }
 
 /// OpenGL shader component.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Shader {
     _id: u32,
 
