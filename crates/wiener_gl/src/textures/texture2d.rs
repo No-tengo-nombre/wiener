@@ -98,7 +98,7 @@ impl Texture2D {
 
     /// Build the texture. After building, you should buffer the desired
     /// image.
-    pub fn build<T>(self) -> Self {
+    pub fn build(self) -> Self {
         log::info!("Texture2D :: Building Texture2D with parameters:\nWrap S {:?}\nWrap T {:?}\nWrap R {:?}\nMin filter {:?}\nMag filter {:?}", self.wrap_s, self.wrap_t, self.wrap_r, self.min_filter, self.mag_filter);
         self.bind();
         unsafe {
