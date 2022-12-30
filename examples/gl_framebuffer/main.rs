@@ -19,16 +19,16 @@ fn main() {
         })
         .build();
 
-    log::debug!("gl_framebuffer :: Initializing framebuffer");
-    let fbo = FrameBuffer::new();
-    fbo.bind();
-
-    log::debug!("gl_framebuffer :: Initializing framebuffer texture");
-    let fbo_texture = Texture2D::default()
+        log::debug!("gl_framebuffer :: Initializing framebuffer texture");
+        let fbo_texture = Texture2D::default()
         .tex_num(0)
         .build()
         .buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
-    fbo.inplace_attach_texture2d(0, &fbo_texture);
+
+        log::debug!("gl_framebuffer :: Initializing framebuffer");
+        let fbo = FrameBuffer::new()
+            .attach_texture2d(0, &fbo_texture);
+        fbo.bind();
 
     log::debug!("gl_framebuffer :: Making triangle shader");
     let triangle_shader_arr = [
