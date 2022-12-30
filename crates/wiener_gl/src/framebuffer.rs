@@ -30,6 +30,7 @@ impl FrameBuffer {
                 panic!("The framebuffer is not complete");
             }
         }
+        self.unbind();
     }
 
     pub fn inplace_attach_renderbuffer(&self, attachment: GLenum, target: &RenderBuffer) {
@@ -37,6 +38,7 @@ impl FrameBuffer {
         unsafe {
             gl::FramebufferRenderbuffer(gl::FRAMEBUFFER, attachment, gl::RENDERBUFFER, target.get_id());
         }
+        self.unbind();
     }
 
     pub fn inplace_attach_texture(&self, attachment: GLenum, target: &dyn Texture) {
@@ -44,6 +46,7 @@ impl FrameBuffer {
         unsafe {
             gl::FramebufferTexture(gl::FRAMEBUFFER, attachment, target.get_id(), 0);
         }
+        self.unbind();
     }
 
     pub fn inplace_attach_depth(&self, target: &dyn Texture) {
@@ -55,6 +58,7 @@ impl FrameBuffer {
         unsafe {
             gl::FramebufferTexture2D(gl::FRAMEBUFFER, attachment, target_type, target.get_id(), 0);
         }
+        self.unbind();
     }
 
     pub fn inplace_attach_texture2d(&self, attachment_num: u32, target: &Texture2D) {
