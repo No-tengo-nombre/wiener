@@ -6,8 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-wiener_core = { path = "../wiener_core" }
-wiener_utils = { path = "../wiener_utils" }
+wiener_core = { path = "../wiener_core", version = "0.1.0" }
+wiener_utils = { path = "../wiener_utils", version = "0.1.0" }
 env_logger = "0.10.0"
 gl = "0.14.0"
 glfw = "0.46.0"
