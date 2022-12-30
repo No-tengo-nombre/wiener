@@ -116,6 +116,7 @@ impl Texture2D {
                 self.mag_filter as i32,
             );
         }
+        self.unbind();
         return self;
     }
 
@@ -141,6 +142,7 @@ impl Texture2D {
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
+        self.unbind();
         return self;
     }
 
@@ -166,6 +168,7 @@ impl Texture2D {
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
+        self.unbind();
         return self;
     }
 
