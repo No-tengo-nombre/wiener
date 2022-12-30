@@ -3,6 +3,8 @@ use crate::{Bindable, HasID, Texture};
 use gl;
 use gl::types::*;
 
+/// OpenGL render buffer, which can be drawn to efficiently, but is not
+/// intended for reading.
 #[derive(Clone, Copy, Debug)]
 pub struct RenderBuffer {
     _id: u32,
@@ -17,6 +19,7 @@ impl HasID for RenderBuffer {
 }
 
 impl RenderBuffer {
+    /// Create a new render buffer.
     pub fn new() -> Self {
         let mut rbo = 0;
         unsafe {
@@ -25,6 +28,7 @@ impl RenderBuffer {
         return RenderBuffer { _id: rbo };
     }
 
+    /// Set up the render buffer, giving it a format, width and height.
     pub fn set_up(self, format: GLenum, width: i32, height: i32) -> Self {
         self.bind();
         unsafe {
