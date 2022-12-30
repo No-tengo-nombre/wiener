@@ -11,3 +11,8 @@ pub trait HasID {
     /// Get the OpenGL ID of the object.
     fn get_id(&self) -> u32;
 }
+
+pub trait Drawable {
+    /// Draw this object.
+    fn draw(&self);
+}

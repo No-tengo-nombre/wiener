@@ -15,6 +15,13 @@ impl GLManager {
         }
     }
 
+    pub fn disable(feature: GLenum) {
+        log::info!("GLManager :: Disabling feature {:?}", feature);
+        unsafe {
+            gl::Disable(feature);
+        }
+    }
+
     pub fn clear_color(red: f32, green: f32, blue: f32, alpha: f32) {
         log::info!("GLManager :: Setting clear color");
         unsafe {
@@ -37,9 +44,16 @@ impl GLManager {
     }
 
     pub fn viewport(start_x: i32, start_y: i32, width: i32, height: i32) {
-        log::trace!("Setting viewport to {:?}x{:?} at ({:?}, {:?})", width, height, start_x, start_y);
+        log::trace!("GLManager :: Setting viewport to {:?}x{:?} at ({:?}, {:?})", width, height, start_x, start_y);
         unsafe {
             gl::Viewport(start_x, start_y, width, height);
+        }
+    }
+
+    pub fn polygon_mode(face: GLenum, mode: GLenum) {
+        log::info!("GLManager :: Setting polygon mode on face {:?} to {:?}", face, mode);
+        unsafe {
+            gl::PolygonMode(face, mode);
         }
     }
 }

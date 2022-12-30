@@ -6,7 +6,7 @@ use wiener::WindowDescriptor;
 
 fn main() {
     env_logger::init();
-    log::debug!("gl_triangle :: Making window");
+    log::debug!("gl_uniform :: Making window");
     let mut window = GLWindow::builder()
         .descriptor(WindowDescriptor {
             width: 1000,
@@ -16,13 +16,13 @@ fn main() {
         })
         .build();
 
-    log::debug!("gl_triangle :: Making triangle shader");
+    log::debug!("gl_uniform :: Making triangle shader");
     let triangle_shader_arr = [
         Shader::from_file(
-            "examples/gl_uniforms/resources/triangle.vert",
+            "examples/gl_uniform/resources/triangle.vert",
         ),
         Shader::from_file(
-            "examples/gl_uniforms/resources/triangle.frag",
+            "examples/gl_uniform/resources/triangle.frag",
         )
     ];
     let triangle_shader = ShaderProgram::from_array(&triangle_shader_arr);
@@ -32,7 +32,7 @@ fn main() {
         VertexAttribute { location: 1, size: 3, data_type: gl::FLOAT },
     ];
 
-    log::debug!("gl_triangle :: Making triangle mesh");
+    log::debug!("gl_uniform :: Making triangle mesh");
     let mut triangle_rotation = Mesh::<f32, u32>::new(&triangle_shader)
         .vertices(&[
             -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
@@ -51,13 +51,13 @@ fn main() {
         .indices(&[0, 1, 2])
         .layout(&triangle_layout);
 
-    log::debug!("gl_triangle :: Setting clear color");
+    log::debug!("gl_uniform :: Setting clear color");
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
 
     const ROTATION_SPEED: f32 = 10.0;
     const TRANSLATION_SPEED: f32 = 2.0;
 
-    log::debug!("gl_triangle :: Starting the render loop");
+    log::debug!("gl_uniform :: Starting the render loop");
     let mut viewport;
     let mut window_time;
     while !window.should_close() {
