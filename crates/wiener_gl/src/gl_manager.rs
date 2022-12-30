@@ -15,6 +15,13 @@ impl GLManager {
         }
     }
 
+    pub fn disable(feature: GLenum) {
+        log::info!("GLManager :: Disabling feature {:?}", feature);
+        unsafe {
+            gl::Disable(feature);
+        }
+    }
+
     pub fn clear_color(red: f32, green: f32, blue: f32, alpha: f32) {
         log::info!("GLManager :: Setting clear color");
         unsafe {
