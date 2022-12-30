@@ -208,7 +208,7 @@ impl Default for Texture2D {
 
 impl Bindable for Texture2D {
     fn bind(&self) {
-        log::trace!("Texture2D :: Binding");
+        log::trace!("Texture2D :: Binding texture {:?} to slot {:?}", self.get_id(), self.tex_num);
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, self.get_id());
@@ -216,7 +216,7 @@ impl Bindable for Texture2D {
     }
 
     fn unbind(&self) {
-        log::trace!("Texture2D :: Unbinding");
+        log::trace!("Texture2D :: Unbinding texture {:?} to slot {:?}", self.get_id(), self.tex_num);
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, 0);
@@ -224,8 +224,8 @@ impl Bindable for Texture2D {
     }
 
     fn delete(&self) {
-        log::trace!("Texture2D :: Deleting");
-        self.bind_slot();
+        log::trace!("Texture2D :: Deleting texture {:?} bound to slot {:?}", self.get_id(), self.tex_num);
+        self.bind();
         unsafe {
             gl::DeleteTextures(1, &self.get_id());
         }
