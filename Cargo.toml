@@ -1,5 +1,7 @@
 [package]
 name = "wiener"
+description = "Rendering API for OpenGL and Vulkan"
+readme = "README.md"
 version = "0.1.0"
 edition = "2021"
 
