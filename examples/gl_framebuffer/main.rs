@@ -22,7 +22,6 @@ fn main() {
         log::debug!("gl_framebuffer :: Initializing framebuffer texture");
         let fbo_texture = Texture2D::default()
             .tex_num(0)
-            .format(gl::RGBA)
             .build()
             .buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -53,6 +52,8 @@ fn main() {
         ),
     ];
     let framebuffer_shader = ShaderProgram::from_array(&framebuffer_shader_arr);
+    framebuffer_shader.uniform_1f("u_screen_x", WINDOW_WIDTH as f32);
+    framebuffer_shader.uniform_1f("u_screen_y", WINDOW_HEIGHT as f32);
 
     let triangle_layout = [
         VertexAttribute { location: 0, size: 3, data_type: gl::FLOAT },
@@ -89,7 +90,7 @@ fn main() {
             -1.0, -1.0, 0.0, 0.0, 0.0,
             -1.0,  1.0, 0.0, 0.0, 1.0,
              1.0, -1.0, 0.0, 1.0, 0.0,
-             1.0,  1.0, 0.0, 1.0, 1.0,
+             1.0,  1.0, 0.0, 1.0, 1.0_f32,
         ])
         .indices(&[0, 2, 1, 2, 3, 1])
         .layout(&screen_quad_layout)
