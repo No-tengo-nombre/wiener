@@ -13,39 +13,48 @@ fn main() {
             height: 1000,
             title: "Models example".to_string(),
             ..Default::default()
-        }).build();
+        })
+        .build();
 
     log::debug!("gl_model :: Enabling features");
     GLManager::enable(gl::DEPTH_TEST);
 
     log::debug!("gl_model :: Making ship shader");
     let ship_shader_arr = [
-        Shader::from_file(
-            "examples/gl_model/resources/shaders/ship.vert",
-        ),
-        Shader::from_file(
-            "examples/gl_model/resources/shaders/ship.frag",
-        )
+        Shader::from_file("examples/gl_model/resources/shaders/ship.vert"),
+        Shader::from_file("examples/gl_model/resources/shaders/ship.frag"),
     ];
     let ship_shader = ShaderProgram::from_array(&ship_shader_arr);
-    
+
     let vertex_layout = [
-        VertexAttribute { location: 0, size: 3, data_type: gl::FLOAT },
-        VertexAttribute { location: 1, size: 3, data_type: gl::FLOAT },
-        VertexAttribute { location: 2, size: 3, data_type: gl::FLOAT },
+        VertexAttribute {
+            location: 0,
+            size: 3,
+            data_type: gl::FLOAT,
+        },
+        VertexAttribute {
+            location: 1,
+            size: 3,
+            data_type: gl::FLOAT,
+        },
+        VertexAttribute {
+            location: 2,
+            size: 3,
+            data_type: gl::FLOAT,
+        },
     ];
 
     log::debug!("gl_model :: Loading ship mesh");
-    let mut ship =  Mesh::<f32, u32>::from_off(
+    let mut ship = Mesh::<f32, u32>::from_off(
         "examples/gl_model/resources/models/XJ5 X-wing starfighter.off",
         &ship_shader,
         (1.0, 1.0, 1.0),
     )
-        .layout(&vertex_layout);
+    .layout(&vertex_layout);
 
     log::debug!("gl_model :: Setting clear color");
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
-    
+
     const ROTATION_SPEED: f32 = 0.5;
 
     log::debug!("gl_model :: Starting the render loop");
@@ -64,7 +73,7 @@ fn main() {
 
         ship.model_mat = math::matmul(
             math::rotation(ROTATION_SPEED * window_time, 0.0, 0.0),
-            math::scaling(0.5, 0.5, 0.5)
+            math::scaling(0.5, 0.5, 0.5),
         );
         ship.draw();
 

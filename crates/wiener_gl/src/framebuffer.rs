@@ -1,4 +1,4 @@
-use crate::{Bindable, HasID, Texture, Texture2D, RenderBuffer};
+use crate::{Bindable, HasID, RenderBuffer, Texture, Texture2D};
 
 use gl;
 use gl::types::*;
@@ -40,7 +40,12 @@ impl FrameBuffer {
     pub fn inplace_attach_renderbuffer(&self, attachment: GLenum, target: &RenderBuffer) {
         self.bind();
         unsafe {
-            gl::FramebufferRenderbuffer(gl::FRAMEBUFFER, attachment, gl::RENDERBUFFER, target.get_id());
+            gl::FramebufferRenderbuffer(
+                gl::FRAMEBUFFER,
+                attachment,
+                gl::RENDERBUFFER,
+                target.get_id(),
+            );
         }
         self.unbind();
     }
@@ -53,24 +58,33 @@ impl FrameBuffer {
         }
         self.unbind();
     }
-    
+
     /// Attach a depth texture without returning.
     pub fn inplace_attach_depth(&self, target: &dyn Texture) {
         self.inplace_attach_texture(gl::DEPTH_ATTACHMENT, target);
     }
-    
+
     /// Attach an arbitrary 2D texture without returning.
-    pub fn inplace_attach_raw_texture2d(&self, attachment: GLenum, target_type: GLenum, target: &Texture2D) {
+    pub fn inplace_attach_raw_texture2d(
+        &self,
+        attachment: GLenum,
+        target_type: GLenum,
+        target: &Texture2D,
+    ) {
         self.bind();
         unsafe {
             gl::FramebufferTexture2D(gl::FRAMEBUFFER, attachment, target_type, target.get_id(), 0);
         }
         self.unbind();
     }
-    
+
     /// Attach a 2D texture without returning.
     pub fn inplace_attach_texture2d(&self, attachment_num: u32, target: &Texture2D) {
-        self.inplace_attach_raw_texture2d(gl::COLOR_ATTACHMENT0 + attachment_num, gl::TEXTURE_2D, target);
+        self.inplace_attach_raw_texture2d(
+            gl::COLOR_ATTACHMENT0 + attachment_num,
+            gl::TEXTURE_2D,
+            target,
+        );
     }
 
     /// Attach a renderbuffer, returning `self` afterwards.
@@ -92,7 +106,12 @@ impl FrameBuffer {
     }
 
     /// Attach an arbitrary 2D texture, returning `self` afterwards.
-    pub fn attach_raw_texture2d(self, attachment: GLenum, target_type: GLenum, target: &Texture2D) -> Self {
+    pub fn attach_raw_texture2d(
+        self,
+        attachment: GLenum,
+        target_type: GLenum,
+        target: &Texture2D,
+    ) -> Self {
         self.inplace_attach_raw_texture2d(attachment, target_type, target);
         return self;
     }

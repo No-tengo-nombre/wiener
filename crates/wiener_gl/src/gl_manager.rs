@@ -44,14 +44,24 @@ impl GLManager {
     }
 
     pub fn viewport(start_x: i32, start_y: i32, width: i32, height: i32) {
-        log::trace!("GLManager :: Setting viewport to {:?}x{:?} at ({:?}, {:?})", width, height, start_x, start_y);
+        log::trace!(
+            "GLManager :: Setting viewport to {:?}x{:?} at ({:?}, {:?})",
+            width,
+            height,
+            start_x,
+            start_y
+        );
         unsafe {
             gl::Viewport(start_x, start_y, width, height);
         }
     }
 
     pub fn polygon_mode(face: GLenum, mode: GLenum) {
-        log::info!("GLManager :: Setting polygon mode on face {:?} to {:?}", face, mode);
+        log::info!(
+            "GLManager :: Setting polygon mode on face {:?} to {:?}",
+            face,
+            mode
+        );
         unsafe {
             gl::PolygonMode(face, mode);
         }

@@ -1,10 +1,11 @@
-use std::ops::AddAssign;
-use std::{ffi::c_void, fmt::Debug};
 use std::fs;
+use std::ops::AddAssign;
 use std::str::FromStr;
+use std::{ffi::c_void, fmt::Debug};
 
 use crate::{
-    Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray, VertexAttribute, VertexBuffer,
+    Bindable, Buffer, Drawable, ElementBuffer, ShaderProgram, Texture2D, VertexArray,
+    VertexAttribute, VertexBuffer,
 };
 
 use gl::types::GLenum;
@@ -30,9 +31,14 @@ pub struct Mesh<'a, U, I> {
     phantom: std::marker::PhantomData<I>,
 }
 
-impl<'a, U: Float + Debug + Copy + FromStr + Pow<u16, Output = U> + AddAssign<U>, I: Integer + std::str::FromStr + ToPrimitive + Copy + Debug> Mesh<'a, U, I>
+impl<
+        'a,
+        U: Float + Debug + Copy + FromStr + Pow<u16, Output = U> + AddAssign<U>,
+        I: Integer + std::str::FromStr + ToPrimitive + Copy + Debug,
+    > Mesh<'a, U, I>
 where
-    <U as FromStr>::Err: Debug, <I as FromStr>::Err: Debug,
+    <U as FromStr>::Err: Debug,
+    <I as FromStr>::Err: Debug,
 {
     /// Create a new mesh associated to a shader program.
     pub fn new(shader: &'a ShaderProgram<'a>) -> Self {
@@ -58,8 +64,7 @@ where
 
     /// Read a mesh from an OFF file, generating normals and a color. The resulting
     /// VAO layout is (3, 3, 2), so the user must make sure to specify this.
-    pub fn from_off(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self
-    {
+    pub fn from_off(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self {
         log::info!("Mesh :: Reading mesh from OFF file");
 
         // Read the file and separate into lines
@@ -70,7 +75,11 @@ where
         if lines.next() != Some("OFF") {
             panic!("File doesn't have the OFF format.");
         }
-        let file_descriptor = lines.next().unwrap().split_whitespace().collect::<Vec<&str>>();
+        let file_descriptor = lines
+            .next()
+            .unwrap()
+            .split_whitespace()
+            .collect::<Vec<&str>>();
         let vert_num = i32::from_str_radix(file_descriptor[0], 10).unwrap();
         let face_num = i32::from_str_radix(file_descriptor[1], 10).unwrap();
         let mut vertices = Vec::<[U; 9]>::with_capacity(vert_num as usize);
@@ -84,11 +93,25 @@ where
         let mut z;
         log::trace!("Mesh :: Reading the vertices");
         for _ in 0..vert_num {
-            temp_vert = lines.next().unwrap().split_whitespace().collect::<Vec<&str>>();
+            temp_vert = lines
+                .next()
+                .unwrap()
+                .split_whitespace()
+                .collect::<Vec<&str>>();
             x = temp_vert[0].parse::<U>().unwrap();
             y = temp_vert[1].parse::<U>().unwrap();
             z = temp_vert[2].parse::<U>().unwrap();
-            vertices.push([x, y, z, color.0, color.1, color.2, U::zero(), U::zero(), U::zero()]);
+            vertices.push([
+                x,
+                y,
+                z,
+                color.0,
+                color.1,
+                color.2,
+                U::zero(),
+                U::zero(),
+                U::zero(),
+            ]);
         }
 
         // Read the faces and generate the normals
@@ -111,18 +134,47 @@ where
         log::trace!("Mesh :: Reading the faces");
         for _ in 0..face_num {
             // Read the face
-            temp_face = lines.next().unwrap().split_whitespace().collect::<Vec<&str>>()[1..].to_owned();
+            temp_face = lines
+                .next()
+                .unwrap()
+                .split_whitespace()
+                .collect::<Vec<&str>>()[1..]
+                .to_owned();
             v0 = temp_face[0].parse::<I>().unwrap();
             v1 = temp_face[1].parse::<I>().unwrap();
             v2 = temp_face[2].parse::<I>().unwrap();
             faces.push([v0, v1, v2]);
 
-            vertex0_positions = [vertices[v0.to_usize().unwrap()][0], vertices[v0.to_usize().unwrap()][1], vertices[v0.to_usize().unwrap()][2]];
-            vertex1_positions = [vertices[v1.to_usize().unwrap()][0], vertices[v1.to_usize().unwrap()][1], vertices[v1.to_usize().unwrap()][2]];
-            vertex2_positions = [vertices[v2.to_usize().unwrap()][0], vertices[v2.to_usize().unwrap()][1], vertices[v2.to_usize().unwrap()][2]];
-            vertex0_normals = [vertices[v0.to_usize().unwrap()][6], vertices[v0.to_usize().unwrap()][7], vertices[v0.to_usize().unwrap()][8]];
-            vertex1_normals = [vertices[v1.to_usize().unwrap()][6], vertices[v1.to_usize().unwrap()][7], vertices[v1.to_usize().unwrap()][8]];
-            vertex2_normals = [vertices[v2.to_usize().unwrap()][6], vertices[v2.to_usize().unwrap()][7], vertices[v2.to_usize().unwrap()][8]];
+            vertex0_positions = [
+                vertices[v0.to_usize().unwrap()][0],
+                vertices[v0.to_usize().unwrap()][1],
+                vertices[v0.to_usize().unwrap()][2],
+            ];
+            vertex1_positions = [
+                vertices[v1.to_usize().unwrap()][0],
+                vertices[v1.to_usize().unwrap()][1],
+                vertices[v1.to_usize().unwrap()][2],
+            ];
+            vertex2_positions = [
+                vertices[v2.to_usize().unwrap()][0],
+                vertices[v2.to_usize().unwrap()][1],
+                vertices[v2.to_usize().unwrap()][2],
+            ];
+            vertex0_normals = [
+                vertices[v0.to_usize().unwrap()][6],
+                vertices[v0.to_usize().unwrap()][7],
+                vertices[v0.to_usize().unwrap()][8],
+            ];
+            vertex1_normals = [
+                vertices[v1.to_usize().unwrap()][6],
+                vertices[v1.to_usize().unwrap()][7],
+                vertices[v1.to_usize().unwrap()][8],
+            ];
+            vertex2_normals = [
+                vertices[v2.to_usize().unwrap()][6],
+                vertices[v2.to_usize().unwrap()][7],
+                vertices[v2.to_usize().unwrap()][8],
+            ];
 
             // Generate the normals
             vec1 = math::subtract3(vertex1_positions, vertex0_positions);
@@ -164,13 +216,13 @@ where
         self.set_vertices(new_vertices);
         return self;
     }
-    
+
     /// Buffer indices to the associated EBO, returning `self`.
     pub fn indices<T>(mut self, new_indices: &[T]) -> Self {
         self.set_indices(new_indices);
         return self;
     }
-    
+
     /// Set the associated shader program, returning `self`.
     pub fn shader(mut self, new_shader: &'a ShaderProgram<'a>) -> Self {
         trace!("Mesh :: Setting shader");
@@ -216,8 +268,12 @@ where
     pub fn set_indices<T>(&mut self, new_indices: &[T]) {
         trace!("Mesh :: Setting indices");
         self.ebo.buffer_data(new_indices);
-        self._primitive_num = (new_indices.len() * std::mem::size_of::<T>() / std::mem::size_of::<I>()) as i32;
-        info!("Mesh :: Setting EBO number of primitives to {:?}", self._primitive_num);
+        self._primitive_num =
+            (new_indices.len() * std::mem::size_of::<T>() / std::mem::size_of::<I>()) as i32;
+        info!(
+            "Mesh :: Setting EBO number of primitives to {:?}",
+            self._primitive_num
+        );
     }
 
     /// Set the usage of the mesh inplace, without returning anything.
@@ -292,7 +348,12 @@ impl<'a, U, I> Bindable for Mesh<'a, U, I> {
 
 impl<'a, U: Debug + Copy, I> Drawable for Mesh<'a, U, I> {
     fn draw(&self) {
-        trace!("Mesh :: Sending draw call, model {:?}, view {:?}, projection {:?}", self.model_mat, self.view_mat, self.projection_mat);
+        trace!(
+            "Mesh :: Sending draw call, model {:?}, view {:?}, projection {:?}",
+            self.model_mat,
+            self.view_mat,
+            self.projection_mat
+        );
         self.bind();
 
         // Uniform the MVP matrices

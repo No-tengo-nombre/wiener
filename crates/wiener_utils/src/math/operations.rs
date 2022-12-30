@@ -30,7 +30,10 @@ pub fn add4<T: Add<T, Output = T> + Copy>(a: [T; 4], b: [T; 4]) -> [T; 4] {
 }
 
 /// Subtract two vectors.
-pub fn subtract<T: Add<T, Output = T> + Copy + Num, const N: usize>(a: [T; N], b: [T; N]) -> [T; N] {
+pub fn subtract<T: Add<T, Output = T> + Copy + Num, const N: usize>(
+    a: [T; N],
+    b: [T; N],
+) -> [T; N] {
     let mut result = [T::zero(); N];
     for i in 0..a.len() {
         result[i] = a[i] - b[i];
@@ -94,7 +97,10 @@ pub fn extract_column4<T: Num + Copy>(mat: [[T; 4]; 4], index: usize) -> [T; 4] 
 // === Matrix arithmetic === //
 
 /// Multiply two matrices.
-pub fn matmul<T: Num + Copy + AddAssign<T>, const N: usize>(a: [[T; N]; N], b: [[T; N]; N]) -> [[T; N]; N] {
+pub fn matmul<T: Num + Copy + AddAssign<T>, const N: usize>(
+    a: [[T; N]; N],
+    b: [[T; N]; N],
+) -> [[T; N]; N] {
     let mut result = [[T::zero(); N]; N];
     for i in 0..a.len() {
         for j in 0..b.len() {
@@ -138,7 +144,10 @@ pub fn matmul4<T: Num + Copy + AddAssign<T>>(a: [[T; 4]; 4], b: [[T; 4]; 4]) -> 
 }
 
 /// Multiply a matrix and a vector.
-pub fn matmulv<T: Num + Copy + AddAssign<T>, const N: usize>(mat: [[T; N]; N], v: [T; N]) -> [T; N] {
+pub fn matmulv<T: Num + Copy + AddAssign<T>, const N: usize>(
+    mat: [[T; N]; N],
+    v: [T; N],
+) -> [T; N] {
     let mut result = [T::zero(); N];
     for i in 0..mat.len() {
         result[i] = dot::<T, N>(mat[i], v);

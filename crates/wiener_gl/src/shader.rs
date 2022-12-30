@@ -174,7 +174,10 @@ impl<'a> ShaderProgram<'a> {
     pub fn get_uniform_location(&self, name: &str) -> GLint {
         unsafe {
             // Strings in rust are not null terminated, so we terminate them manually.
-            return gl::GetUniformLocation(self.get_id(), format!("{name}\0").as_ptr() as *const GLchar);
+            return gl::GetUniformLocation(
+                self.get_id(),
+                format!("{name}\0").as_ptr() as *const GLchar,
+            );
         }
     }
 
@@ -188,21 +191,36 @@ impl<'a> ShaderProgram<'a> {
     pub fn uniform_2i<T: num::PrimInt>(&self, name: &str, val0: T, val1: T) {
         self.bind();
         unsafe {
-            gl::Uniform2i(self.get_uniform_location(name), val0.to_i32().unwrap(), val1.to_i32().unwrap());
+            gl::Uniform2i(
+                self.get_uniform_location(name),
+                val0.to_i32().unwrap(),
+                val1.to_i32().unwrap(),
+            );
         }
     }
 
     pub fn uniform_3i<T: num::PrimInt>(&self, name: &str, val0: T, val1: T, val2: T) {
         self.bind();
         unsafe {
-            gl::Uniform3i(self.get_uniform_location(name), val0.to_i32().unwrap(), val1.to_i32().unwrap(), val2.to_i32().unwrap());
+            gl::Uniform3i(
+                self.get_uniform_location(name),
+                val0.to_i32().unwrap(),
+                val1.to_i32().unwrap(),
+                val2.to_i32().unwrap(),
+            );
         }
     }
 
     pub fn uniform_4i<T: num::PrimInt>(&self, name: &str, val0: T, val1: T, val2: T, val3: T) {
         self.bind();
         unsafe {
-            gl::Uniform4i(self.get_uniform_location(name), val0.to_i32().unwrap(), val1.to_i32().unwrap(), val2.to_i32().unwrap(), val3.to_i32().unwrap());
+            gl::Uniform4i(
+                self.get_uniform_location(name),
+                val0.to_i32().unwrap(),
+                val1.to_i32().unwrap(),
+                val2.to_i32().unwrap(),
+                val3.to_i32().unwrap(),
+            );
         }
     }
 
@@ -216,21 +234,36 @@ impl<'a> ShaderProgram<'a> {
     pub fn uniform_2f<T: num::Float>(&self, name: &str, val0: T, val1: T) {
         self.bind();
         unsafe {
-            gl::Uniform2f(self.get_uniform_location(name), val0.to_f32().unwrap(), val1.to_f32().unwrap());
+            gl::Uniform2f(
+                self.get_uniform_location(name),
+                val0.to_f32().unwrap(),
+                val1.to_f32().unwrap(),
+            );
         }
     }
 
     pub fn uniform_3f<T: num::Float>(&self, name: &str, val0: T, val1: T, val2: T) {
         self.bind();
         unsafe {
-            gl::Uniform3f(self.get_uniform_location(name), val0.to_f32().unwrap(), val1.to_f32().unwrap(), val2.to_f32().unwrap());
+            gl::Uniform3f(
+                self.get_uniform_location(name),
+                val0.to_f32().unwrap(),
+                val1.to_f32().unwrap(),
+                val2.to_f32().unwrap(),
+            );
         }
     }
 
     pub fn uniform_4f<T: num::Float>(&self, name: &str, val0: T, val1: T, val2: T, val3: T) {
         self.bind();
         unsafe {
-            gl::Uniform4f(self.get_uniform_location(name), val0.to_f32().unwrap(), val1.to_f32().unwrap(), val2.to_f32().unwrap(), val3.to_f32().unwrap());
+            gl::Uniform4f(
+                self.get_uniform_location(name),
+                val0.to_f32().unwrap(),
+                val1.to_f32().unwrap(),
+                val2.to_f32().unwrap(),
+                val3.to_f32().unwrap(),
+            );
         }
     }
 

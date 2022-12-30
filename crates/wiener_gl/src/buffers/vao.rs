@@ -19,7 +19,11 @@ pub struct VertexAttribute {
 
 impl VertexAttribute {
     pub fn new(location: usize, size: u32, data_type: GLenum) -> Self {
-        return VertexAttribute { location, size, data_type };
+        return VertexAttribute {
+            location,
+            size,
+            data_type,
+        };
     }
 
     /// Bind the vertex attribute to a given VAO.
@@ -31,7 +35,11 @@ impl VertexAttribute {
                 self.data_type,
                 gl::FALSE,
                 (vao.size * vao.stride) as i32,
-                (vao.size * vao.layout[0..self.location].iter().map(|a| a.size).sum::<u32>()) as *const _,
+                (vao.size
+                    * vao.layout[0..self.location]
+                        .iter()
+                        .map(|a| a.size)
+                        .sum::<u32>()) as *const _,
             );
             gl::EnableVertexArrayAttrib(vao.get_id(), self.location as u32);
         }
@@ -40,7 +48,11 @@ impl VertexAttribute {
 
 impl Default for VertexAttribute {
     fn default() -> Self {
-        return VertexAttribute { location: 0, size: 0, data_type: gl::FLOAT };
+        return VertexAttribute {
+            location: 0,
+            size: 0,
+            data_type: gl::FLOAT,
+        };
     }
 }
 
@@ -91,7 +103,11 @@ impl<'a> VertexArray<'a> {
     pub fn set_layout(&mut self, new_layout: &'a [VertexAttribute]) {
         self.layout = new_layout;
         self.stride = new_layout.iter().map(|a| a.size).sum();
-        log::debug!("VertexArray :: Set layout to {:?}. New stride is {:?}", self.layout, self.stride);
+        log::debug!(
+            "VertexArray :: Set layout to {:?}. New stride is {:?}",
+            self.layout,
+            self.stride
+        );
         self.update();
     }
 
