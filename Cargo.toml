@@ -4,6 +4,11 @@ description = "Rendering API for OpenGL and Vulkan"
 readme = "README.md"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/No-tengo-nombre/wiener/"
+license = "MIT"
+license-file = "LICENSE"
+keywords = ["graphics", "opengl", "gamedev", "visualization"]
+categories = ["graphics", "rendering", "rendering::engine", "rendering::graphics-api"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
