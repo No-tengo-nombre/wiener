@@ -4,16 +4,18 @@ use wiener::WindowDescriptor;
 
 fn main() {
     env_logger::init();
-    let window_descriptor = WindowDescriptor {
+    log::debug!("gl_window :: Making window");
+    let mut window = GLWindow::builder().descriptor(WindowDescriptor {
         width: 1000,
         height: 1000,
         title: "Window example".to_string(),
         ..Default::default()
-    };
-    let mut window = GLWindow::builder().descriptor(window_descriptor).build();
+    }).build();
 
+    log::debug!("gl_window :: Setting clear color");
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
 
+    log::debug!("gl_window :: Starting the render loop");
     while !window.should_close() {
         window.poll_events();
         GLManager::clear(gl::COLOR_BUFFER_BIT);
