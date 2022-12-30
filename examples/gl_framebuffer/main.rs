@@ -21,14 +21,16 @@ fn main() {
 
         log::debug!("gl_framebuffer :: Initializing framebuffer texture");
         let fbo_texture = Texture2D::default()
-        .tex_num(0)
-        .build()
-        .buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
+            .tex_num(0)
+            .format(gl::RGBA)
+            .build()
+            .buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         log::debug!("gl_framebuffer :: Initializing framebuffer");
         let fbo = FrameBuffer::new()
             .attach_texture2d(0, &fbo_texture);
         fbo.bind();
+        fbo.verify();
 
     log::debug!("gl_framebuffer :: Making triangle shader");
     let triangle_shader_arr = [
@@ -114,7 +116,7 @@ fn main() {
 
         GLManager::clear(gl::COLOR_BUFFER_BIT);
         GLManager::viewport(0, 0, viewport.0, viewport.1);
-        
+
         triangle_rotation.model_mat = math::rotation(0.0, 0.0, (ROTATION_SPEED * window_time).sin());
         triangle_translation.model_mat = math::translation((TRANSLATION_SPEED * window_time).sin(), 0.0, 0.0);
         
