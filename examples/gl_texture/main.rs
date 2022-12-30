@@ -37,6 +37,7 @@ fn main() {
     let quad_textures = [
         Texture2D::default()
             .tex_num(0)
+            .format(gl::RGBA)
             .build()
             .buffer_from_file("examples/gl_texture/resources/textures/chihuahua.jpg"),
     ];
@@ -44,10 +45,10 @@ fn main() {
     log::debug!("gl_texture :: Making quad mesh");
     let mut quad = Mesh::<f32, u32>::new(&quad_shader)
         .vertices(&[
-            -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-            -0.5,  0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-             0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,
-             0.5,  0.5, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0_f32,
+            -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+            -0.5,  0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+             0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0,
+             0.5,  0.5, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0_f32,
             ])
         .indices(&[0, 2, 1, 2, 3, 1])
         .layout(&quad_layout)
