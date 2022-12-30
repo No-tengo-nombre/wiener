@@ -1,4 +1,4 @@
-use crate::{Bindable, Texture, Texture2D};
+use crate::{Bindable, HasID, Texture, Texture2D, RenderBuffer};
 
 use gl;
 use gl::types::*;
@@ -8,7 +8,7 @@ pub struct FrameBuffer {
     _id: u32,
 }
 
-impl HasID for Shader {
+impl HasID for FrameBuffer {
     fn get_id(&self) -> u32 {
         return self._id;
     }
@@ -23,10 +23,12 @@ impl FrameBuffer {
         return FrameBuffer { _id: fbo_id };
     }
 
-    pub fn verify(&self) -> ! {
+    pub fn verify(&self) {
         self.bind();
-        if gl::CheckFramebufferStatus(gl::FRAMEBUFFER) != gl::FRAMEBUFFER_COMPLETE {
-            panic!("The framebuffer is not complete");
+        unsafe {
+            if gl::CheckFramebufferStatus(gl::FRAMEBUFFER) != gl::FRAMEBUFFER_COMPLETE {
+                panic!("The framebuffer is not complete");
+            }
         }
     }
 
@@ -56,7 +58,7 @@ impl FrameBuffer {
     }
 
     pub fn inplace_attach_texture2d(&self, attachment_num: u32, target: &Texture2D) {
-        self.inplace_attach2d(gl::COLOR_ATTACHMENT0 + attachment_num, gl::TEXTURE_2D, target.get_id());
+        self.inplace_attach_raw_texture2d(gl::COLOR_ATTACHMENT0 + attachment_num, gl::TEXTURE_2D, target);
     }
 
     pub fn attach_renderbuffer(self, attachment: GLenum, target: &RenderBuffer) -> Self {
@@ -81,19 +83,20 @@ impl FrameBuffer {
 
     pub fn attach_texture2d(self, attachment_num: u32, target: &Texture2D) -> Self {
         self.inplace_attach_texture2d(attachment_num, target);
+        return self;
     }
 }
 
 impl Bindable for FrameBuffer {
     fn bind(&self) {
         unsafe {
-            gl::BindFrameBuffer(gl::FRAMEBUFFER, self.get_id());
+            gl::BindFramebuffer(gl::FRAMEBUFFER, self.get_id());
         }
     }
 
     fn unbind(&self) {
         unsafe {
-            gl::BindFrameBuffer(gl::FRAMEBUFFER, 0);
+            gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
         }
     }
 
