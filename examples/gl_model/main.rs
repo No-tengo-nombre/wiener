@@ -6,7 +6,7 @@ use wiener_gl::Drawable;
 
 fn main() {
     env_logger::init();
-    log::debug!("gl_models :: Making window");
+    log::debug!("gl_model :: Making window");
     let mut window = GLWindow::builder()
         .descriptor(WindowDescriptor {
             width: 1000,
@@ -15,16 +15,16 @@ fn main() {
             ..Default::default()
         }).build();
 
-    log::debug!("gl_models :: Enabling features");
+    log::debug!("gl_model :: Enabling features");
     GLManager::enable(gl::DEPTH_TEST);
 
-    log::debug!("gl_models :: Making ship shader");
+    log::debug!("gl_model :: Making ship shader");
     let ship_shader_arr = [
         Shader::from_file(
-            "examples/gl_models/resources/shaders/ship.vert",
+            "examples/gl_model/resources/shaders/ship.vert",
         ),
         Shader::from_file(
-            "examples/gl_models/resources/shaders/ship.frag",
+            "examples/gl_model/resources/shaders/ship.frag",
         )
     ];
     let ship_shader = ShaderProgram::from_array(&ship_shader_arr);
@@ -35,20 +35,20 @@ fn main() {
         VertexAttribute { location: 2, size: 3, data_type: gl::FLOAT },
     ];
 
-    log::debug!("gl_models :: Loading ship mesh");
+    log::debug!("gl_model :: Loading ship mesh");
     let mut ship =  Mesh::<f32, u32>::from_off(
-        "examples/gl_models/resources/models/XJ5 X-wing starfighter.off",
+        "examples/gl_model/resources/models/XJ5 X-wing starfighter.off",
         &ship_shader,
         (1.0, 1.0, 1.0),
     )
         .layout(&vertex_layout);
 
-    log::debug!("gl_models :: Setting clear color");
+    log::debug!("gl_model :: Setting clear color");
     GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
     
     const ROTATION_SPEED: f32 = 0.5;
 
-    log::debug!("gl_models :: Starting the render loop");
+    log::debug!("gl_model :: Starting the render loop");
     let mut viewport;
     let mut window_time;
     while !window.should_close() {
