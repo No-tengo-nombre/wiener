@@ -1,3 +1,5 @@
+use std::ptr::null;
+
 use crate::{Bindable, HasID, Texture};
 
 use gl;
@@ -136,6 +138,31 @@ impl Texture2D {
                 self.format,
                 self.data_type,
                 data.as_ptr() as *const _,
+            );
+            gl::GenerateMipmap(gl::TEXTURE_2D);
+        }
+        return self;
+    }
+
+    /// Allocate memory for the texture without buffering anything.
+    pub fn buffer_empty(self, width: i32, height: i32) -> Self {
+        log::info!(
+            "Texture2D :: Allocating for a {:?}x{:?} image",
+            width,
+            height
+        );
+        self.bind();
+        unsafe {
+            gl::TexImage2D(
+                gl::TEXTURE_2D,
+                0,
+                self.format as i32,
+                width,
+                height,
+                0,
+                self.format,
+                self.data_type,
+                null(),
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
