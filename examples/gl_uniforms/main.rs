@@ -33,7 +33,7 @@ fn main() {
     ];
 
     log::debug!("gl_triangle :: Making triangle mesh");
-    let mut triangle_rotation = Mesh::new(&triangle_shader)
+    let mut triangle_rotation = Mesh::<f32, u32>::new(&triangle_shader)
         .vertices(&[
             -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
              0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
@@ -42,7 +42,7 @@ fn main() {
         .indices(&[0, 1, 2])
         .layout(&triangle_layout);
 
-    let mut triangle_translation = Mesh::new(&triangle_shader)
+    let mut triangle_translation = Mesh::<f32, u32>::new(&triangle_shader)
         .vertices(&[
             -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
              0.5, -0.5, 0.0, 0.0, 1.0, 0.0,

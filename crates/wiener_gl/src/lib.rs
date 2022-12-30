@@ -3,6 +3,7 @@
 pub mod prelude;
 
 mod buffers;
+mod framebuffer;
 mod gl_manager;
 mod shader;
 mod shapes;
@@ -11,6 +12,7 @@ mod types;
 mod window;
 
 pub use buffers::*;
+pub use framebuffer::*;
 pub use gl_manager::*;
 pub use shader::*;
 pub use shapes::*;

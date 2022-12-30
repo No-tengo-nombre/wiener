@@ -1,17 +1,23 @@
-use crate::{Bindable, Buffer};
+use crate::{Bindable, Buffer, HasID};
 use std::mem::size_of;
 
 use gl;
 use gl::types::*;
 
 /// Vertex buffer object, which contains vertex data stored in the GPU.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct VertexBuffer {
     /// Unique ID associated to the object.
     _id: u32,
 
     /// Usage of the data.
     pub usage: GLenum,
+}
+
+impl HasID for VertexBuffer {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
 }
 
 impl VertexBuffer {
@@ -41,7 +47,7 @@ impl Bindable for VertexBuffer {
     fn bind(&self) {
         log::trace!("VertexBuffer :: Binding");
         unsafe {
-            gl::BindBuffer(gl::ARRAY_BUFFER, self._id);
+            gl::BindBuffer(gl::ARRAY_BUFFER, self.get_id());
         }
     }
 
@@ -55,19 +61,20 @@ impl Bindable for VertexBuffer {
     fn delete(&self) {
         log::info!("VertexBuffer :: Deleting");
         unsafe {
-            gl::DeleteBuffers(1, &self._id);
+            gl::DeleteBuffers(1, &self.get_id());
         }
     }
 }
 
 impl Buffer for VertexBuffer {
     fn buffer_data<T>(&self, data: &[T]) -> Self {
-        log::info!("VertexBuffer :: Buffering data to GPU");
+        let size = data.len() * size_of::<T>();
+        log::info!("VertexBuffer :: Buffering {:?} bytes to GPU", size);
         self.bind();
         unsafe {
             gl::BufferData(
                 gl::ARRAY_BUFFER,
-                (data.len() * size_of::<T>()) as isize,
+                size as isize,
                 data.as_ptr() as *const GLvoid,
                 self.usage,
             );

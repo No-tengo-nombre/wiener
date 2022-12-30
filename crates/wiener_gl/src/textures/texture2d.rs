@@ -1,4 +1,6 @@
-use crate::Bindable;
+use std::ptr::null;
+
+use crate::{Bindable, HasID, Texture};
 
 use gl;
 use gl::types::*;
@@ -17,6 +19,9 @@ pub struct Texture2D {
     /// Format of the data.
     pub format: GLenum,
 
+    /// Type of the data.
+    pub data_type: GLenum,
+
     /// Method to use for S wrapping.
     pub wrap_s: GLenum,
 
@@ -31,6 +36,14 @@ pub struct Texture2D {
 
     /// Method for mag filter.
     pub mag_filter: GLenum,
+}
+
+impl Texture for Texture2D {}
+
+impl HasID for Texture2D {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
 }
 
 impl Texture2D {
@@ -85,7 +98,7 @@ impl Texture2D {
 
     /// Build the texture. After building, you should buffer the desired
     /// image.
-    pub fn build<T>(self) -> Self {
+    pub fn build(self) -> Self {
         log::info!("Texture2D :: Building Texture2D with parameters:\nWrap S {:?}\nWrap T {:?}\nWrap R {:?}\nMin filter {:?}\nMag filter {:?}", self.wrap_s, self.wrap_t, self.wrap_r, self.min_filter, self.mag_filter);
         self.bind();
         unsafe {
@@ -123,8 +136,33 @@ impl Texture2D {
                 height,
                 0,
                 self.format,
-                gl::UNSIGNED_BYTE,
+                self.data_type,
                 data.as_ptr() as *const _,
+            );
+            gl::GenerateMipmap(gl::TEXTURE_2D);
+        }
+        return self;
+    }
+
+    /// Allocate memory for the texture without buffering anything.
+    pub fn buffer_empty(self, width: i32, height: i32) -> Self {
+        log::info!(
+            "Texture2D :: Allocating for a {:?}x{:?} image",
+            width,
+            height
+        );
+        self.bind();
+        unsafe {
+            gl::TexImage2D(
+                gl::TEXTURE_2D,
+                0,
+                self.format as i32,
+                width,
+                height,
+                0,
+                self.format,
+                self.data_type,
+                null(),
             );
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
@@ -158,6 +196,7 @@ impl Default for Texture2D {
             _id: tex_id,
             tex_num: 0,
             format: gl::RGB,
+            data_type: gl::UNSIGNED_BYTE,
             wrap_s: gl::REPEAT,
             wrap_t: gl::REPEAT,
             wrap_r: gl::REPEAT,
@@ -169,15 +208,15 @@ impl Default for Texture2D {
 
 impl Bindable for Texture2D {
     fn bind(&self) {
-        log::trace!("Texture2D :: Binding");
+        log::trace!("Texture2D :: Binding texture {:?} to slot {:?}", self.get_id(), self.tex_num);
         self.bind_slot();
         unsafe {
-            gl::BindTexture(gl::TEXTURE_2D, self._id);
+            gl::BindTexture(gl::TEXTURE_2D, self.get_id());
         }
     }
 
     fn unbind(&self) {
-        log::trace!("Texture2D :: Unbinding");
+        log::trace!("Texture2D :: Unbinding texture {:?} to slot {:?}", self.get_id(), self.tex_num);
         self.bind_slot();
         unsafe {
             gl::BindTexture(gl::TEXTURE_2D, 0);
@@ -185,10 +224,10 @@ impl Bindable for Texture2D {
     }
 
     fn delete(&self) {
-        log::trace!("Texture2D :: Deleting");
-        self.bind_slot();
+        log::trace!("Texture2D :: Deleting texture {:?} bound to slot {:?}", self.get_id(), self.tex_num);
+        self.bind();
         unsafe {
-            gl::DeleteTextures(1, &self._id);
+            gl::DeleteTextures(1, &self.get_id());
         }
     }
 }

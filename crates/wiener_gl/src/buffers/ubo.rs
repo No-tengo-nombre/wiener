@@ -1,4 +1,4 @@
-use crate::{Bindable, Buffer};
+use crate::{Bindable, Buffer, HasID};
 use std::mem::size_of;
 
 use gl;
@@ -6,7 +6,7 @@ use gl::types::*;
 use log;
 
 /// Uniform buffer object, which contains uniform data stored in the GPU.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct UniformBuffer {
     /// Unique ID associated to the object.
     _id: u32,
@@ -16,6 +16,12 @@ pub struct UniformBuffer {
 
     /// Usage of the data.
     pub usage: GLenum,
+}
+
+impl HasID for UniformBuffer {
+    fn get_id(&self) -> u32 {
+        return self._id;
+    }
 }
 
 impl UniformBuffer {
@@ -45,7 +51,7 @@ impl UniformBuffer {
     pub fn bind_index(&self, index: u32) {
         log::trace!("UniformBuffer :: Binding index");
         unsafe {
-            gl::BindBufferBase(gl::UNIFORM_BUFFER, index, self._id);
+            gl::BindBufferBase(gl::UNIFORM_BUFFER, index, self.get_id());
         }
     }
 }
@@ -54,7 +60,7 @@ impl Bindable for UniformBuffer {
     fn bind(&self) {
         log::trace!("UniformBuffer :: Binding");
         unsafe {
-            gl::BindBuffer(gl::UNIFORM_BUFFER, self._id);
+            gl::BindBuffer(gl::UNIFORM_BUFFER, self.get_id());
         }
     }
 
@@ -68,7 +74,7 @@ impl Bindable for UniformBuffer {
     fn delete(&self) {
         log::info!("UniformBuffer :: Deleting");
         unsafe {
-            gl::DeleteBuffers(1, &self._id);
+            gl::DeleteBuffers(1, &self.get_id());
         }
     }
 }
