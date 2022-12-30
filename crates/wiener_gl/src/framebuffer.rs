@@ -3,6 +3,7 @@ use crate::{Bindable, HasID, Texture, Texture2D, RenderBuffer};
 use gl;
 use gl::types::*;
 
+/// OpenGL framebuffer.
 #[derive(Clone, Copy, Debug)]
 pub struct FrameBuffer {
     _id: u32,
@@ -15,6 +16,7 @@ impl HasID for FrameBuffer {
 }
 
 impl FrameBuffer {
+    /// Create a new framebuffer.
     pub fn new() -> Self {
         let mut fbo_id = 0;
         unsafe {
@@ -23,6 +25,7 @@ impl FrameBuffer {
         return FrameBuffer { _id: fbo_id };
     }
 
+    /// Verify the validity of the framebuffer.
     pub fn verify(&self) {
         self.bind();
         unsafe {
@@ -33,6 +36,7 @@ impl FrameBuffer {
         self.unbind();
     }
 
+    /// Attach a renderbuffer without returning.
     pub fn inplace_attach_renderbuffer(&self, attachment: GLenum, target: &RenderBuffer) {
         self.bind();
         unsafe {
@@ -41,6 +45,7 @@ impl FrameBuffer {
         self.unbind();
     }
 
+    /// Attach a texture without returning.
     pub fn inplace_attach_texture(&self, attachment: GLenum, target: &dyn Texture) {
         self.bind();
         unsafe {
@@ -48,11 +53,13 @@ impl FrameBuffer {
         }
         self.unbind();
     }
-
+    
+    /// Attach a depth texture without returning.
     pub fn inplace_attach_depth(&self, target: &dyn Texture) {
         self.inplace_attach_texture(gl::DEPTH_ATTACHMENT, target);
     }
-
+    
+    /// Attach an arbitrary 2D texture without returning.
     pub fn inplace_attach_raw_texture2d(&self, attachment: GLenum, target_type: GLenum, target: &Texture2D) {
         self.bind();
         unsafe {
@@ -60,31 +67,37 @@ impl FrameBuffer {
         }
         self.unbind();
     }
-
+    
+    /// Attach a 2D texture without returning.
     pub fn inplace_attach_texture2d(&self, attachment_num: u32, target: &Texture2D) {
         self.inplace_attach_raw_texture2d(gl::COLOR_ATTACHMENT0 + attachment_num, gl::TEXTURE_2D, target);
     }
 
+    /// Attach a renderbuffer, returning `self` afterwards.
     pub fn attach_renderbuffer(self, attachment: GLenum, target: &RenderBuffer) -> Self {
         self.inplace_attach_renderbuffer(attachment, target);
         return self;
     }
 
+    /// Attach a texture, returning `self` afterwards.
     pub fn attach_texture(self, attachment: GLenum, target: &dyn Texture) -> Self {
         self.inplace_attach_texture(attachment, target);
         return self;
     }
 
+    /// Attach a depth texture, returning `self` afterwards.
     pub fn attach_depth(self, target: &dyn Texture) -> Self {
         self.inplace_attach_depth(target);
         return self;
     }
 
+    /// Attach an arbitrary 2D texture, returning `self` afterwards.
     pub fn attach_raw_texture2d(self, attachment: GLenum, target_type: GLenum, target: &Texture2D) -> Self {
         self.inplace_attach_raw_texture2d(attachment, target_type, target);
         return self;
     }
 
+    /// Attach a 2D texture, returning `self` afterwards.
     pub fn attach_texture2d(self, attachment_num: u32, target: &Texture2D) -> Self {
         self.inplace_attach_texture2d(attachment_num, target);
         return self;
