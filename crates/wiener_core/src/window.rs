@@ -14,8 +14,8 @@ pub enum WindowMode {
 /// Descriptor of a window.
 #[derive(Clone, Debug)]
 pub struct WindowDescriptor {
-    pub width: u32,
-    pub height: u32,
+    pub width: i32,
+    pub height: i32,
     pub title: String,
     pub mode: WindowMode,
     pub key_polling: bool,
@@ -36,19 +36,19 @@ impl WindowDescriptor {
     }
 
     /// Set the width.
-    pub fn set_width(mut self, width: u32) -> Self {
+    pub fn set_width(mut self, width: i32) -> Self {
         self.width = width;
         return self;
     }
 
     /// Set the height.
-    pub fn set_height(mut self, height: u32) -> Self {
+    pub fn set_height(mut self, height: i32) -> Self {
         self.height = height;
         return self;
     }
 
     /// Set the dimensions (width and height).
-    pub fn set_dimensions(mut self, width: u32, height: u32) -> Self {
+    pub fn set_dimensions(mut self, width: i32, height: i32) -> Self {
         self.width = width;
         self.height = height;
         return self;
@@ -156,8 +156,8 @@ pub fn init_glfw(
     let (mut window, events) = match descriptor.mode {
         WindowMode::Windowed => glfw_inst
             .create_window(
-                descriptor.width,
-                descriptor.height,
+                descriptor.width as u32,
+                descriptor.height as u32,
                 &descriptor.title,
                 glfw::WindowMode::Windowed,
             )
@@ -165,8 +165,8 @@ pub fn init_glfw(
         WindowMode::FullScreen(_) => glfw_inst
             .with_primary_monitor(|temp_glfw, m| {
                 temp_glfw.create_window(
-                    descriptor.width,
-                    descriptor.height,
+                    descriptor.width as u32,
+                    descriptor.height as u32,
                     &descriptor.title,
                     m.map_or(glfw::WindowMode::Windowed, |m| {
                         glfw::WindowMode::FullScreen(m)
