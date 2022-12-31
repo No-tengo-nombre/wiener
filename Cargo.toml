@@ -2,7 +2,7 @@
 name = "wiener"
 description = "Rendering API for OpenGL and Vulkan"
 readme = "README.md"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 repository = "https://github.com/No-tengo-nombre/wiener/"
 license = "MIT"
@@ -15,7 +15,7 @@ members = [
 ]
 
 [dependencies]
-wiener_internal = { path = "crates/wiener_internal", version = "0.1.0" }
+wiener_internal = { path = "crates/wiener_internal", version = "0.1.1" }
 
 [dev-dependencies]
 env_logger = "0.10.0"
