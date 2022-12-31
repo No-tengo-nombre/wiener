@@ -18,8 +18,8 @@ fn main() {
 
     log::debug!("gl_texture :: Making quad shader");
     let quad_shader_arr = [
-        Shader::from_file("examples/gl_texture/resources/shaders/quad.vert"),
-        Shader::from_file("examples/gl_texture/resources/shaders/quad.frag"),
+        Shader::from_file("examples/gl/texture/resources/shaders/quad.vert"),
+        Shader::from_file("examples/gl/texture/resources/shaders/quad.frag"),
     ];
     let quad_shader = ShaderProgram::from_array(&quad_shader_arr);
 
@@ -46,7 +46,7 @@ fn main() {
         .tex_num(0)
         .format(gl::RGBA)
         .build()
-        .buffer_from_file("examples/gl_texture/resources/textures/chihuahua.jpg")];
+        .buffer_from_file("examples/gl/texture/resources/textures/chihuahua.jpg")];
 
     log::debug!("gl_texture :: Making quad mesh");
     let mut quad = Mesh::<f32, u32>::new(&quad_shader)

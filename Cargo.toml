@@ -25,3 +25,27 @@ wiener_vk = { path = "crates/wiener_vk", version = "0.1.0" }
 env_logger = "0.10.0"
 gl = "0.14.0"
 log = "0.4.17"
+
+[[example]]
+name = "gl_framebuffer"
+path = "examples/gl/framebuffer/main.rs"
+
+[[example]]
+name = "gl_model"
+path = "examples/gl/model/main.rs"
+
+[[example]]
+name = "gl_texture"
+path = "examples/gl/texture/main.rs"
+
+[[example]]
+name = "gl_triangle"
+path = "examples/gl/triangle/main.rs"
+
+[[example]]
+name = "gl_uniform"
+path = "examples/gl/uniform/main.rs"
+
+[[example]]
+name = "gl_window"
+path = "examples/gl/window/main.rs"
