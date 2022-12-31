@@ -10,12 +10,15 @@ license-file = "LICENSE"
 keywords = ["graphics", "opengl", "gamedev", "visualization"]
 categories = ["graphics", "rendering", "rendering::engine", "rendering::graphics-api"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [
+    "crates/*",
+]
 
 [dependencies]
 wiener_core = { path = "crates/wiener_core", version = "0.1.0" }
-wiener_gl = { path = "crates/wiener_gl", version = "0.1.0" }
 wiener_utils = { path = "crates/wiener_utils", version = "0.1.0" }
+wiener_gl = { path = "crates/wiener_gl", version = "0.1.0" }
 wiener_vk = { path = "crates/wiener_vk", version = "0.1.0" }
 
 [dev-dependencies]
