@@ -27,8 +27,12 @@ name = "gl_framebuffer"
 path = "examples/gl/framebuffer/main.rs"
 
 [[example]]
-name = "gl_model"
-path = "examples/gl/model/main.rs"
+name = "gl_model_obj"
+path = "examples/gl/model_obj/main.rs"
+
+[[example]]
+name = "gl_model_off"
+path = "examples/gl/model_off/main.rs"
 
 [[example]]
 name = "gl_texture"
