@@ -1,6 +1,6 @@
 [package]
 name = "wiener_internal"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Internal crate for Wiener"
 repository = "https://github.com/No-tengo-nombre/wiener/"
@@ -9,7 +9,7 @@ keywords = ["graphics", "opengl", "gamedev", "visualization"]
 categories = ["graphics", "rendering", "rendering::engine", "rendering::graphics-api"]
 
 [dependencies]
-wiener_core = { path = "../wiener_core", version = "0.1.0" }
-wiener_utils = { path = "../wiener_utils", version = "0.1.0" }
-wiener_gl = { path = "../wiener_gl", version = "0.1.0" }
+wiener_core = { path = "../wiener_core", version = "0.1.1" }
+wiener_utils = { path = "../wiener_utils", version = "0.1.1" }
+wiener_gl = { path = "../wiener_gl", version = "0.1.1" }
 wiener_vk = { path = "../wiener_vk", version = "0.1.0" }

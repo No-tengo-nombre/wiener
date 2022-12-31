@@ -1,6 +1,6 @@
 [package]
 name = "wiener_core"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Crate that contains the core functionality for Wiener"
 repository = "https://github.com/No-tengo-nombre/wiener/"

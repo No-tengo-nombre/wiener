@@ -1,6 +1,6 @@
 [package]
 name = "wiener_gl"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Crate that contains the OpenGL code for Wiener"
 readme = "README.md"
@@ -12,10 +12,11 @@ categories = ["graphics", "rendering", "rendering::engine", "rendering::graphics
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-wiener_core = { path = "../wiener_core", version = "0.1.0" }
-wiener_utils = { path = "../wiener_utils", version = "0.1.0" }
+wiener_core = { path = "../wiener_core", version = "0.1.1" }
+wiener_utils = { path = "../wiener_utils", version = "0.1.1" }
 env_logger = "0.10.0"
 gl = "0.14.0"
 glfw = "0.46.0"
 log = "0.4.17"
 num = "0.4.0"
+obj-rs = "0.7.0"

@@ -1,4 +1,5 @@
 use std::fs;
+use std::io::BufReader;
 use std::ops::AddAssign;
 use std::str::FromStr;
 use std::{ffi::c_void, fmt::Debug};
@@ -12,6 +13,8 @@ use gl::types::GLenum;
 use log::{info, trace};
 use num::traits::Pow;
 use num::{Float, Integer, ToPrimitive};
+use obj::{load_obj, Obj};
+
 use wiener_utils::math;
 
 /// Structure for a simple mesh, corresponding to the most basic set of
@@ -63,8 +66,8 @@ where
     }
 
     /// Read a mesh from an OFF file, generating normals and a color. The resulting
-    /// VAO layout is (3, 3, 2), so the user must make sure to specify this.
-    pub fn from_off(filename: &str, shader: &'a ShaderProgram<'a>, color: (U, U, U)) -> Self {
+    /// VAO layout is (3, 3), so the user must make sure to specify this.
+    pub fn from_off(filename: &str, shader: &'a ShaderProgram<'a>) -> Self {
         log::info!("Mesh :: Reading mesh from OFF file");
 
         // Read the file and separate into lines
@@ -82,7 +85,7 @@ where
             .collect::<Vec<&str>>();
         let vert_num = i32::from_str_radix(file_descriptor[0], 10).unwrap();
         let face_num = i32::from_str_radix(file_descriptor[1], 10).unwrap();
-        let mut vertices = Vec::<[U; 9]>::with_capacity(vert_num as usize);
+        let mut vertices = Vec::<[U; 6]>::with_capacity(vert_num as usize);
         let mut faces = Vec::<[I; 3]>::with_capacity(face_num as usize);
         log::debug!("Mesh :: Reading {vert_num} vertices and {face_num} faces");
 
@@ -105,9 +108,6 @@ where
                 x,
                 y,
                 z,
-                color.0,
-                color.1,
-                color.2,
                 U::zero(),
                 U::zero(),
                 U::zero(),
@@ -161,19 +161,19 @@ where
                 vertices[v2.to_usize().unwrap()][2],
             ];
             vertex0_normals = [
-                vertices[v0.to_usize().unwrap()][6],
-                vertices[v0.to_usize().unwrap()][7],
-                vertices[v0.to_usize().unwrap()][8],
+                vertices[v0.to_usize().unwrap()][3],
+                vertices[v0.to_usize().unwrap()][4],
+                vertices[v0.to_usize().unwrap()][5],
             ];
             vertex1_normals = [
-                vertices[v1.to_usize().unwrap()][6],
-                vertices[v1.to_usize().unwrap()][7],
-                vertices[v1.to_usize().unwrap()][8],
+                vertices[v1.to_usize().unwrap()][3],
+                vertices[v1.to_usize().unwrap()][4],
+                vertices[v1.to_usize().unwrap()][5],
             ];
             vertex2_normals = [
-                vertices[v2.to_usize().unwrap()][6],
-                vertices[v2.to_usize().unwrap()][7],
-                vertices[v2.to_usize().unwrap()][8],
+                vertices[v2.to_usize().unwrap()][3],
+                vertices[v2.to_usize().unwrap()][4],
+                vertices[v2.to_usize().unwrap()][5],
             ];
 
             // Generate the normals
@@ -185,17 +185,17 @@ where
             normalized_v1 = math::normalize3(math::add3(vertex1_normals, normal_result));
             normalized_v2 = math::normalize3(math::add3(vertex2_normals, normal_result));
 
-            vertices[v0.to_usize().unwrap()][6] = normalized_v0[0];
-            vertices[v0.to_usize().unwrap()][7] = normalized_v0[1];
-            vertices[v0.to_usize().unwrap()][8] = normalized_v0[2];
+            vertices[v0.to_usize().unwrap()][3] = normalized_v0[0];
+            vertices[v0.to_usize().unwrap()][4] = normalized_v0[1];
+            vertices[v0.to_usize().unwrap()][5] = normalized_v0[2];
 
-            vertices[v1.to_usize().unwrap()][6] = normalized_v1[0];
-            vertices[v1.to_usize().unwrap()][7] = normalized_v1[1];
-            vertices[v1.to_usize().unwrap()][8] = normalized_v1[2];
+            vertices[v1.to_usize().unwrap()][3] = normalized_v1[0];
+            vertices[v1.to_usize().unwrap()][4] = normalized_v1[1];
+            vertices[v1.to_usize().unwrap()][5] = normalized_v1[2];
 
-            vertices[v2.to_usize().unwrap()][6] = normalized_v2[0];
-            vertices[v2.to_usize().unwrap()][7] = normalized_v2[1];
-            vertices[v2.to_usize().unwrap()][8] = normalized_v2[2];
+            vertices[v2.to_usize().unwrap()][3] = normalized_v2[0];
+            vertices[v2.to_usize().unwrap()][4] = normalized_v2[1];
+            vertices[v2.to_usize().unwrap()][5] = normalized_v2[2];
         }
 
         // Once we have all the info, we create the mesh
@@ -203,7 +203,29 @@ where
         let face_slice = faces.as_slice();
         log::debug!(
             "Mesh :: Found {:?} vertices and {:?} faces",
-            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 9,
+            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 6,
+            std::mem::size_of_val(face_slice) / std::mem::size_of::<I>() / 3,
+        );
+        return Mesh::<U, I>::new(shader)
+            .vertices(vert_slice)
+            .indices(face_slice);
+    }
+
+    /// Read a mesh from an OBJ file.
+    pub fn from_obj(filename: &str, shader: &'a ShaderProgram<'a>) -> Self {
+        let input_buffer = BufReader::new(fs::File::open(filename).expect("File could not be opened"));
+        let data: Obj = load_obj(input_buffer).expect("Obj file could not be read from");
+
+        // Once we have all the info, we create the mesh
+        let vert_slice = data.vertices.as_slice();
+        let mut faces_vec = Vec::with_capacity(data.indices.len());
+        for idx in data.indices {
+            faces_vec.push(I::from_str(&idx.to_string()).unwrap());
+        }
+        let face_slice = faces_vec.as_slice();
+        log::debug!(
+            "Mesh :: Found {:?} vertices and {:?} faces",
+            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 6,
             std::mem::size_of_val(face_slice) / std::mem::size_of::<I>() / 3,
         );
         return Mesh::<U, I>::new(shader)
