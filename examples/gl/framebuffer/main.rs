@@ -1,8 +1,8 @@
 use gl;
 use log;
+use wiener::core::WindowDescriptor;
 use wiener::gl::prelude::*;
 use wiener::utils::math;
-use wiener::WindowDescriptor;
 
 const WINDOW_WIDTH: i32 = 1000;
 const WINDOW_HEIGHT: i32 = 1000;

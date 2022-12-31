@@ -1,14 +1,15 @@
 [package]
-name = "wiener_utils"
+name = "wiener_internal"
 version = "0.1.0"
 edition = "2021"
+readme = "README.md"
 repository = "https://github.com/No-tengo-nombre/wiener/"
 license = "MIT"
 keywords = ["graphics", "opengl", "gamedev", "visualization"]
 categories = ["graphics", "rendering", "rendering::engine", "rendering::graphics-api"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-image = "0.24.4"
-num = "0.4.0"
+wiener_core = { path = "../wiener_core", version = "0.1.0" }
+wiener_utils = { path = "../wiener_utils", version = "0.1.0" }
+wiener_gl = { path = "../wiener_gl", version = "0.1.0" }
+wiener_vk = { path = "../wiener_vk", version = "0.1.0" }

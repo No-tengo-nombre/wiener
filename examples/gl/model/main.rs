@@ -1,8 +1,7 @@
 use gl;
-use wiener::gl::{GLManager, GLWindow, Mesh, Shader, ShaderProgram, VertexAttribute};
+use wiener::core::WindowDescriptor;
+use wiener::gl::prelude::*;
 use wiener::utils::math;
-use wiener::WindowDescriptor;
-use wiener_gl::Drawable;
 
 fn main() {
     env_logger::init();

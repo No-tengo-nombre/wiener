@@ -15,10 +15,7 @@ members = [
 ]
 
 [dependencies]
-wiener_core = { path = "crates/wiener_core", version = "0.1.0" }
-wiener_utils = { path = "crates/wiener_utils", version = "0.1.0" }
-wiener_gl = { path = "crates/wiener_gl", version = "0.1.0" }
-wiener_vk = { path = "crates/wiener_vk", version = "0.1.0" }
+wiener_internal = { path = "crates/wiener_internal", version = "0.1.0" }
 
 [dev-dependencies]
 env_logger = "0.10.0"
