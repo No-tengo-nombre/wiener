@@ -14,6 +14,7 @@ while getopts "d" arg
 do
     case "$arg" in
         d)
+            echo "Warning: Running in 'dry run' mode"
             dry_run=1
             ;;
     esac
