@@ -31,6 +31,9 @@ for crate in "${CRATES[@]}"; do
         cargo publish --dry-run
     fi
     cd ..
+
+    # Sleep to make sure crates.io is updated between iterations
+    sleep 10
 done
 
 # Publish the root crate
