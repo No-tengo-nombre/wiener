@@ -1,4 +1,5 @@
 use std::fs;
+use std::io::BufReader;
 use std::ops::AddAssign;
 use std::str::FromStr;
 use std::{ffi::c_void, fmt::Debug};
@@ -12,6 +13,7 @@ use gl::types::GLenum;
 use log::{info, trace};
 use num::traits::Pow;
 use num::{Float, Integer, ToPrimitive};
+use obj::{load_obj, Obj};
 
 use wiener_utils::math;
 
@@ -199,6 +201,28 @@ where
         // Once we have all the info, we create the mesh
         let vert_slice = vertices.as_slice();
         let face_slice = faces.as_slice();
+        log::debug!(
+            "Mesh :: Found {:?} vertices and {:?} faces",
+            std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 6,
+            std::mem::size_of_val(face_slice) / std::mem::size_of::<I>() / 3,
+        );
+        return Mesh::<U, I>::new(shader)
+            .vertices(vert_slice)
+            .indices(face_slice);
+    }
+
+    /// Read a mesh from an OBJ file.
+    pub fn from_obj(filename: &str, shader: &'a ShaderProgram<'a>) -> Self {
+        let input_buffer = BufReader::new(fs::File::open(filename).expect("File could not be opened"));
+        let data: Obj = load_obj(input_buffer).expect("Obj file could not be read from");
+
+        // Once we have all the info, we create the mesh
+        let vert_slice = data.vertices.as_slice();
+        let mut faces_vec = Vec::with_capacity(data.indices.len());
+        for idx in data.indices {
+            faces_vec.push(I::from_str(&idx.to_string()).unwrap());
+        }
+        let face_slice = faces_vec.as_slice();
         log::debug!(
             "Mesh :: Found {:?} vertices and {:?} faces",
             std::mem::size_of_val(vert_slice) / std::mem::size_of::<U>() / 6,
