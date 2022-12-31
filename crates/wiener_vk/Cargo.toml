@@ -2,6 +2,7 @@
 name = "wiener_vk"
 version = "0.1.0"
 edition = "2021"
+description = "Crate that contains the Vulkan code for Wiener"
 readme = "README.md"
 repository = "https://github.com/No-tengo-nombre/wiener/"
 license = "MIT"

@@ -2,6 +2,7 @@
 name = "wiener_internal"
 version = "0.1.0"
 edition = "2021"
+description = "Internal crate for Wiener"
 readme = "README.md"
 repository = "https://github.com/No-tengo-nombre/wiener/"
 license = "MIT"

@@ -2,6 +2,7 @@
 name = "wiener_utils"
 version = "0.1.0"
 edition = "2021"
+description = "Crate that contains the utilities for Wiener and the user"
 repository = "https://github.com/No-tengo-nombre/wiener/"
 license = "MIT"
 keywords = ["graphics", "opengl", "gamedev", "visualization"]
