@@ -1,7 +1,7 @@
 use gl;
 use log;
-use wiener::gl::{Drawable, GLManager, GLWindow, Mesh, Shader, ShaderProgram, VertexAttribute};
-use wiener::WindowDescriptor;
+use wiener::core::WindowDescriptor;
+use wiener::gl::prelude::*;
 
 fn main() {
     env_logger::init();
@@ -17,8 +17,8 @@ fn main() {
 
     log::debug!("gl_triangle :: Making triangle shader");
     let triangle_shader_arr = [
-        Shader::from_file("examples/gl_triangle/resources/triangle.vert"),
-        Shader::from_file("examples/gl_triangle/resources/triangle.frag"),
+        Shader::from_file("examples/gl/triangle/resources/triangle.vert"),
+        Shader::from_file("examples/gl/triangle/resources/triangle.frag"),
     ];
     let triangle_shader = ShaderProgram::from_array(&triangle_shader_arr);
 

@@ -1,8 +1,7 @@
 use gl;
-use wiener::gl::{GLManager, GLWindow, Mesh, Shader, ShaderProgram, VertexAttribute};
+use wiener::core::WindowDescriptor;
+use wiener::gl::prelude::*;
 use wiener::utils::math;
-use wiener::WindowDescriptor;
-use wiener_gl::Drawable;
 
 fn main() {
     env_logger::init();
@@ -21,8 +20,8 @@ fn main() {
 
     log::debug!("gl_model :: Making ship shader");
     let ship_shader_arr = [
-        Shader::from_file("examples/gl_model/resources/shaders/ship.vert"),
-        Shader::from_file("examples/gl_model/resources/shaders/ship.frag"),
+        Shader::from_file("examples/gl/model/resources/shaders/ship.vert"),
+        Shader::from_file("examples/gl/model/resources/shaders/ship.frag"),
     ];
     let ship_shader = ShaderProgram::from_array(&ship_shader_arr);
 
@@ -46,7 +45,7 @@ fn main() {
 
     log::debug!("gl_model :: Loading ship mesh");
     let mut ship = Mesh::<f32, u32>::from_off(
-        "examples/gl_model/resources/models/XJ5 X-wing starfighter.off",
+        "examples/gl/model/resources/models/XJ5 X-wing starfighter.off",
         &ship_shader,
         (1.0, 1.0, 1.0),
     )

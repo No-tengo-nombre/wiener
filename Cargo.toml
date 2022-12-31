@@ -1,17 +1,47 @@
 [package]
 name = "wiener"
+description = "Rendering API for OpenGL and Vulkan"
+readme = "README.md"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/No-tengo-nombre/wiener/"
+license = "MIT"
+keywords = ["graphics", "opengl", "gamedev", "visualization"]
+categories = ["graphics", "rendering", "rendering::engine", "rendering::graphics-api"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = [
+    "crates/*",
+]
 
 [dependencies]
-wiener_core = { path = "crates/wiener_core" }
-wiener_gl = { path = "crates/wiener_gl" }
-wiener_utils = { path = "crates/wiener_utils" }
-wiener_vk = { path = "crates/wiener_vk" }
+wiener_internal = { path = "crates/wiener_internal", version = "0.1.0" }
 
 [dev-dependencies]
 env_logger = "0.10.0"
 gl = "0.14.0"
 log = "0.4.17"
+
+[[example]]
+name = "gl_framebuffer"
+path = "examples/gl/framebuffer/main.rs"
+
+[[example]]
+name = "gl_model"
+path = "examples/gl/model/main.rs"
+
+[[example]]
+name = "gl_texture"
+path = "examples/gl/texture/main.rs"
+
+[[example]]
+name = "gl_triangle"
+path = "examples/gl/triangle/main.rs"
+
+[[example]]
+name = "gl_uniform"
+path = "examples/gl/uniform/main.rs"
+
+[[example]]
+name = "gl_window"
+path = "examples/gl/window/main.rs"

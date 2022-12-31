@@ -1,6 +1,6 @@
 use gl;
-use wiener::gl::{GLManager, GLWindow};
-use wiener::WindowDescriptor;
+use wiener::core::WindowDescriptor;
+use wiener::gl::prelude::*;
 
 fn main() {
     env_logger::init();

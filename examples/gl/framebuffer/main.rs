@@ -1,8 +1,8 @@
 use gl;
 use log;
+use wiener::core::WindowDescriptor;
 use wiener::gl::prelude::*;
 use wiener::utils::math;
-use wiener::WindowDescriptor;
 
 const WINDOW_WIDTH: i32 = 1000;
 const WINDOW_HEIGHT: i32 = 1000;
@@ -32,15 +32,15 @@ fn main() {
 
     log::debug!("gl_framebuffer :: Making triangle shader");
     let triangle_shader_arr = [
-        Shader::from_file("examples/gl_framebuffer/resources/triangle.vert"),
-        Shader::from_file("examples/gl_framebuffer/resources/triangle.frag"),
+        Shader::from_file("examples/gl/framebuffer/resources/triangle.vert"),
+        Shader::from_file("examples/gl/framebuffer/resources/triangle.frag"),
     ];
     let triangle_shader = ShaderProgram::from_array(&triangle_shader_arr);
 
     log::debug!("gl_framebuffer :: Making framebuffer shader");
     let framebuffer_shader_arr = [
-        Shader::from_file("examples/gl_framebuffer/resources/framebuffer.vert"),
-        Shader::from_file("examples/gl_framebuffer/resources/framebuffer.frag"),
+        Shader::from_file("examples/gl/framebuffer/resources/framebuffer.vert"),
+        Shader::from_file("examples/gl/framebuffer/resources/framebuffer.frag"),
     ];
     let framebuffer_shader = ShaderProgram::from_array(&framebuffer_shader_arr);
     framebuffer_shader.uniform_1f("u_screen_x", WINDOW_WIDTH as f32);
