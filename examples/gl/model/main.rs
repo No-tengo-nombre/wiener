@@ -36,18 +36,12 @@ fn main() {
             size: 3,
             data_type: gl::FLOAT,
         },
-        VertexAttribute {
-            location: 2,
-            size: 3,
-            data_type: gl::FLOAT,
-        },
     ];
 
     log::debug!("gl_model :: Loading ship mesh");
     let mut ship = Mesh::<f32, u32>::from_off(
         "examples/gl/model/resources/models/XJ5 X-wing starfighter.off",
         &ship_shader,
-        (1.0, 1.0, 1.0),
     )
     .layout(&vertex_layout);
 
