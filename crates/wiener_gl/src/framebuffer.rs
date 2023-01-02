@@ -139,13 +139,15 @@ impl FrameBuffer {
 
     /// Bind to the read framebuffer.
     pub fn bind_read(&self) {
+        log::trace!("FrameBuffer :: Binding to the read framebuffer");
         unsafe {
             gl::BindFramebuffer(gl::READ_FRAMEBUFFER, self.get_id());
         }
     }
-
+    
     /// Bind to the draw framebuffer.
     pub fn bind_draw(&self) {
+        log::trace!("FrameBuffer :: Binding to the draw framebuffer");
         unsafe {
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, self.get_id());
         }
