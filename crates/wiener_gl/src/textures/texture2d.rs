@@ -182,6 +182,28 @@ impl Texture2D {
         return self;
     }
 
+    /// Allocate a multisampled empty buffer.
+    pub fn buffer_multisampled(self, samples: i32, width: i32, height: i32) -> Self {
+        log::info!(
+            "Texture2D :: Allocating for a {:?}x{:?} multisampled image",
+            width,
+            height
+        );
+        self.bind_multisample();
+        unsafe {
+            gl::TexImage2DMultisample(
+                gl::TEXTURE_2D_MULTISAMPLE,
+                samples,
+                self.internal_format,
+                width,
+                height,
+                gl::TRUE,
+            );
+        }
+        self.unbind_multisample();
+        return self;
+    }
+
     /// Buffer an image contained in a file to the texture.
     pub fn buffer_from_file(self, filename: &str) -> Self {
         let (img, width, height) = image::load(filename);
@@ -194,6 +216,20 @@ impl Texture2D {
         log::trace!("Texture2D :: Binding texture slot");
         unsafe {
             gl::ActiveTexture(gl::TEXTURE0 + self.tex_num);
+        }
+    }
+
+    pub fn bind_multisample(&self) {
+        log::trace!("Texture2D :: Binding texture multisampled");
+        unsafe { 
+            gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
+        }
+    }
+
+    pub fn unbind_multisample(&self) {
+        log::trace!("Texture2D :: Unbinding texture multisampled");
+        unsafe { 
+            gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
         }
     }
 }
