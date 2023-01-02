@@ -87,6 +87,15 @@ impl FrameBuffer {
         );
     }
 
+    /// Attach a multisampled 2D texture without returning.
+    pub fn inplace_attach_multisampled_texture2d(&self, attachment_num: u32, target: &Texture2D) {
+        self.inplace_attach_raw_texture2d(
+            gl::COLOR_ATTACHMENT0 + attachment_num,
+            gl::TEXTURE_2D_MULTISAMPLE,
+            target,
+        );
+    }
+
     /// Attach a renderbuffer, returning `self` afterwards.
     pub fn attach_renderbuffer(self, attachment: GLenum, target: &RenderBuffer) -> Self {
         self.inplace_attach_renderbuffer(attachment, target);
@@ -119,6 +128,12 @@ impl FrameBuffer {
     /// Attach a 2D texture, returning `self` afterwards.
     pub fn attach_texture2d(self, attachment_num: u32, target: &Texture2D) -> Self {
         self.inplace_attach_texture2d(attachment_num, target);
+        return self;
+    }
+
+    /// Attach a multisampled 2D texture, returning `self` afterwards.
+    pub fn attach_multisampled_texture2d(self, attachment_num: u32, target: &Texture2D) -> Self{
+        self.inplace_attach_multisampled_texture2d(attachment_num, target);
         return self;
     }
 
