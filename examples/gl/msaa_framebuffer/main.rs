@@ -158,4 +158,10 @@ fn main() {
         window.swap_buffers();
         window.poll_events();
     }
+
+    log::debug!("gl_msaa_framebuffer :: Exporting final image to file");
+    fbo_texture.export(
+        (0, 0, WINDOW_WIDTH, WINDOW_HEIGHT),
+        "examples/gl/msaa_framebuffer/resources/textures/out.png",
+    );
 }
