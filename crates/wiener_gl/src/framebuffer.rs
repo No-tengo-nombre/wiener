@@ -133,6 +133,19 @@ impl FrameBuffer {
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, self.get_id());
         }
     }
+
+    pub fn blit(&self, target: &FrameBuffer, source_coords: (i32, i32, i32, i32), target_coords: (i32, i32, i32, i32), mask: GLenum, filter: GLenum) {
+        self.bind_read();
+        target.bind_draw();
+        unsafe {
+            gl::BlitFramebuffer(
+                source_coords.0, source_coords.1, source_coords.2, source_coords.3,
+                target_coords.0, target_coords.1, target_coords.2, target_coords.3,
+                mask, filter,
+            );
+        }
+        self.unbind();
+    }
 }
 
 impl Bindable for FrameBuffer {
