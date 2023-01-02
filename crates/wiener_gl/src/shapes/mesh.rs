@@ -69,6 +69,7 @@ where
     }
 
     pub fn from_handler<T: MeshFileHandler>(handler: T, shader: &'a ShaderProgram<'a>) -> Self {
+        log::debug!("Mesh :: Reading from {:?} handler", T::get_name());
         let (vertices, faces, vert_num) = handler.load_file::<U, I>();
 
         // Once we have all the info, we create the mesh
