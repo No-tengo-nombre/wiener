@@ -1,11 +1,11 @@
 use crate::MeshFileHandler;
 
+use num::{traits::Pow, Float, ToPrimitive};
 use obj::{load_obj, Obj};
 use std::io::BufReader;
+use std::ops::AddAssign;
 use std::str::FromStr;
 use std::{fmt::Debug, fs};
-use num::{Float, ToPrimitive, traits::Pow};
-use std::ops::AddAssign;
 
 #[derive(Clone, Debug)]
 pub struct MeshHandlerOBJ {
@@ -29,13 +29,17 @@ impl MeshFileHandler for MeshHandlerOBJ {
     ) -> (Vec<U>, Vec<I>, u32)
     where
         <U as FromStr>::Err: Debug,
-        <I as FromStr>::Err: Debug
+        <I as FromStr>::Err: Debug,
     {
         log::info!("MeshHandlerOBJ :: Reading mesh from OBJ file");
         let input_buffer =
-        BufReader::new(fs::File::open(&self.filename).expect("File could not be opened"));
+            BufReader::new(fs::File::open(&self.filename).expect("File could not be opened"));
         let data: Obj = load_obj(input_buffer).expect("Obj file could not be read from");
-        log::info!("MeshHandlerOBJ :: Reading {:?} vertices and {:?} faces", data.vertices.len(), data.indices.len());
+        log::info!(
+            "MeshHandlerOBJ :: Reading {:?} vertices and {:?} faces",
+            data.vertices.len(),
+            data.indices.len()
+        );
 
         // Once we have all the info, we create the mesh
         let mut faces_vec = Vec::with_capacity(data.indices.len());

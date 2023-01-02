@@ -59,12 +59,19 @@ where
     }
 
     pub fn from_file(filename: &str, shader: &'a ShaderProgram<'a>) -> Self {
-        let file_extension = filename.split(".").last().expect("Error reading file").to_lowercase();
+        let file_extension = filename
+            .split(".")
+            .last()
+            .expect("Error reading file")
+            .to_lowercase();
         match file_extension.as_str() {
             "mtl" => Self::from_handler(MeshHandlerOBJ::new(filename), shader),
             "obj" => Self::from_handler(MeshHandlerOBJ::new(filename), shader),
             "off" => Self::from_handler(MeshHandlerOFF::new(filename), shader),
-            _ => panic!("Could not interpret format from extension '.{:?}' or it is not implemented", file_extension),
+            _ => panic!(
+                "Could not interpret format from extension '.{:?}' or it is not implemented",
+                file_extension
+            ),
         }
     }
 

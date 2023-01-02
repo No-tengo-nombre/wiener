@@ -1,10 +1,10 @@
 use crate::MeshFileHandler;
 use wiener_utils::math;
 
+use num::{traits::Pow, Float, ToPrimitive};
+use std::ops::AddAssign;
 use std::str::FromStr;
 use std::{fmt::Debug, fs};
-use num::{Float, ToPrimitive, traits::Pow};
-use std::ops::AddAssign;
 
 #[derive(Clone, Debug)]
 pub struct MeshHandlerOFF {
@@ -28,7 +28,7 @@ impl MeshFileHandler for MeshHandlerOFF {
     ) -> (Vec<U>, Vec<I>, u32)
     where
         <U as FromStr>::Err: Debug,
-        <I as FromStr>::Err: Debug
+        <I as FromStr>::Err: Debug,
     {
         log::info!("MeshHandlerOFF :: Reading mesh from OFF file");
 
