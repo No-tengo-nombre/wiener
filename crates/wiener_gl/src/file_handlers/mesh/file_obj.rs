@@ -44,6 +44,11 @@ impl MeshFileHandler for MeshHandlerOBJ {
         let mut vertex_result = Vec::<U>::with_capacity(data.vertices.len() * 6);
         for v in data.vertices {
             vertex_result.push(v.position[0].try_into().unwrap());
+            vertex_result.push(v.position[1].try_into().unwrap());
+            vertex_result.push(v.position[2].try_into().unwrap());
+            vertex_result.push(v.normal[0].try_into().unwrap());
+            vertex_result.push(v.normal[1].try_into().unwrap());
+            vertex_result.push(v.normal[2].try_into().unwrap());
         }
         return (vertex_result, faces_vec, 6);
     }
