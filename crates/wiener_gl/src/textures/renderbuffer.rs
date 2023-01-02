@@ -37,6 +37,16 @@ impl RenderBuffer {
         self.unbind();
         return self;
     }
+
+    /// Set up a multisampled renderbuffer.
+    pub fn set_up_multisample(self, samples: i32, format: GLenum, width: i32, height: i32) -> Self {
+        self.bind();
+        unsafe {
+            gl::RenderbufferStorageMultisample(gl::RENDERBUFFER, samples, format, width, height);
+        }
+        self.unbind();
+        return self;
+    }
 }
 
 impl Bindable for RenderBuffer {
