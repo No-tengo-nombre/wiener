@@ -19,4 +19,6 @@ pub trait MeshFileHandler {
     where
         <U as FromStr>::Err: Debug,
         <I as FromStr>::Err: Debug;
+
+    fn get_name<'a>() -> &'a str;
 }

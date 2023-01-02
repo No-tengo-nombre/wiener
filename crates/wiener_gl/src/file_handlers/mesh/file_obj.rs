@@ -52,4 +52,8 @@ impl MeshFileHandler for MeshHandlerOBJ {
         }
         return (vertex_result, faces_vec, 6);
     }
+
+    fn get_name<'a>() -> &'a str {
+        return "OBJ";
+    }
 }

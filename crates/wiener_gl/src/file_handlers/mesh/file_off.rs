@@ -159,4 +159,8 @@ impl MeshFileHandler for MeshHandlerOFF {
 
         return (vertices_result, faces, 6);
     }
+
+    fn get_name<'a>() -> &'a str {
+        return "OFF";
+    }
 }
