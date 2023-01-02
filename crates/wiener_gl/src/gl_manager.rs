@@ -9,21 +9,21 @@ pub struct GLManager;
 
 impl GLManager {
     pub fn enable(feature: GLenum) {
-        log::info!("GLManager :: Enabling feature {:?}", feature);
+        log::trace!("GLManager :: Enabling feature {:?}", feature);
         unsafe {
             gl::Enable(feature);
         }
     }
 
     pub fn disable(feature: GLenum) {
-        log::info!("GLManager :: Disabling feature {:?}", feature);
+        log::trace!("GLManager :: Disabling feature {:?}", feature);
         unsafe {
             gl::Disable(feature);
         }
     }
 
     pub fn clear_color(red: f32, green: f32, blue: f32, alpha: f32) {
-        log::info!("GLManager :: Setting clear color");
+        log::trace!("GLManager :: Setting clear color");
         unsafe {
             gl::ClearColor(red, green, blue, alpha);
         }
@@ -37,7 +37,7 @@ impl GLManager {
     }
 
     pub fn blend_func(sfactor: u32, dfactor: u32) {
-        log::info!("GLManager :: Setting blending function");
+        log::trace!("GLManager :: Setting blending function");
         unsafe {
             gl::BlendFunc(sfactor, dfactor);
         }
@@ -57,7 +57,7 @@ impl GLManager {
     }
 
     pub fn polygon_mode(face: GLenum, mode: GLenum) {
-        log::info!(
+        log::trace!(
             "GLManager :: Setting polygon mode on face {:?} to {:?}",
             face,
             mode
