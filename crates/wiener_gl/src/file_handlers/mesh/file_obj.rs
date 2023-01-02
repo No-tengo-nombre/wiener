@@ -31,9 +31,11 @@ impl MeshFileHandler for MeshHandlerOBJ {
         <U as FromStr>::Err: Debug,
         <I as FromStr>::Err: Debug
     {
+        log::info!("MeshHandlerOBJ :: Reading mesh from OBJ file");
         let input_buffer =
-            BufReader::new(fs::File::open(&self.filename).expect("File could not be opened"));
+        BufReader::new(fs::File::open(&self.filename).expect("File could not be opened"));
         let data: Obj = load_obj(input_buffer).expect("Obj file could not be read from");
+        log::info!("MeshHandlerOBJ :: Reading {:?} vertices and {:?} faces", data.vertices.len(), data.indices.len());
 
         // Once we have all the info, we create the mesh
         let mut faces_vec = Vec::with_capacity(data.indices.len());
