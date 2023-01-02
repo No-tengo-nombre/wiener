@@ -16,6 +16,9 @@ pub struct Texture2D {
     /// Slot to which the image is bound.
     pub tex_num: u32,
 
+    /// Internal format of the data. Use floats for HDR.
+    pub internal_format: GLenum,
+
     /// Format of the data.
     pub format: GLenum,
 
@@ -51,6 +54,13 @@ impl Texture2D {
     pub fn tex_num(mut self, new_bind: u32) -> Self {
         log::trace!("Texture2D :: Setting texture num {:?}", new_bind);
         self.tex_num = new_bind;
+        return self;
+    }
+
+    /// Change the internal format of the texture.
+    pub fn internal_format(mut self, new_format: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting internal format {:?}", new_format);
+        self.internal_format = new_format;
         return self;
     }
 
@@ -132,7 +142,7 @@ impl Texture2D {
             gl::TexImage2D(
                 gl::TEXTURE_2D,
                 0,
-                self.format as i32,
+                self.internal_format as i32,
                 width,
                 height,
                 0,
@@ -158,7 +168,7 @@ impl Texture2D {
             gl::TexImage2D(
                 gl::TEXTURE_2D,
                 0,
-                self.format as i32,
+                self.internal_format as i32,
                 width,
                 height,
                 0,
@@ -169,6 +179,28 @@ impl Texture2D {
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
         self.unbind();
+        return self;
+    }
+
+    /// Allocate a multisampled empty buffer.
+    pub fn buffer_multisampled(self, samples: i32, width: i32, height: i32) -> Self {
+        log::info!(
+            "Texture2D :: Allocating for a {:?}x{:?} multisampled image",
+            width,
+            height
+        );
+        self.bind_multisample();
+        unsafe {
+            gl::TexImage2DMultisample(
+                gl::TEXTURE_2D_MULTISAMPLE,
+                samples,
+                self.internal_format,
+                width,
+                height,
+                gl::TRUE,
+            );
+        }
+        self.unbind_multisample();
         return self;
     }
 
@@ -186,6 +218,20 @@ impl Texture2D {
             gl::ActiveTexture(gl::TEXTURE0 + self.tex_num);
         }
     }
+
+    pub fn bind_multisample(&self) {
+        log::trace!("Texture2D :: Binding texture multisampled");
+        unsafe { 
+            gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
+        }
+    }
+
+    pub fn unbind_multisample(&self) {
+        log::trace!("Texture2D :: Unbinding texture multisampled");
+        unsafe { 
+            gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
+        }
+    }
 }
 
 impl Default for Texture2D {
@@ -198,6 +244,7 @@ impl Default for Texture2D {
         return Texture2D {
             _id: tex_id,
             tex_num: 0,
+            internal_format: gl::RGB,
             format: gl::RGB,
             data_type: gl::UNSIGNED_BYTE,
             wrap_s: gl::REPEAT,
