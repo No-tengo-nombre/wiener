@@ -40,7 +40,7 @@ fn main() {
 
     log::debug!("gl_model_off :: Loading ship mesh");
     let mut ship = Mesh::<f32, u32>::from_file(
-        MeshHandlerOFF::new("examples/gl/model_off/resources/models/XJ5 X-wing starfighter.off"),
+        "examples/gl/model_off/resources/models/XJ5 X-wing starfighter.off",
         &ship_shader,
     )
     .layout(&vertex_layout);
