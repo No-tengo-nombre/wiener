@@ -39,8 +39,8 @@ fn main() {
     ];
 
     log::debug!("gl_model_obj :: Loading ship mesh");
-    let mut ship = Mesh::<f32, u32>::from_obj(
-        "examples/gl/model_obj/resources/models/XJ5 X-wing starfighter.obj",
+    let mut ship = Mesh::<f32, u32>::from_file(
+        MeshHandlerOBJ::new("examples/gl/model_obj/resources/models/XJ5 X-wing starfighter.obj"),
         &ship_shader,
     )
     .layout(&vertex_layout);
