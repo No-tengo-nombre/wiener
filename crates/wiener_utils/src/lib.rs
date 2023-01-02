@@ -1,4 +1,4 @@
-//! Create that contains utilities for Wiener
+//! Crate that contains utilities for Wiener
 
 pub mod prelude;
 
