@@ -121,6 +121,18 @@ impl FrameBuffer {
         self.inplace_attach_texture2d(attachment_num, target);
         return self;
     }
+
+    pub fn bind_read(&self) {
+        unsafe {
+            gl::BindFramebuffer(gl::READ_FRAMEBUFFER, self.get_id());
+        }
+    }
+
+    pub fn bind_draw(&self) {
+        unsafe {
+            gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, self.get_id());
+        }
+    }
 }
 
 impl Bindable for FrameBuffer {
