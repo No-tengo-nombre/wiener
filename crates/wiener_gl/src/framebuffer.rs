@@ -137,19 +137,23 @@ impl FrameBuffer {
         return self;
     }
 
+    /// Bind to the read framebuffer.
     pub fn bind_read(&self) {
         unsafe {
             gl::BindFramebuffer(gl::READ_FRAMEBUFFER, self.get_id());
         }
     }
 
+    /// Bind to the draw framebuffer.
     pub fn bind_draw(&self) {
         unsafe {
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, self.get_id());
         }
     }
 
+    /// Blit the framebuffer's texture to another framebuffer.
     pub fn blit(&self, target: &FrameBuffer, source_coords: (i32, i32, i32, i32), target_coords: (i32, i32, i32, i32), mask: GLenum, filter: GLenum) {
+        log::trace!("FrameBuffer :: Blitting to another framebuffer");
         self.bind_read();
         target.bind_draw();
         unsafe {
@@ -165,18 +169,21 @@ impl FrameBuffer {
 
 impl Bindable for FrameBuffer {
     fn bind(&self) {
+        log::trace!("FrameBuffer :: Binding");
         unsafe {
             gl::BindFramebuffer(gl::FRAMEBUFFER, self.get_id());
         }
     }
-
+    
     fn unbind(&self) {
+        log::trace!("FrameBuffer :: Unbinding");
         unsafe {
             gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
         }
     }
-
+    
     fn delete(&self) {
+        log::trace!("FrameBuffer :: Deleting");
         unsafe {
             gl::DeleteFramebuffers(1, &self.get_id());
         }
