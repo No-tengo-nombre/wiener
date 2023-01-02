@@ -10,6 +10,7 @@
     - Made a function that creates a `Mesh` from a handler.
     - Made another function that interprets the filename and associates the file extension to a handler.
 - **(wiener_gl)** Implemented MSAA compatible with post-processing framebuffers.
+- **(wiener_gl)** Added a function to export a texture to a file.
 
 ## 0.1.0
 - Wiener was created!
