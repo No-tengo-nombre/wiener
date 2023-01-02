@@ -100,7 +100,7 @@ fn main() {
         .textures(&screen_quad_textures);
 
     log::debug!("gl_framebuffer :: Setting clear color");
-    GLManager::clear_color(0.1, 0.1, 0.3, 1.0);
+    GLManager::clear_color(0.1, 0.05, 0.05, 1.0);
 
     const ROTATION_SPEED: f32 = 1.0;
 
