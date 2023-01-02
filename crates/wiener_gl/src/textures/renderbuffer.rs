@@ -34,6 +34,7 @@ impl RenderBuffer {
         unsafe {
             gl::RenderbufferStorage(gl::RENDERBUFFER, format, width, height);
         }
+        self.unbind();
         return self;
     }
 }
