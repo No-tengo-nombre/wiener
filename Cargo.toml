@@ -35,6 +35,10 @@ name = "gl_model_off"
 path = "examples/gl/model_off/main.rs"
 
 [[example]]
+name = "gl_msaa_framebuffer"
+path = "examples/gl/msaa_framebuffer/main.rs"
+
+[[example]]
 name = "gl_texture"
 path = "examples/gl/texture/main.rs"
 
