@@ -1,3 +1,4 @@
+use std::ffi::c_void;
 use std::ptr::null;
 
 use crate::{Bindable, HasID, Texture};
@@ -209,6 +210,29 @@ impl Texture2D {
         let (img, width, height) = image::load(filename);
         let data = img.to_rgba8().to_vec();
         return self.buffer_img(&data, width, height);
+    }
+
+    /// Export the texture to a file.
+    pub fn export(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?}", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        let mut data = Vec::<u8>::with_capacity((3 * width * height) as usize);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image(filename, data.as_ptr(), width, height);
     }
 
     /// Bind the slot associated to the texture.
