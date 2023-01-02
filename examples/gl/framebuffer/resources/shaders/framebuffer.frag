@@ -63,4 +63,9 @@ void main () {
 
     // Unchanged texture
     // frag_color = texture(u_fbo_texture, tex_uv);
+
+
+    // Apply gamma correction
+    float gamma = 2.2;
+    frag_color = pow(frag_color, vec4(vec3(gamma), 1.0));
 }
