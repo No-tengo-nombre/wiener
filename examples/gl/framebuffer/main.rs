@@ -122,7 +122,7 @@ fn main() {
 
         ship.model_mat = math::matmul(
             math::rotation(ROTATION_SPEED * window_time, 0.0, 0.0),
-            math::scaling(0.5, 0.5, 0.5),
+            math::scaling(1.0, 1.0, 1.0),
         );
         ship.draw();
 
