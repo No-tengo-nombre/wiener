@@ -221,14 +221,14 @@ impl Texture2D {
 
     pub fn bind_multisample(&self) {
         log::trace!("Texture2D :: Binding texture multisampled");
-        unsafe { 
+        unsafe {
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
         }
     }
 
     pub fn unbind_multisample(&self) {
         log::trace!("Texture2D :: Unbinding texture multisampled");
-        unsafe { 
+        unsafe {
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
         }
     }
