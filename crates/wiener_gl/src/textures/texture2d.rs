@@ -219,6 +219,7 @@ impl Texture2D {
         let width = window.2 - window.0;
         let height = window.3 - window.1;
         let mut data = Vec::<u8>::with_capacity((3 * width * height) as usize);
+        data.resize((3 * width * height) as usize, 0);
         unsafe {
             log::debug!("Texture2D :: Reading data from texture");
             gl::ReadPixels(
@@ -232,7 +233,7 @@ impl Texture2D {
             );
         }
         log::debug!("Texture2D :: Saving data to file");
-        image::save_image(filename, data.as_ptr(), width, height);
+        image::save_image(filename, data.as_slice(), width, height);
     }
 
     /// Bind the slot associated to the texture.

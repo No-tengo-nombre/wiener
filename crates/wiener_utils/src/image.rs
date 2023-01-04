@@ -12,7 +12,7 @@ pub fn load(path: &str) -> (image::DynamicImage, i32, i32) {
     return (img_data, width, height);
 }
 
-pub fn save_image(path: &str, buffer: *const u8, width: i32, height: i32) {
+pub fn save_image(path: &str, buffer: &[u8], width: i32, height: i32) {
     log::info!(
         "save_image :: Saving {:?}x{:?} image to file {:?}",
         width,
@@ -21,13 +21,9 @@ pub fn save_image(path: &str, buffer: *const u8, width: i32, height: i32) {
     );
 
     log::debug!("save_image :: Loading image from data");
-    let data;
-    unsafe {
-        data = std::slice::from_raw_parts(buffer, (3 * width * height) as usize);
-    }
     let result =
-        image::ImageBuffer::<image::Rgb<u8>, &[u8]>::from_raw(width as u32, height as u32, data)
-            .expect("Error reading image data");
+        image::ImageBuffer::<image::Rgb<u8>, &[u8]>::from_raw(width as u32, height as u32, buffer)
+            .expect("Not enough memory was allocated");
 
     log::debug!("save_image :: Saving image to file");
     match result.save(path) {
