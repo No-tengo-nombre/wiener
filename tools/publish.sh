@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Declare crates to descend in the dependency tree
 CRATES=(
     wiener_core
