@@ -29,8 +29,7 @@ fn main() {
         .buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     log::debug!("gl_framebuffer :: Initializing depth renderbuffer");
-    let fbo_depth = RenderBuffer::new()
-        .set_up(gl::DEPTH24_STENCIL8, WINDOW_WIDTH, WINDOW_HEIGHT);
+    let fbo_depth = RenderBuffer::new().set_up(gl::DEPTH24_STENCIL8, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     log::debug!("gl_framebuffer :: Initializing framebuffer");
     let fbo = FrameBuffer::new()

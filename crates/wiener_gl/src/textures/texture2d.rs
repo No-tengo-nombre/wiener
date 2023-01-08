@@ -1,3 +1,4 @@
+use std::ffi::c_void;
 use std::ptr::null;
 
 use crate::{Bindable, HasID, Texture};
@@ -68,6 +69,13 @@ impl Texture2D {
     pub fn format(mut self, new_format: GLenum) -> Self {
         log::trace!("Texture2D :: Setting format {:?}", new_format);
         self.format = new_format;
+        return self;
+    }
+
+    /// Change the data type of the texture.
+    pub fn data_type(mut self, new_type: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting data type {:?}", new_type);
+        self.data_type = new_type;
         return self;
     }
 
@@ -211,6 +219,213 @@ impl Texture2D {
         return self.buffer_img(&data, width, height);
     }
 
+    pub fn export(&self, window: (i32, i32, i32, i32), filename: &str) {
+        match self.format {
+            gl::RGB => match self.data_type {
+                gl::UNSIGNED_BYTE => self.export_rgb_u8(window, filename),
+                gl::UNSIGNED_SHORT => self.export_rgb_u16(window, filename),
+                gl::FLOAT => self.export_rgb_f32(window, filename),
+                _ => log::warn!(
+                    "Texture2D :: Export not implemented for given data type. Aborting export"
+                ),
+            },
+            gl::RGBA => match self.data_type {
+                gl::UNSIGNED_BYTE => self.export_rgba_u8(window, filename),
+                gl::UNSIGNED_SHORT => self.export_rgba_u16(window, filename),
+                gl::FLOAT => self.export_rgba_f32(window, filename),
+                _ => log::warn!(
+                    "Texture2D :: Export not implemented for given data type. Aborting export"
+                ),
+            },
+            _ => {
+                log::warn!("Texture2D :: Export not implemented for given format. Aborting export")
+            }
+        };
+    }
+
+    /// Export the texture to a file as an RGB u8 image.
+    pub fn export_rgb_u8(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?} as RGB u8", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        // let mut data = Vec::<u8>::with_capacity((3 * width * height) as usize);
+        let mut data = Vec::<[u8; 3]>::with_capacity((width * height) as usize);
+        data.resize((width * height) as usize, [0, 0, 0]);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Setting data up to save it");
+        data.reverse();
+        let mut result = Vec::<u8>::with_capacity((3 * width * height) as usize);
+        for v in data {
+            result.extend(v);
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image_rgb_u8(filename, result.as_slice(), width, height);
+    }
+
+    /// Export the texture to a file as an RGB u8 image.
+    pub fn export_rgba_u8(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?} as RGBA u8", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        let mut data = Vec::<[u8; 4]>::with_capacity((width * height) as usize);
+        data.resize((width * height) as usize, [0, 0, 0, 0]);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Setting data up to save it");
+        data.reverse();
+        let mut result = Vec::<u8>::with_capacity((4 * width * height) as usize);
+        for v in data {
+            result.extend(v);
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image_rgba_u8(filename, result.as_slice(), width, height);
+    }
+
+    /// Export the texture to a file as an RGB u16 image.
+    pub fn export_rgb_u16(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?} as RGB u16", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        // let mut data = Vec::<u16>::with_capacity((3 * width * height) as usize);
+        let mut data = Vec::<[u16; 3]>::with_capacity((width * height) as usize);
+        data.resize((width * height) as usize, [0, 0, 0]);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Setting data up to save it");
+        data.reverse();
+        let mut result = Vec::<u16>::with_capacity((3 * width * height) as usize);
+        for v in data {
+            result.extend(v);
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image_rgb_u16(filename, result.as_slice(), width, height);
+    }
+
+    /// Export the texture to a file as an RGB u16 image.
+    pub fn export_rgba_u16(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?} as RGBA u16", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        let mut data = Vec::<[u16; 4]>::with_capacity((width * height) as usize);
+        data.resize((width * height) as usize, [0, 0, 0, 0]);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Setting data up to save it");
+        data.reverse();
+        let mut result = Vec::<u16>::with_capacity((4 * width * height) as usize);
+        for v in data {
+            result.extend(v);
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image_rgba_u16(filename, result.as_slice(), width, height);
+    }
+
+    /// Export the texture to a file as an RGB f32 image.
+    pub fn export_rgb_f32(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?} as RGB f32", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        // let mut data = Vec::<f32>::with_capacity((3 * width * height) as usize);
+        let mut data = Vec::<[f32; 3]>::with_capacity((width * height) as usize);
+        data.resize((width * height) as usize, [0.0, 0.0, 0.0]);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Setting data up to save it");
+        data.reverse();
+        let mut result = Vec::<f32>::with_capacity((3 * width * height) as usize);
+        for v in data {
+            result.extend(v);
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image_rgb_f32(filename, result.as_slice(), width, height);
+    }
+
+    /// Export the texture to a file as an RGB f32 image.
+    pub fn export_rgba_f32(&self, window: (i32, i32, i32, i32), filename: &str) {
+        log::info!("Texture2D :: Exporting to image {:?} as RGBA f32", filename);
+        self.bind();
+        let width = window.2 - window.0;
+        let height = window.3 - window.1;
+        let mut data = Vec::<[f32; 4]>::with_capacity((width * height) as usize);
+        data.resize((width * height) as usize, [0.0, 0.0, 0.0, 0.0]);
+        unsafe {
+            log::debug!("Texture2D :: Reading data from texture");
+            gl::ReadPixels(
+                window.0,
+                window.1,
+                window.2,
+                window.3,
+                self.format,
+                self.data_type,
+                data.as_mut_ptr() as *mut c_void,
+            );
+        }
+        log::debug!("Texture2D :: Setting data up to save it");
+        data.reverse();
+        let mut result = Vec::<f32>::with_capacity((4 * width * height) as usize);
+        for v in data {
+            result.extend(v);
+        }
+        log::debug!("Texture2D :: Saving data to file");
+        image::save_image_rgba_f32(filename, result.as_slice(), width, height);
+    }
+
     /// Bind the slot associated to the texture.
     pub fn bind_slot(&self) {
         log::trace!("Texture2D :: Binding texture slot");
@@ -221,14 +436,14 @@ impl Texture2D {
 
     pub fn bind_multisample(&self) {
         log::trace!("Texture2D :: Binding texture multisampled");
-        unsafe { 
+        unsafe {
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
         }
     }
 
     pub fn unbind_multisample(&self) {
         log::trace!("Texture2D :: Unbinding texture multisampled");
-        unsafe { 
+        unsafe {
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, self.get_id());
         }
     }

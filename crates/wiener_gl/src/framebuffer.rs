@@ -64,6 +64,11 @@ impl FrameBuffer {
         self.inplace_attach_texture(gl::DEPTH_ATTACHMENT, target);
     }
 
+    /// Attach a depth and stencil texture without returning.
+    pub fn inplace_attach_depth_stencil(&self, target: &dyn Texture) {
+        self.inplace_attach_texture(gl::DEPTH_STENCIL_ATTACHMENT, target);
+    }
+
     /// Attach an arbitrary 2D texture without returning.
     pub fn inplace_attach_raw_texture2d(
         &self,
@@ -114,6 +119,12 @@ impl FrameBuffer {
         return self;
     }
 
+    /// Attach a depth and stencil texture, returning `self` afterwards.
+    pub fn attach_depth_stencil(self, target: &dyn Texture) -> Self {
+        self.inplace_attach_depth_stencil(target);
+        return self;
+    }
+
     /// Attach an arbitrary 2D texture, returning `self` afterwards.
     pub fn attach_raw_texture2d(
         self,
@@ -132,31 +143,51 @@ impl FrameBuffer {
     }
 
     /// Attach a multisampled 2D texture, returning `self` afterwards.
-    pub fn attach_multisampled_texture2d(self, attachment_num: u32, target: &Texture2D) -> Self{
+    pub fn attach_multisampled_texture2d(self, attachment_num: u32, target: &Texture2D) -> Self {
         self.inplace_attach_multisampled_texture2d(attachment_num, target);
         return self;
     }
 
+    /// Bind to the read framebuffer.
     pub fn bind_read(&self) {
+        log::trace!("FrameBuffer :: Binding to the read framebuffer");
         unsafe {
             gl::BindFramebuffer(gl::READ_FRAMEBUFFER, self.get_id());
         }
     }
 
+    /// Bind to the draw framebuffer.
     pub fn bind_draw(&self) {
+        log::trace!("FrameBuffer :: Binding to the draw framebuffer");
         unsafe {
             gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, self.get_id());
         }
     }
 
-    pub fn blit(&self, target: &FrameBuffer, source_coords: (i32, i32, i32, i32), target_coords: (i32, i32, i32, i32), mask: GLenum, filter: GLenum) {
+    /// Blit the framebuffer's texture to another framebuffer.
+    pub fn blit(
+        &self,
+        target: &FrameBuffer,
+        source_coords: (i32, i32, i32, i32),
+        target_coords: (i32, i32, i32, i32),
+        mask: GLenum,
+        filter: GLenum,
+    ) {
+        log::trace!("FrameBuffer :: Blitting to another framebuffer");
         self.bind_read();
         target.bind_draw();
         unsafe {
             gl::BlitFramebuffer(
-                source_coords.0, source_coords.1, source_coords.2, source_coords.3,
-                target_coords.0, target_coords.1, target_coords.2, target_coords.3,
-                mask, filter,
+                source_coords.0,
+                source_coords.1,
+                source_coords.2,
+                source_coords.3,
+                target_coords.0,
+                target_coords.1,
+                target_coords.2,
+                target_coords.3,
+                mask,
+                filter,
             );
         }
         self.unbind();
@@ -165,18 +196,21 @@ impl FrameBuffer {
 
 impl Bindable for FrameBuffer {
     fn bind(&self) {
+        log::trace!("FrameBuffer :: Binding");
         unsafe {
             gl::BindFramebuffer(gl::FRAMEBUFFER, self.get_id());
         }
     }
 
     fn unbind(&self) {
+        log::trace!("FrameBuffer :: Unbinding");
         unsafe {
             gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
         }
     }
 
     fn delete(&self) {
+        log::trace!("FrameBuffer :: Deleting");
         unsafe {
             gl::DeleteFramebuffers(1, &self.get_id());
         }
