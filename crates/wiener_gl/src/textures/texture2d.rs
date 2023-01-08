@@ -225,15 +225,21 @@ impl Texture2D {
                 gl::UNSIGNED_BYTE => self.export_rgb_u8(window, filename),
                 gl::UNSIGNED_SHORT => self.export_rgb_u16(window, filename),
                 gl::FLOAT => self.export_rgb_f32(window, filename),
-                _ => log::warn!("Texture2D :: Export not implemented for given data type. Aborting export")
+                _ => log::warn!(
+                    "Texture2D :: Export not implemented for given data type. Aborting export"
+                ),
             },
             gl::RGBA => match self.data_type {
                 gl::UNSIGNED_BYTE => self.export_rgba_u8(window, filename),
                 gl::UNSIGNED_SHORT => self.export_rgba_u16(window, filename),
                 gl::FLOAT => self.export_rgba_f32(window, filename),
-                _ => log::warn!("Texture2D :: Export not implemented for given data type. Aborting export")
+                _ => log::warn!(
+                    "Texture2D :: Export not implemented for given data type. Aborting export"
+                ),
             },
-            _ => log::warn!("Texture2D :: Export not implemented for given format. Aborting export"),
+            _ => {
+                log::warn!("Texture2D :: Export not implemented for given format. Aborting export")
+            }
         };
     }
 
