@@ -72,6 +72,13 @@ impl Texture2D {
         return self;
     }
 
+    /// Change the data type of the texture.
+    pub fn data_type(mut self, new_type: GLenum) -> Self {
+        log::trace!("Texture2D :: Setting data type {:?}", new_type);
+        self.data_type = new_type;
+        return self;
+    }
+
     /// Change the S wrapping method.
     pub fn wrap_s(mut self, new_wrap: GLenum) -> Self {
         log::trace!("Texture2D :: Setting wrap S {:?}", new_wrap);
@@ -214,54 +221,20 @@ impl Texture2D {
 
     pub fn export(&self, window: (i32, i32, i32, i32), filename: &str) {
         match self.format {
-            gl::DEPTH_COMPONENT => match self.data_type {
-                gl::UNSIGNED_BYTE => self.export_depth_u8(window, filename),
-                _ => log::warn!("Export not implemented for given data type. Aborting export")
-            }
             gl::RGB => match self.data_type {
                 gl::UNSIGNED_BYTE => self.export_rgb_u8(window, filename),
                 gl::UNSIGNED_SHORT => self.export_rgb_u16(window, filename),
                 gl::FLOAT => self.export_rgb_f32(window, filename),
-                _ => log::warn!("Export not implemented for given data type. Aborting export")
+                _ => log::warn!("Texture2D :: Export not implemented for given data type. Aborting export")
             },
             gl::RGBA => match self.data_type {
                 gl::UNSIGNED_BYTE => self.export_rgba_u8(window, filename),
                 gl::UNSIGNED_SHORT => self.export_rgba_u16(window, filename),
                 gl::FLOAT => self.export_rgba_f32(window, filename),
-                _ => log::warn!("Export not implemented for given data type. Aborting export")
+                _ => log::warn!("Texture2D :: Export not implemented for given data type. Aborting export")
             },
-            _ => log::warn!("Export not implemented for given format. Aborting export"),
+            _ => log::warn!("Texture2D :: Export not implemented for given format. Aborting export"),
         };
-    }
-
-    /// Export the texture to a file as a depth u8 image.
-    pub fn export_depth_u8(&self, window: (i32, i32, i32, i32), filename: &str) {
-        log::info!("Texture2D :: Exporting to image {:?} as RGB u8", filename);
-        self.bind();
-        let width = window.2 - window.0;
-        let height = window.3 - window.1;
-        let mut data = Vec::<u8>::with_capacity((width * height) as usize);
-        data.resize((width * height) as usize, 0);
-        unsafe {
-            log::debug!("Texture2D :: Reading data from texture");
-            gl::ReadPixels(
-                window.0,
-                window.1,
-                window.2,
-                window.3,
-                self.format,
-                self.data_type,
-                data.as_mut_ptr() as *mut c_void,
-            );
-        }
-
-        // Copy the values to all channels
-        let original_data = data.clone();
-        data.extend(&original_data);
-        data.extend(&original_data);
-
-        log::debug!("Texture2D :: Saving data to file");
-        image::save_image_rgb_u8(filename, data.as_slice(), width, height);
     }
 
     /// Export the texture to a file as an RGB u8 image.
