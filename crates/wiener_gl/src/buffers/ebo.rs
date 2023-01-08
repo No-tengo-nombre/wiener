@@ -68,7 +68,7 @@ impl Bindable for ElementBuffer {
 }
 
 impl Buffer for ElementBuffer {
-    fn buffer_data<T>(&self, data: &[T]) -> Self {
+    fn buffer_data<T>(&self, data: &[T]) {
         let size = data.len() * size_of::<T>();
         log::info!("ElementBuffer :: Buffering {:?} bytes to GPU", size);
         self.bind();
@@ -79,7 +79,6 @@ impl Buffer for ElementBuffer {
                 data.as_ptr() as *const GLvoid,
                 self.usage,
             );
-        }
-        return *self;
+        };
     }
 }

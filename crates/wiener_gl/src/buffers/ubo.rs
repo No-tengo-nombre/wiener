@@ -80,7 +80,7 @@ impl Bindable for UniformBuffer {
 }
 
 impl Buffer for UniformBuffer {
-    fn buffer_data<T>(&self, data: &[T]) -> Self {
+    fn buffer_data<T>(&self, data: &[T]) {
         log::info!("UniformBuffer :: Buffering data to GPU");
         self.bind();
         unsafe {
@@ -90,7 +90,6 @@ impl Buffer for UniformBuffer {
                 data.as_ptr() as *const GLvoid,
                 self.usage,
             );
-        }
-        return *self;
+        };
     }
 }
