@@ -12,7 +12,7 @@ use wiener_utils::math;
 
 /// Structure for a simple mesh, corresponding to the most basic set of
 /// triangles.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Mesh<'a, U, I> {
     pub vao: VertexArray<'a>,
     pub vbo: VertexBuffer,
@@ -251,5 +251,11 @@ impl<'a, U: Debug + Copy, I> Drawable for Mesh<'a, U, I> {
                 0 as *const c_void,
             );
         }
+    }
+}
+
+impl<'a, U, I> Drop for Mesh<'a, U, I> {
+    fn drop(&mut self) {
+        self.delete();
     }
 }
