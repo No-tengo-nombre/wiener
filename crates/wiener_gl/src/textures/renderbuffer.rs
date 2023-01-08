@@ -5,7 +5,7 @@ use gl::types::*;
 
 /// OpenGL render buffer, which can be drawn to efficiently, but is not
 /// intended for reading.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct RenderBuffer {
     _id: u32,
 }
@@ -72,5 +72,11 @@ impl Bindable for RenderBuffer {
         unsafe {
             gl::DeleteRenderbuffers(1, &self.get_id());
         }
+    }
+}
+
+impl Drop for RenderBuffer {
+    fn drop(&mut self) {
+        self.delete();
     }
 }
