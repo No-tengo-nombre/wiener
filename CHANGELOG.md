@@ -2,6 +2,11 @@
 
 ---
 
+## 0.1.2
+- **(wiener_gl)** Modified the `buffer_data` function in the buffer trait.
+- **(wiener_gl)** Implemented the drop trait for `FrameBuffer`, `RenderBuffer` and `Mesh`.
+- **(wiener_gl)** Fixed a small error in the `delete` function in struct `Shader`.
+
 ## 0.1.1
 - **(wiener_gl)** Added option to create meshes from OBJ files.
 - **(wiener_gl)** Added an example for loading models from OBJ files.
