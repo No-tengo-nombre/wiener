@@ -25,8 +25,8 @@ fn main() {
     log::debug!("gl_framebuffer :: Initializing framebuffer texture");
     let fbo_texture = Texture2D::default()
         .tex_num(0)
-        .build()
-        .buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
+        .build();
+    fbo_texture.buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     log::debug!("gl_framebuffer :: Initializing depth renderbuffer");
     let fbo_depth = RenderBuffer::new().set_up(gl::DEPTH24_STENCIL8, WINDOW_WIDTH, WINDOW_HEIGHT);
