@@ -43,6 +43,10 @@ name = "gl_texture"
 path = "examples/gl/texture/main.rs"
 
 [[example]]
+name = "gl_texture_export"
+path = "examples/gl/texture_export/main.rs"
+
+[[example]]
 name = "gl_triangle"
 path = "examples/gl/triangle/main.rs"
 
