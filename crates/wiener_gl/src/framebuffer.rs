@@ -64,6 +64,11 @@ impl FrameBuffer {
         self.inplace_attach_texture(gl::DEPTH_ATTACHMENT, target);
     }
 
+    /// Attach a depth and stencil texture without returning.
+    pub fn inplace_attach_depth_stencil(&self, target: &dyn Texture) {
+        self.inplace_attach_texture(gl::DEPTH_STENCIL_ATTACHMENT, target);
+    }
+
     /// Attach an arbitrary 2D texture without returning.
     pub fn inplace_attach_raw_texture2d(
         &self,
@@ -111,6 +116,12 @@ impl FrameBuffer {
     /// Attach a depth texture, returning `self` afterwards.
     pub fn attach_depth(self, target: &dyn Texture) -> Self {
         self.inplace_attach_depth(target);
+        return self;
+    }
+
+    /// Attach a depth and stencil texture, returning `self` afterwards.
+    pub fn attach_depth_stencil(self, target: &dyn Texture) -> Self {
+        self.inplace_attach_depth_stencil(target);
         return self;
     }
 
