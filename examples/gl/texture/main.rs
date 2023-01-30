@@ -42,10 +42,7 @@ fn main() {
     ];
 
     log::debug!("gl_texture :: Loading quad texture");
-    let quad_texture = Texture2D::default()
-        .tex_num(0)
-        .format(gl::RGBA)
-        .build();
+    let quad_texture = Texture2D::default().tex_num(0).format(gl::RGBA).build();
     quad_texture.buffer_from_file("examples/gl/texture/resources/textures/chihuahua.jpg");
     let quad_textures = [quad_texture];
 

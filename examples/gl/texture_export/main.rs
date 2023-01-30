@@ -25,11 +25,7 @@ fn main() {
 
     log::debug!("gl_texture_export :: Initializing MSAA texture");
     let msaa_texture = Texture2D::default().tex_num(0);
-    msaa_texture.buffer_multisampled(
-        MSAA_SAMPLES,
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-    );
+    msaa_texture.buffer_multisampled(MSAA_SAMPLES, WINDOW_WIDTH, WINDOW_HEIGHT);
     log::debug!("gl_texture_export :: Initializing MSAA renderbuffer");
     let msaa_depth_rbo = RenderBuffer::new().set_up_multisample(
         MSAA_SAMPLES,
@@ -43,9 +39,7 @@ fn main() {
         .attach_renderbuffer(gl::DEPTH_STENCIL_ATTACHMENT, &msaa_depth_rbo);
 
     log::debug!("gl_texture_export :: Initializing framebuffer texture");
-    let fbo_texture = Texture2D::default()
-        .tex_num(0)
-        .build();
+    let fbo_texture = Texture2D::default().tex_num(0).build();
     fbo_texture.buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
     log::debug!("gl_texture_export :: Initializing depth renderbuffer");
     let fbo_depth = RenderBuffer::new().set_up(gl::DEPTH24_STENCIL8, WINDOW_WIDTH, WINDOW_HEIGHT);

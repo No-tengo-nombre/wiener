@@ -23,9 +23,7 @@ fn main() {
     GLManager::enable(gl::DEPTH_TEST);
 
     log::debug!("gl_framebuffer :: Initializing framebuffer texture");
-    let fbo_texture = Texture2D::default()
-        .tex_num(0)
-        .build();
+    let fbo_texture = Texture2D::default().tex_num(0).build();
     fbo_texture.buffer_empty(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     log::debug!("gl_framebuffer :: Initializing depth renderbuffer");
