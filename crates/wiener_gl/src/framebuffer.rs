@@ -191,6 +191,7 @@ impl FrameBuffer {
             );
         }
         self.unbind();
+        target.unbind();
     }
 }
 
