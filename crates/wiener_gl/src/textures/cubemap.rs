@@ -1,3 +1,4 @@
+use std::ptr::null;
 use gl::types::GLenum;
 
 use crate::{Bindable, HasID, Texture};
@@ -137,9 +138,9 @@ impl CubeMapTexture {
         log::info!("CubeMapTexture :: Buffering images to CubeMapTexture");
         self.bind();
         unsafe {
-            for i in ..6 {
+            for i in 0..6_usize {
                 gl::TexImage2D(
-                    gl::TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                    gl::TEXTURE_CUBE_MAP_POSITIVE_X + i as u32,
                     0,
                     self.internal_format as i32,
                     widths[i],
@@ -160,9 +161,9 @@ impl CubeMapTexture {
         log::info!("CubeMapTexture :: Buffering images to CubeMapTexture");
         self.bind();
         unsafe {
-            for i in ..6 {
+            for i in 0..6_usize {
                 gl::TexImage2D(
-                    gl::TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                    gl::TEXTURE_CUBE_MAP_POSITIVE_X + i as u32,
                     0,
                     self.internal_format as i32,
                     widths[i],
