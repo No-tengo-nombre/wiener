@@ -16,7 +16,7 @@ while getopts "d" arg
 do
     case "$arg" in
         d)
-            echo "Warning: Running in 'dry run' mode"
+            echo -e "\e[0;31mWARNING\e[0;37m running in 'dry run' mode"
             dry_run=1
             ;;
     esac

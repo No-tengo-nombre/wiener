@@ -67,7 +67,7 @@ impl Bindable for VertexBuffer {
 }
 
 impl Buffer for VertexBuffer {
-    fn buffer_data<T>(&self, data: &[T]) -> Self {
+    fn buffer_data<T>(&self, data: &[T]) {
         let size = data.len() * size_of::<T>();
         log::info!("VertexBuffer :: Buffering {:?} bytes to GPU", size);
         self.bind();
@@ -78,7 +78,6 @@ impl Buffer for VertexBuffer {
                 data.as_ptr() as *const GLvoid,
                 self.usage,
             );
-        }
-        return *self;
+        };
     }
 }

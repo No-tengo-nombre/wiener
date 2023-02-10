@@ -42,11 +42,9 @@ fn main() {
     ];
 
     log::debug!("gl_texture :: Loading quad texture");
-    let quad_textures = [Texture2D::default()
-        .tex_num(0)
-        .format(gl::RGBA)
-        .build()
-        .buffer_from_file("examples/gl/texture/resources/textures/chihuahua.jpg")];
+    let quad_texture = Texture2D::default().tex_num(0).format(gl::RGBA).build();
+    quad_texture.buffer_from_file("examples/gl/texture/resources/textures/chihuahua.jpg");
+    let quad_textures = [quad_texture];
 
     log::debug!("gl_texture :: Making quad mesh");
     let mut quad = Mesh::<f32, u32>::new(&quad_shader)

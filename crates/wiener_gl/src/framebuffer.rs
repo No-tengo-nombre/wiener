@@ -4,7 +4,7 @@ use gl;
 use gl::types::*;
 
 /// OpenGL framebuffer.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct FrameBuffer {
     _id: u32,
 }
@@ -191,6 +191,7 @@ impl FrameBuffer {
             );
         }
         self.unbind();
+        target.unbind();
     }
 }
 
@@ -214,5 +215,11 @@ impl Bindable for FrameBuffer {
         unsafe {
             gl::DeleteFramebuffers(1, &self.get_id());
         }
+    }
+}
+
+impl Drop for FrameBuffer {
+    fn drop(&mut self) {
+        self.delete();
     }
 }

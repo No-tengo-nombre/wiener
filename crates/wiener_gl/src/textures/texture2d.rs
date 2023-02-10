@@ -139,7 +139,7 @@ impl Texture2D {
     }
 
     /// Buffer the given image to the texture.
-    pub fn buffer_img<T>(self, data: &[T], width: i32, height: i32) -> Self {
+    pub fn buffer_img<T>(&self, data: &[T], width: i32, height: i32) {
         log::info!(
             "Texture2D :: Buffering {:?}x{:?} image to Texture2D",
             width,
@@ -161,11 +161,10 @@ impl Texture2D {
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
         self.unbind();
-        return self;
     }
 
     /// Allocate memory for the texture without buffering anything.
-    pub fn buffer_empty(self, width: i32, height: i32) -> Self {
+    pub fn buffer_empty(&self, width: i32, height: i32) {
         log::info!(
             "Texture2D :: Allocating for a {:?}x{:?} image",
             width,
@@ -187,11 +186,10 @@ impl Texture2D {
             gl::GenerateMipmap(gl::TEXTURE_2D);
         }
         self.unbind();
-        return self;
     }
 
     /// Allocate a multisampled empty buffer.
-    pub fn buffer_multisampled(self, samples: i32, width: i32, height: i32) -> Self {
+    pub fn buffer_multisampled(&self, samples: i32, width: i32, height: i32) {
         log::info!(
             "Texture2D :: Allocating for a {:?}x{:?} multisampled image",
             width,
@@ -209,14 +207,13 @@ impl Texture2D {
             );
         }
         self.unbind_multisample();
-        return self;
     }
 
     /// Buffer an image contained in a file to the texture.
-    pub fn buffer_from_file(self, filename: &str) -> Self {
+    pub fn buffer_from_file(&self, filename: &str) {
         let (img, width, height) = image::load(filename);
         let data = img.to_rgba8().to_vec();
-        return self.buffer_img(&data, width, height);
+        self.buffer_img(&data, width, height);
     }
 
     pub fn export(&self, window: (i32, i32, i32, i32), filename: &str) {

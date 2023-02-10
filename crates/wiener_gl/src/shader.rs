@@ -51,7 +51,7 @@ pub struct Shader {
 }
 
 /// Program that contains a bunch of compiled shaders.
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct ShaderProgram<'a> {
     _id: u32,
     _shaders: &'a [Shader],
@@ -115,7 +115,7 @@ impl Shader {
     }
 
     /// Delete the shader.
-    pub fn delete(self) {
+    pub fn delete(&self) {
         log::info!("Shader :: Deleting shader");
         unsafe {
             gl::DeleteShader(self.get_id());
